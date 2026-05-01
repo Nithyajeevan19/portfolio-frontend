@@ -71,86 +71,91 @@ export function Capabilities() {
           supporting="Five service pillars. No generalism. We go deep on work that creates lasting value."
         />
 
-        <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-10">
-          <div className="lg:col-span-7">
-            <div className="divider-thin" />
-            {SERVICES.map((s, i) => {
-              const isOpen = i === active;
-              return (
-                <div key={s.n}>
-                  <button
-                    onClick={() => setActive(i)}
-                    className="flex w-full items-center gap-6 py-7 text-left"
-                  >
-                    <span className="label-eyebrow-muted w-8 shrink-0">{s.n}</span>
-                    <span
-                      className={`display-serif flex-1 text-3xl md:text-[34px] transition-opacity ${
-                        isOpen ? "opacity-100" : "opacity-80"
-                      }`}
+        <div className="mt-16 grid grid-cols-1 lg:grid-cols-100 gap-10" style={{ gridTemplateColumns: undefined }}>
+          <div className="lg:col-span-7" style={{ flexBasis: "55%" }}>
+            <div className="lg:hidden">
+              {/* spacer */}
+            </div>
+            <div className="lg:[width:100%]">
+              <div className="divider-thin" />
+              {SERVICES.map((s, i) => {
+                const isOpen = i === active;
+                return (
+                  <div key={s.n}>
+                    <button
+                      onClick={() => setActive(isOpen ? -1 : i)}
+                      className="flex w-full items-center gap-6 py-7 text-left"
                     >
-                      {s.name}
-                    </span>
-                    <span
-                      className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-forest/40 transition-all ${
-                        isOpen ? "bg-forest text-cream rotate-45" : "text-forest"
-                      }`}
-                    >
-                      <ArrowUpRight className="h-4 w-4" />
-                    </span>
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.4, ease: "easeOut" }}
-                        className="overflow-hidden"
+                      <span className="label-eyebrow-muted w-8 shrink-0">{s.n}</span>
+                      <span
+                        className={`display-serif flex-1 text-3xl md:text-[34px] transition-opacity ${
+                          isOpen ? "opacity-100" : "opacity-80"
+                        }`}
                       >
-                        <div className="pb-8 pl-14 pr-2">
-                          <p className="max-w-xl text-[15px] leading-relaxed text-forest/80">
-                            {s.desc}
-                          </p>
-                          <div className="mt-5 flex flex-wrap gap-2">
-                            {s.tags.map((t) => (
-                              <span key={t} className="pill-tag">
-                                {t}
-                              </span>
-                            ))}
+                        {s.name}
+                      </span>
+                      <span
+                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-forest/40 transition-all ${
+                          isOpen ? "bg-forest text-cream rotate-45" : "text-forest"
+                        }`}
+                      >
+                        <ArrowUpRight className="h-4 w-4" />
+                      </span>
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.4, ease: "easeOut" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pb-8 pl-14 pr-2">
+                            <p className="max-w-xl text-[15px] leading-relaxed text-forest/80">
+                              {s.desc}
+                            </p>
+                            <div className="mt-5 flex flex-wrap gap-2">
+                              {s.tags.map((t) => (
+                                <span key={t} className="pill-tag">
+                                  {t}
+                                </span>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                  <div className="divider-thin" />
-                </div>
-              );
-            })}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <div className="divider-thin" />
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="lg:col-span-5">
-            <div className="lg:sticky lg:top-28">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-ink">
-                <AnimatePresence mode="wait">
-                  <motion.img
-                    key={current.image}
-                    src={current.image}
-                    alt={current.name}
-                    initial={{ opacity: 0, scale: 1.04 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="absolute inset-0 h-full w-full object-cover"
+          <div className="lg:col-span-5" style={{ flexBasis: "45%" }}>
+            <div className="lg:sticky lg:top-0 lg:h-screen lg:flex lg:items-center">
+              <div className="relative w-full aspect-[4/5] lg:aspect-auto lg:h-[85vh] overflow-hidden rounded-md bg-ink">
+                {SERVICES.map((s, i) => (
+                  <img
+                    key={s.n}
+                    src={s.image}
+                    alt={s.name}
+                    className="absolute inset-0 h-full w-full object-cover transition-opacity duration-[400ms] ease-in-out"
+                    style={{ opacity: i === active ? 1 : 0 }}
                   />
-                </AnimatePresence>
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                ))}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-                  <p className="label-eyebrow text-cream/80">{current.n}</p>
+                  <p className="label-eyebrow text-cream/80">{current?.n}</p>
                   <p className="display-serif mt-2 text-3xl text-cream md:text-4xl">
-                    {current.name}
+                    {current?.name}
                   </p>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
             </div>
           </div>
         </div>
