@@ -156,9 +156,6 @@ export function Capabilities() {
             </div>
           </div>
         </div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );
