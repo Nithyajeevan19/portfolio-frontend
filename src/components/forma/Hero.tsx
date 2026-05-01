@@ -61,7 +61,11 @@ export function Hero() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 1.4, ease: "easeOut" }}
               className="sphere"
-            />
+            >
+              <span className="sphere-dot" style={{ width: 10, height: 10, top: "28%", left: "58%" }} />
+              <span className="sphere-dot" style={{ width: 7, height: 7, top: "55%", left: "38%" }} />
+              <span className="sphere-dot" style={{ width: 12, height: 12, top: "68%", left: "62%" }} />
+            </motion.div>
           </div>
         </div>
 

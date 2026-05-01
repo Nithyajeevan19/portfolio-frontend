@@ -20,9 +20,9 @@ export function SectionHeader({ number, label, line1, line2, supporting }: Props
         className="lg:col-span-8"
       >
         <p className="label-eyebrow">{number} —— {label}</p>
-        <h2 className="display-serif mt-8 text-[12vw] sm:text-[8vw] lg:text-[5.6vw]">
-          <span className="block">{line1}</span>
-          <span className="ghost-italic block">{line2}</span>
+        <h2 className="mt-8">
+          <span className="section-headline-line1 block">{line1}</span>
+          <span className="section-headline-line2 block">{line2}</span>
         </h2>
       </motion.div>
       <motion.div
@@ -30,11 +30,9 @@ export function SectionHeader({ number, label, line1, line2, supporting }: Props
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.4 }}
         transition={{ duration: 0.7, delay: 0.15 }}
-        className="lg:col-span-4 lg:text-right"
+        className="lg:col-span-4 flex lg:items-end lg:justify-end"
       >
-        <p className="ml-auto max-w-xs text-[14px] leading-relaxed text-forest/75">
-          {supporting}
-        </p>
+        <p className="section-headline-sub">{supporting}</p>
       </motion.div>
     </div>
   );
