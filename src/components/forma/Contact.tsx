@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { base44 } from "@/api/base44Client";
+import { supabase } from "@/integrations/supabase/client";
 
 const PROJECT_SCOPES = [
   "Brand Strategy & Identity",
@@ -47,7 +47,14 @@ export function Contact() {
     e.preventDefault();
     setStatus("loading");
     try {
-      await (base44.entities.ContactSubmission as any).create(form);
+      const { error } = await supabase.from("contact_submissions").insert([{
+        name: form.name,
+        email: form.email,
+        project_type: form.project_scope,
+        budget_range: form.budget,
+        message: form.message,
+      }]);
+      if (error) throw error;
       setStatus("success");
       setForm({ name: "", email: "", project_scope: "", budget: "", message: "" });
     } catch (err) {

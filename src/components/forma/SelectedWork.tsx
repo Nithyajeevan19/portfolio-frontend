@@ -1,22 +1,24 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
+import { CASE_STUDIES } from "@/data/caseStudies";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Project {
   id: string;
   slug: string;
-  title: string;
-  client: string;
+  project_title: string;
+  client_name: string;
   category: string;
   services: string;
   year: number;
   description: string;
   cover_image: string;
   featured: boolean;
-  tags: string[];
 }
+
+// ─── WorkCard ─────────────────────────────────────────────────────────────────
 
 function WorkCard({
   project,
@@ -58,8 +60,7 @@ function WorkCard({
             ? "0 22px 56px rgba(4,50,34,0.10)"
             : "0 2px 10px rgba(4,50,34,0.04)",
           transform: hov ? "translateY(-2px)" : "translateY(0)",
-          transition:
-            "box-shadow 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1)",
+          transition: "box-shadow 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1)",
           textDecoration: "none",
         }}
         onMouseEnter={() => setHov(true)}
@@ -72,9 +73,7 @@ function WorkCard({
           style={{
             position: "relative",
             overflow: "hidden",
-            height: isLarge
-              ? "clamp(300px,46vw,600px)"
-              : "clamp(220px,28vw,380px)",
+            height: isLarge ? "clamp(300px,46vw,600px)" : "clamp(220px,28vw,380px)",
           }}
         >
           <div
@@ -85,11 +84,8 @@ function WorkCard({
               backgroundSize: "cover",
               backgroundPosition: "center",
               transform: hov ? "scale(1.055)" : "scale(1.0)",
-              filter: hov
-                ? "brightness(0.68) saturate(0.88)"
-                : "brightness(0.62) saturate(0.80)",
-              transition:
-                "transform 1.0s cubic-bezier(0.16,1,0.3,1), filter 0.7s ease",
+              filter: hov ? "brightness(0.68) saturate(0.88)" : "brightness(0.62) saturate(0.80)",
+              transition: "transform 1.0s cubic-bezier(0.16,1,0.3,1), filter 0.7s ease",
             }}
           />
 
@@ -155,13 +151,7 @@ function WorkCard({
               transition: "all 0.5s ease",
             }}
           >
-            <svg
-              width="11"
-              height="11"
-              viewBox="0 0 12 12"
-              fill="none"
-              style={{ transform: "rotate(-45deg)" }}
-            >
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" style={{ transform: "rotate(-45deg)" }}>
               <path
                 d="M1 11L11 1M11 1H4M11 1V8"
                 stroke="#043222"
@@ -173,15 +163,7 @@ function WorkCard({
           </div>
 
           {/* Card bottom metadata */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              padding: "1.5rem",
-            }}
-          >
+          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1.5rem" }}>
             <div
               style={{
                 display: "flex",
@@ -248,7 +230,7 @@ function WorkCard({
                 paddingBottom: "0.06em",
               }}
             >
-              {project.title}
+              {project.project_title}
             </h3>
             <p
               style={{
@@ -258,7 +240,7 @@ function WorkCard({
                 color: "rgba(255,248,238,0.52)",
               }}
             >
-              {project.client}
+              {project.client_name}
             </p>
           </div>
         </div>
@@ -317,59 +299,23 @@ function WorkCard({
   );
 }
 
+// ─── SelectedWork ─────────────────────────────────────────────────────────────
+
 export function SelectedWork() {
-  const { data: projects, isLoading } = useQuery({
-    queryKey: ["case_studies"],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("case_studies")
-        .select("*")
-        .order("sort_order", { ascending: true });
+  const items = CASE_STUDIES as Project[];
 
-      if (error) throw error;
-      return data as Project[];
-    },
-  });
-
-  if (isLoading) {
-    return (
-      <div
-        style={{
-          height: "50vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#F6E9D9",
-        }}
-      >
-        <p
-          style={{
-            fontFamily: "Inter,sans-serif",
-            fontSize: "0.7rem",
-            letterSpacing: "0.2em",
-            color: "rgba(4,50,34,0.3)",
-          }}
-        >
-          LOADING WORK...
-        </p>
-      </div>
-    );
-  }
-
-  const items = projects || [];
-
-  // Build rows: large → [small, small] → large → repeat
-  const rows: Array<{ type: "single"; item: Project } | { type: "pair"; items: [Project, Project] }> = [];
+  // Alternating layout: large → [small + small] → large → repeat
+  const rows: Array<
+    { type: "single"; item: Project } | { type: "pair"; items: [Project, Project] }
+  > = [];
   let i = 0;
   let rowIndex = 0;
 
   while (i < items.length) {
     if (rowIndex % 2 === 0) {
-      // Single large card
       rows.push({ type: "single", item: items[i] });
       i++;
     } else {
-      // Pair of small cards
       if (i + 1 < items.length) {
         rows.push({ type: "pair", items: [items[i], items[i + 1]] });
         i += 2;
@@ -391,10 +337,7 @@ export function SelectedWork() {
       {/* Header */}
       <div
         className="px-8 md:px-14 mb-14"
-        style={{
-          borderBottom: "1px solid rgba(4,50,34,0.09)",
-          paddingBottom: "2.5rem",
-        }}
+        style={{ borderBottom: "1px solid rgba(4,50,34,0.09)", paddingBottom: "2.5rem" }}
       >
         <motion.div
           initial={{ opacity: 0, y: 14 }}
@@ -456,13 +399,13 @@ export function SelectedWork() {
               maxWidth: "21rem",
             }}
           >
-            A focused selection. Every engagement is led by senior principals, from
-            strategy through final delivery.
+            A focused selection. Every engagement is led by senior principals, from strategy through
+            final delivery.
           </p>
         </motion.div>
       </div>
 
-      {/* Grid — alternating large / [small + small] */}
+      {/* Grid */}
       <div
         className="px-8 md:px-14"
         style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}
@@ -470,7 +413,9 @@ export function SelectedWork() {
         {rows.map((row, ri) => {
           if (row.type === "single") {
             const idx = cardIndex++;
-            return <WorkCard key={row.item.id} project={row.item} index={idx} size="large" />;
+            return (
+              <WorkCard key={row.item.id} project={row.item} index={idx} size="large" />
+            );
           } else {
             const idxA = cardIndex++;
             const idxB = cardIndex++;
@@ -509,7 +454,7 @@ export function SelectedWork() {
         }}
       >
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "1.2rem" }}>
-          {["Fintech", "Luxury", "SaaS", "Web3", "Climate"].map((c) => (
+          {["Fintech", "Food Tech", "SaaS", "Sports Tech", "Lifestyle"].map((c) => (
             <span
               key={c}
               style={{
@@ -540,22 +485,12 @@ export function SelectedWork() {
             gap: "0.6rem",
             transition: "color 0.3s",
           }}
-          onMouseEnter={(e) =>
-            ((e.currentTarget as HTMLAnchorElement).style.color = "#043222")
-          }
-          onMouseLeave={(e) =>
-            ((e.currentTarget as HTMLAnchorElement).style.color = "#4F5B57")
-          }
+          onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#043222")}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#4F5B57")}
           data-cursor=""
         >
           Discuss a project
-          <svg
-            width="11"
-            height="11"
-            viewBox="0 0 12 12"
-            fill="none"
-            style={{ transform: "rotate(-45deg)" }}
-          >
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" style={{ transform: "rotate(-45deg)" }}>
             <path
               d="M1 11L11 1M11 1H4M11 1V8"
               stroke="currentColor"

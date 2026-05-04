@@ -1,22 +1,33 @@
 import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClientInstance } from "@/lib/query-client";
 import CustomCursor from "@/components/forma/CustomCursor";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-cream px-4">
+    <div className="flex min-h-screen items-center justify-center px-4" style={{ backgroundColor: "#F6E9D9" }}>
       <div className="max-w-md text-center">
-        <h1 className="display-serif text-8xl text-forest">404</h1>
-        <p className="display-serif-italic mt-2 text-3xl text-forest/30">
-          page not found.
+        <h1 style={{ fontFamily: "Boska, Georgia, serif", fontSize: "6rem", color: "#043222", margin: 0 }}>
+          404
+        </h1>
+        <p style={{ fontFamily: "Satoshi, Inter, sans-serif", color: "rgba(4,50,34,0.5)", marginBottom: "2rem" }}>
+          Page not found.
         </p>
-        <div className="mt-8">
-          <Link to="/" className="btn-primary">
-            GO HOME
-          </Link>
-        </div>
+        <Link
+          to="/"
+          style={{
+            fontFamily: "Satoshi, Inter, sans-serif",
+            fontSize: "0.7rem",
+            fontWeight: 600,
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "#043222",
+            textDecoration: "none",
+            border: "1px solid rgba(4,50,34,0.2)",
+            padding: "0.75rem 1.5rem",
+          }}
+        >
+          Go Home
+        </Link>
       </div>
     </div>
   );
@@ -29,10 +40,10 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <QueryClientProvider client={queryClientInstance}>
+    <>
       <CustomCursor />
       <Outlet />
       <Toaster />
-    </QueryClientProvider>
+    </>
   );
 }
