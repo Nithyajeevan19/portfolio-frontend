@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
@@ -33,7 +33,10 @@ function WorkCard({
 
   const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
-    setXY({ x: ((e.clientX - r.left) / r.width) * 100, y: ((e.clientY - r.top) / r.height) * 100 });
+    setXY({
+      x: ((e.clientX - r.left) / r.width) * 100,
+      y: ((e.clientY - r.top) / r.height) * 100,
+    });
   };
 
   return (
@@ -51,9 +54,12 @@ function WorkCard({
           borderRadius: "2px",
           border: "1px solid rgba(4,50,34,0.09)",
           backgroundColor: "#FFF8EE",
-          boxShadow: hov ? "0 22px 56px rgba(4,50,34,0.10)" : "0 2px 10px rgba(4,50,34,0.04)",
+          boxShadow: hov
+            ? "0 22px 56px rgba(4,50,34,0.10)"
+            : "0 2px 10px rgba(4,50,34,0.04)",
           transform: hov ? "translateY(-2px)" : "translateY(0)",
-          transition: "box-shadow 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1)",
+          transition:
+            "box-shadow 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1)",
           textDecoration: "none",
         }}
         onMouseEnter={() => setHov(true)}
@@ -66,7 +72,9 @@ function WorkCard({
           style={{
             position: "relative",
             overflow: "hidden",
-            height: isLarge ? "clamp(300px,46vw,600px)" : "clamp(220px,28vw,380px)",
+            height: isLarge
+              ? "clamp(300px,46vw,600px)"
+              : "clamp(220px,28vw,380px)",
           }}
         >
           <div
@@ -77,8 +85,11 @@ function WorkCard({
               backgroundSize: "cover",
               backgroundPosition: "center",
               transform: hov ? "scale(1.055)" : "scale(1.0)",
-              filter: hov ? "brightness(0.68) saturate(0.88)" : "brightness(0.62) saturate(0.80)",
-              transition: "transform 1.0s cubic-bezier(0.16,1,0.3,1), filter 0.7s ease",
+              filter: hov
+                ? "brightness(0.68) saturate(0.88)"
+                : "brightness(0.62) saturate(0.80)",
+              transition:
+                "transform 1.0s cubic-bezier(0.16,1,0.3,1), filter 0.7s ease",
             }}
           />
 
@@ -104,12 +115,12 @@ function WorkCard({
             }}
           />
 
-          {/* Tag */}
+          {/* Featured tag */}
           {project.featured && (
             <div style={{ position: "absolute", top: "1.25rem", left: "1.25rem" }}>
               <span
                 style={{
-                  fontFamily: "Inter,sans-serif",
+                  fontFamily: "Satoshi, Inter, sans-serif",
                   fontSize: "0.58rem",
                   fontWeight: 600,
                   letterSpacing: "0.18em",
@@ -120,7 +131,7 @@ function WorkCard({
                   color: "#043222",
                 }}
               >
-                FEATURED
+                Featured
               </span>
             </div>
           )}
@@ -162,7 +173,15 @@ function WorkCard({
           </div>
 
           {/* Card bottom metadata */}
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1.5rem" }}>
+          <div
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              padding: "1.5rem",
+            }}
+          >
             <div
               style={{
                 display: "flex",
@@ -174,7 +193,7 @@ function WorkCard({
             >
               <span
                 style={{
-                  fontFamily: "Inter,sans-serif",
+                  fontFamily: "Satoshi, Inter, sans-serif",
                   fontSize: "0.58rem",
                   fontWeight: 600,
                   letterSpacing: "0.18em",
@@ -186,7 +205,7 @@ function WorkCard({
               </span>
               <span
                 style={{
-                  fontFamily: "Inter,sans-serif",
+                  fontFamily: "Satoshi, Inter, sans-serif",
                   fontSize: "0.58rem",
                   letterSpacing: "0.1em",
                   color: "rgba(255,248,238,0.35)",
@@ -196,7 +215,7 @@ function WorkCard({
               </span>
               <span
                 style={{
-                  fontFamily: "Inter,sans-serif",
+                  fontFamily: "Satoshi, Inter, sans-serif",
                   fontSize: "0.58rem",
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
@@ -207,7 +226,7 @@ function WorkCard({
               </span>
               <span
                 style={{
-                  fontFamily: "Inter,sans-serif",
+                  fontFamily: "Satoshi, Inter, sans-serif",
                   fontSize: "0.58rem",
                   letterSpacing: "0.12em",
                   textTransform: "uppercase",
@@ -221,7 +240,7 @@ function WorkCard({
             <h3
               style={{
                 margin: 0,
-                fontFamily: "Boska, ui-serif, Georgia, serif",
+                fontFamily: "Boska, Georgia, serif",
                 fontSize: "clamp(1.45rem,2.4vw,2.1rem)",
                 letterSpacing: "-0.035em",
                 color: "#FFF8EE",
@@ -234,7 +253,7 @@ function WorkCard({
             <p
               style={{
                 margin: "0.25rem 0 0",
-                fontFamily: "Inter,sans-serif",
+                fontFamily: "Satoshi, Inter, sans-serif",
                 fontSize: "0.73rem",
                 color: "rgba(255,248,238,0.52)",
               }}
@@ -268,7 +287,7 @@ function WorkCard({
             />
             <span
               style={{
-                fontFamily: "Inter,sans-serif",
+                fontFamily: "Satoshi, Inter, sans-serif",
                 fontSize: "0.72rem",
                 color: "#4F5B57",
                 lineHeight: 1.5,
@@ -279,7 +298,7 @@ function WorkCard({
           </div>
           <span
             style={{
-              fontFamily: "Inter,sans-serif",
+              fontFamily: "Satoshi, Inter, sans-serif",
               fontSize: "0.62rem",
               fontWeight: 600,
               letterSpacing: "0.14em",
@@ -298,7 +317,7 @@ function WorkCard({
   );
 }
 
-export function SelectedWork(props: any) {
+export function SelectedWork() {
   const { data: projects, isLoading } = useQuery({
     queryKey: ["case_studies"],
     queryFn: async () => {
@@ -339,6 +358,31 @@ export function SelectedWork(props: any) {
 
   const items = projects || [];
 
+  // Build rows: large → [small, small] → large → repeat
+  const rows: Array<{ type: "single"; item: Project } | { type: "pair"; items: [Project, Project] }> = [];
+  let i = 0;
+  let rowIndex = 0;
+
+  while (i < items.length) {
+    if (rowIndex % 2 === 0) {
+      // Single large card
+      rows.push({ type: "single", item: items[i] });
+      i++;
+    } else {
+      // Pair of small cards
+      if (i + 1 < items.length) {
+        rows.push({ type: "pair", items: [items[i], items[i + 1]] });
+        i += 2;
+      } else {
+        rows.push({ type: "single", item: items[i] });
+        i++;
+      }
+    }
+    rowIndex++;
+  }
+
+  let cardIndex = 0;
+
   return (
     <section
       id="work"
@@ -347,7 +391,10 @@ export function SelectedWork(props: any) {
       {/* Header */}
       <div
         className="px-8 md:px-14 mb-14"
-        style={{ borderBottom: "1px solid rgba(4,50,34,0.09)", paddingBottom: "2.5rem" }}
+        style={{
+          borderBottom: "1px solid rgba(4,50,34,0.09)",
+          paddingBottom: "2.5rem",
+        }}
       >
         <motion.div
           initial={{ opacity: 0, y: 14 }}
@@ -359,7 +406,7 @@ export function SelectedWork(props: any) {
           <div>
             <div
               style={{
-                fontFamily: "Inter,sans-serif",
+                fontFamily: "Satoshi, Inter, sans-serif",
                 fontSize: "0.60rem",
                 fontWeight: 600,
                 letterSpacing: "0.22em",
@@ -385,7 +432,7 @@ export function SelectedWork(props: any) {
             <h2
               style={{
                 margin: 0,
-                fontFamily: "Boska, ui-serif, Georgia, serif",
+                fontFamily: "Boska, Georgia, serif",
                 fontSize: "clamp(2.2rem,5vw,5.5rem)",
                 lineHeight: "0.94",
                 letterSpacing: "-0.044em",
@@ -402,28 +449,45 @@ export function SelectedWork(props: any) {
           </div>
           <p
             style={{
-              fontFamily: "Inter,sans-serif",
+              fontFamily: "Satoshi, Inter, sans-serif",
               fontSize: "0.82rem",
               lineHeight: "1.80",
               color: "#4F5B57",
               maxWidth: "21rem",
             }}
           >
-            A focused selection. Every engagement is led by senior principals, from strategy through
-            final delivery.
+            A focused selection. Every engagement is led by senior principals, from
+            strategy through final delivery.
           </p>
         </motion.div>
       </div>
 
-      {/* Grid */}
+      {/* Grid — alternating large / [small + small] */}
       <div
         className="px-8 md:px-14"
-        style={{ display: "flex", flexDirection: "column", gap: "1.2rem" }}
+        style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}
       >
-        {items.map((project, i) => {
-          // Dynamic layout logic: every 3rd item is large
-          const size = i % 3 === 0 ? "large" : "normal";
-          return <WorkCard key={project.id} project={project} index={i} size={size} />;
+        {rows.map((row, ri) => {
+          if (row.type === "single") {
+            const idx = cardIndex++;
+            return <WorkCard key={row.item.id} project={row.item} index={idx} size="large" />;
+          } else {
+            const idxA = cardIndex++;
+            const idxB = cardIndex++;
+            return (
+              <div
+                key={`pair-${ri}`}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+                  gap: "0.85rem",
+                }}
+              >
+                <WorkCard project={row.items[0]} index={idxA} size="normal" />
+                <WorkCard project={row.items[1]} index={idxB} size="normal" />
+              </div>
+            );
+          }
         })}
       </div>
 
@@ -449,7 +513,7 @@ export function SelectedWork(props: any) {
             <span
               key={c}
               style={{
-                fontFamily: "Inter,sans-serif",
+                fontFamily: "Satoshi, Inter, sans-serif",
                 fontSize: "0.60rem",
                 fontWeight: 600,
                 letterSpacing: "0.18em",
@@ -464,7 +528,7 @@ export function SelectedWork(props: any) {
         <a
           href="#contact"
           style={{
-            fontFamily: "Inter,sans-serif",
+            fontFamily: "Satoshi, Inter, sans-serif",
             fontWeight: 600,
             fontSize: "0.68rem",
             letterSpacing: "0.14em",
@@ -476,8 +540,12 @@ export function SelectedWork(props: any) {
             gap: "0.6rem",
             transition: "color 0.3s",
           }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#043222")}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#4F5B57")}
+          onMouseEnter={(e) =>
+            ((e.currentTarget as HTMLAnchorElement).style.color = "#043222")
+          }
+          onMouseLeave={(e) =>
+            ((e.currentTarget as HTMLAnchorElement).style.color = "#4F5B57")
+          }
           data-cursor=""
         >
           Discuss a project

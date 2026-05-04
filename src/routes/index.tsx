@@ -1,7 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import type { Tables } from "@/integrations/supabase/types";
 import { Navbar } from "@/components/forma/Navbar";
 import { Hero } from "@/components/forma/Hero";
 import { SelectedWork } from "@/components/forma/SelectedWork";
@@ -32,22 +29,12 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [items, setItems] = useState<Tables<"case_studies">[]>([]);
-
-  useEffect(() => {
-    supabase
-      .from("case_studies")
-      .select("*")
-      .order("sort_order", { ascending: true })
-      .then(({ data }) => setItems(data ?? []));
-  }, []);
-
   return (
     <div className="noise-bg min-h-screen bg-cream text-forest">
       <Navbar />
       <main>
         <Hero />
-        <SelectedWork items={items} />
+        <SelectedWork />
         <Capabilities />
         <Methodology />
         <Studio />
