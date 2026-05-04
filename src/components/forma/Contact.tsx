@@ -1,201 +1,532 @@
 import { useState } from "react";
-import { z } from "zod";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { base44 } from "@/api/base44Client";
 
-const schema = z.object({
-  name: z.string().trim().min(1, "Name is required").max(100),
-  email: z.string().trim().email("Invalid email").max(255),
-  company: z.string().trim().max(120).optional().or(z.literal("")),
-  project_type: z.string().min(1, "Select a project type"),
-  budget_range: z.string().min(1, "Select a budget"),
-  message: z.string().trim().min(1, "Tell us about your project").max(2000),
-});
-
-const PROJECT_TYPES = [
-  "Brand Strategy",
-  "Digital Product",
-  "Web Experience",
+const PROJECT_SCOPES = [
+  "Brand Strategy & Identity",
+  "Digital Product Design",
+  "Interactive Web Experience",
   "Creative Technology",
+  "Full Studio Engagement",
   "Creative Direction",
 ];
-const BUDGETS = ["Under $25k", "$25k–$75k", "$75k–$200k", "$200k+"];
+const BUDGETS = ["$25k – $50k", "$50k – $100k", "$100k – $250k", "$250k+", "To be discussed"];
+const SOCIALS = [
+  { label: "LinkedIn", indicator: "LI", href: "https://linkedin.com" },
+  { label: "Awwwards", indicator: "AW", href: "https://awwwards.com" },
+  { label: "Instagram", indicator: "IG", href: "https://instagram.com" },
+  { label: "X / Twitter", indicator: "X", href: "https://x.com" },
+];
+
+const inputBase = {
+  borderBottom: "1px solid rgba(4,50,34,0.15)",
+  color: "#111111",
+  fontSize: "0.9rem",
+  backgroundColor: "transparent",
+  width: "100%",
+  padding: "0.75rem 0",
+  outline: "none",
+  fontFamily: "Satoshi, Inter, sans-serif",
+  transition: "border-color 0.3s",
+};
 
 export function Contact() {
-  const [submitted, setSubmitted] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    project_scope: "",
+    budget: "",
+    message: "",
+  });
+  const [status, setStatus] = useState("idle");
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
+  ) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const raw = {
-      name: String(fd.get("name") ?? ""),
-      email: String(fd.get("email") ?? ""),
-      company: String(fd.get("company") ?? ""),
-      project_type: String(fd.get("project_type") ?? ""),
-      budget_range: String(fd.get("budget_range") ?? ""),
-      message: String(fd.get("message") ?? ""),
-    };
-
-    const parsed = schema.safeParse(raw);
-    if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Invalid input");
-      return;
+    setStatus("loading");
+    try {
+      await (base44.entities.ContactSubmission as any).create(form);
+      setStatus("success");
+      setForm({ name: "", email: "", project_scope: "", budget: "", message: "" });
+    } catch (err) {
+      console.error(err);
+      setStatus("idle");
     }
-
-    setLoading(true);
-    const { error } = await supabase.from("contact_submissions").insert({
-      name: parsed.data.name,
-      email: parsed.data.email,
-      company: parsed.data.company || null,
-      project_type: parsed.data.project_type,
-      budget_range: parsed.data.budget_range,
-      message: parsed.data.message,
-    });
-    setLoading(false);
-
-    if (error) {
-      toast.error("Could not send. Please try again.");
-      return;
-    }
-    setSubmitted(true);
-    toast.success("Inquiry received. We'll be in touch within 48 hours.");
   };
 
   return (
     <section
       id="contact"
-      className="py-24 md:py-32"
-      style={{ backgroundColor: "var(--color-forest)", color: "var(--color-cream)" }}
+      style={{ paddingTop: "14vh", paddingBottom: "8vh", backgroundColor: "#F6E9D9" }}
     >
-      <div className="mx-auto max-w-[1480px] px-6 md:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.8 }}
-            className="lg:col-span-7"
+      {/* Big headline */}
+      <div className="px-8 md:px-14 mb-16 overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="micro-label mb-5 flex items-center gap-3" style={{ color: "#043222" }}>
+            <span style={{ color: "rgba(4,50,34,0.35)" }}>06</span>
+            <span
+              style={{
+                width: "16px",
+                height: "1px",
+                backgroundColor: "rgba(4,50,34,0.25)",
+                display: "inline-block",
+              }}
+            />
+            New Projects
+          </div>
+          <h2
+            style={{
+              fontFamily: "Boska, ui-serif, Georgia, serif",
+              fontSize: "clamp(3.8rem, 10.5vw, 13.5rem)",
+              lineHeight: "0.92",
+              letterSpacing: "-0.046em",
+              color: "#043222",
+              paddingBottom: "0.16em",
+              margin: 0,
+            }}
           >
-            <p className="label-eyebrow" style={{ color: "var(--color-cream)", opacity: 0.7 }}>
-              05 —— NEW INQUIRY
-            </p>
-            <h2 className="display-serif mt-6 text-[14vw] sm:text-[8vw] lg:text-[6vw] text-cream">
-              <span className="block">Start a</span>
-              <span className="display-serif-italic block" style={{ color: "var(--color-gold)" }}>
-                project.
-              </span>
-            </h2>
-            <p className="mt-8 max-w-md text-[15px] leading-relaxed text-cream/80">
-              We take on a small number of new engagements each year. Tell us about
-              your work and we'll reply within 48 hours.
-            </p>
-          </motion.div>
+            Let's build
+            <br />
+            <span style={{ fontStyle: "italic", color: "rgba(4,50,34,0.22)" }}>
+              something serious.
+            </span>
+          </h2>
+        </motion.div>
+      </div>
 
-          <div className="lg:col-span-5">
-            {submitted ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="rounded-md border border-cream/20 p-10"
+      <div
+        className="px-8 md:px-14 grid grid-cols-1 md:grid-cols-12 gap-px rounded-sm overflow-hidden"
+        style={{ border: "1px solid rgba(4,50,34,0.10)" }}
+      >
+        {/* Info panel */}
+        <motion.div
+          initial={{ opacity: 0, x: -16 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+          className="md:col-span-4 p-10 flex flex-col gap-9"
+          style={{ borderRight: "1px solid rgba(4,50,34,0.10)", backgroundColor: "#FFF8EE" }}
+        >
+          {/* Availability */}
+          <div
+            style={{
+              border: "1px solid rgba(4,50,34,0.12)",
+              padding: "1.4rem",
+              backgroundColor: "#FFEDA8",
+              borderRadius: "0.25rem",
+            }}
+          >
+            <div className="flex items-center gap-2.5 mb-3">
+              <div
+                style={{
+                  width: "5px",
+                  height: "5px",
+                  borderRadius: "50%",
+                  backgroundColor: "#043222",
+                }}
+              />
+              <span
+                className="micro-label"
+                style={{
+                  color: "#043222",
+                  fontSize: "0.65rem",
+                  fontWeight: 600,
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                }}
               >
-                <p className="label-eyebrow text-cream/70">CONFIRMATION</p>
-                <h3 className="display-serif mt-4 text-3xl text-cream">
-                  Thank you.
-                </h3>
-                <p className="mt-3 text-cream/75">
-                  Your inquiry has been received. A principal will respond within
-                  48 hours.
-                </p>
-              </motion.div>
-            ) : (
-              <form onSubmit={onSubmit} className="space-y-5">
-                <Field name="name" label="NAME" />
-                <Field name="email" label="EMAIL" type="email" />
-                <Field name="company" label="COMPANY" required={false} />
-                <Select name="project_type" label="PROJECT TYPE" options={PROJECT_TYPES} />
-                <Select name="budget_range" label="BUDGET RANGE" options={BUDGETS} />
-                <div>
-                  <label className="label-eyebrow text-cream/60">MESSAGE</label>
-                  <textarea
-                    name="message"
-                    required
-                    rows={4}
-                    maxLength={2000}
-                    className="mt-2 w-full resize-none border-b border-cream/30 bg-transparent py-3 text-cream placeholder-cream/40 outline-none focus:border-cream"
-                    placeholder="Tell us about your project…"
+                Currently Available
+              </span>
+            </div>
+            <p
+              style={{
+                fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                fontSize: "0.78rem",
+                color: "#003631",
+                lineHeight: "1.65",
+                margin: 0,
+              }}
+            >
+              We take on 3–4 active engagements at a time. 2 slots available for Q3 2026.
+            </p>
+          </div>
+
+          <div>
+            <div className="micro-label mb-2" style={{ color: "#043222" }}>
+              Response Time
+            </div>
+            <p
+              style={{
+                fontFamily: "Boska, ui-serif, Georgia, serif",
+                fontSize: "1.45rem",
+                letterSpacing: "-0.03em",
+                color: "#043222",
+                lineHeight: 1.1,
+                margin: 0,
+              }}
+            >
+              Within 24 hours,
+              <br />
+              always.
+            </p>
+          </div>
+
+          <div>
+            <div className="micro-label mb-3" style={{ color: "#043222" }}>
+              Direct Email
+            </div>
+            <a
+              href="mailto:hello@formastudio.co"
+              className="transition-colors duration-300"
+              style={{
+                fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                fontSize: "0.85rem",
+                color: "#4F5B57",
+                textDecoration: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#043222";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "#4F5B57";
+              }}
+              data-cursor=""
+            >
+              hello@formastudio.co
+            </a>
+          </div>
+
+          <div>
+            <div className="micro-label mb-4" style={{ color: "#043222" }}>
+              Find Our Work
+            </div>
+            {SOCIALS.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between py-3 group transition-all duration-300"
+                style={{ borderBottom: "1px solid rgba(4,50,34,0.10)", textDecoration: "none" }}
+                data-cursor=""
+              >
+                <span
+                  className="micro-label transition-colors duration-300"
+                  style={{ color: "#4F5B57" }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = "#043222";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = "#4F5B57";
+                  }}
+                >
+                  {s.label}
+                </span>
+                <span className="micro-label" style={{ color: "rgba(4,50,34,0.22)" }}>
+                  [{s.indicator}]
+                </span>
+              </a>
+            ))}
+          </div>
+
+          <p
+            style={{
+              fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+              marginTop: "auto",
+              fontSize: "0.72rem",
+              color: "rgba(4,50,34,0.30)",
+              lineHeight: "1.6",
+              margin: 0,
+            }}
+          >
+            We work with founders, brand teams, and product leaders who value craft and move with
+            intention.
+          </p>
+        </motion.div>
+
+        {/* Form */}
+        <motion.div
+          initial={{ opacity: 0, x: 16 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.15 }}
+          className="md:col-span-8 p-10"
+          style={{ backgroundColor: "#F6E9D9" }}
+        >
+          {status === "success" ? (
+            <div className="h-full flex flex-col items-start justify-center gap-5 py-16">
+              <div
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  border: "1px solid rgba(4,50,34,0.3)",
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M3 8L6.5 11.5L13 5"
+                    stroke="#043222"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                   />
+                </svg>
+              </div>
+              <h3
+                style={{
+                  fontFamily: "Boska, ui-serif, Georgia, serif",
+                  fontSize: "2.8rem",
+                  letterSpacing: "-0.04em",
+                  color: "#043222",
+                  lineHeight: 1,
+                  margin: 0,
+                }}
+              >
+                Message
+                <br />
+                received.
+              </h3>
+              <p
+                style={{
+                  fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                  color: "#4F5B57",
+                  fontSize: "0.85rem",
+                  lineHeight: 1.7,
+                }}
+              >
+                We'll review your brief and be in touch within one business day.
+              </p>
+              <button
+                onClick={() => setStatus("idle")}
+                className="micro-label mt-4 transition-colors duration-300"
+                style={{ color: "#4F5B57", background: "none", border: "none", padding: 0 }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "#043222";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "#4F5B57";
+                }}
+                data-cursor=""
+              >
+                ← Submit another
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="flex flex-col gap-7">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
+                {[
+                  { name: "name", label: "Your Name *", placeholder: "Jane Smith", type: "text" },
+                  {
+                    name: "email",
+                    label: "Work Email *",
+                    placeholder: "jane@company.com",
+                    type: "email",
+                  },
+                ].map((f) => (
+                  <div key={f.name} className="flex flex-col gap-2">
+                    <label className="micro-label" style={{ color: "#4F5B57" }}>
+                      {f.label}
+                    </label>
+                    <input
+                      name={f.name}
+                      type={f.type}
+                      value={(form as any)[f.name]}
+                      onChange={handleChange}
+                      required
+                      placeholder={f.placeholder}
+                      style={{ ...inputBase }}
+                      onFocus={(e) => {
+                        e.target.style.borderBottomColor = "#043222";
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderBottomColor = "rgba(4,50,34,0.15)";
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="micro-label" style={{ color: "#4F5B57" }}>
+                  Service Area *
+                </label>
+                <select
+                  name="project_scope"
+                  value={form.project_scope}
+                  onChange={handleChange}
+                  required
+                  style={{
+                    ...inputBase,
+                    color: form.project_scope ? "#111111" : "#4F5B57",
+                    appearance: "none",
+                  }}
+                  onFocus={(e) => {
+                    e.target.style.borderBottomColor = "#043222";
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderBottomColor = "rgba(4,50,34,0.15)";
+                  }}
+                >
+                  <option
+                    value=""
+                    disabled
+                    style={{ backgroundColor: "#FFF8EE", color: "#4F5B57" }}
+                  >
+                    Select a service
+                  </option>
+                  {PROJECT_SCOPES.map((s) => (
+                    <option
+                      key={s}
+                      value={s}
+                      style={{ backgroundColor: "#FFF8EE", color: "#111111" }}
+                    >
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex flex-col gap-2.5">
+                <label className="micro-label" style={{ color: "#4F5B57" }}>
+                  Budget Range
+                </label>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  {BUDGETS.map((b) => (
+                    <button
+                      key={b}
+                      type="button"
+                      onClick={() => setForm((p) => ({ ...p, budget: b }))}
+                      className="micro-label px-4 py-2 rounded-sm transition-all duration-300"
+                      style={{
+                        border:
+                          form.budget === b ? "1px solid #043222" : "1px solid rgba(4,50,34,0.18)",
+                        color: form.budget === b ? "#FFF8EE" : "#4F5B57",
+                        backgroundColor: form.budget === b ? "#043222" : "transparent",
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                        fontSize: "0.68rem",
+                        letterSpacing: "0.04em",
+                      }}
+                      data-cursor=""
+                    >
+                      {b}
+                    </button>
+                  ))}
                 </div>
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="micro-label" style={{ color: "#4F5B57" }}>
+                  Brief
+                </label>
+                <textarea
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
+                  rows={4}
+                  placeholder="Tell us what you're building, what's at stake, and when you need it..."
+                  style={{ ...inputBase, resize: "none", lineHeight: "1.65" }}
+                  onFocus={(e) => {
+                    e.target.style.borderBottomColor = "#043222";
+                  }}
+                  onBlur={(e) => {
+                    e.target.style.borderBottomColor = "rgba(4,50,34,0.15)";
+                  }}
+                />
+              </div>
+
+              <div className="flex items-center justify-between pt-1">
+                <p
+                  style={{
+                    fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                    fontSize: "0.68rem",
+                    color: "rgba(4,50,34,0.3)",
+                    margin: 0,
+                  }}
+                >
+                  * Required. All submissions reviewed personally.
+                </p>
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="inline-flex items-center gap-3 bg-cream text-forest px-6 py-4 text-[11px] font-medium tracking-[0.16em] uppercase rounded-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+                  disabled={status === "loading"}
+                  className="micro-label flex items-center gap-4 px-7 py-3.5 rounded-sm transition-all duration-400"
+                  style={{
+                    backgroundColor: "#043222",
+                    color: "#FFF8EE",
+                    opacity: status === "loading" ? 0.6 : 1,
+                    border: "none",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (status !== "loading") e.currentTarget.style.backgroundColor = "#003631";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "#043222";
+                  }}
+                  data-cursor=""
                 >
-                  {loading ? "SENDING…" : "SEND INQUIRY"} <ArrowUpRight className="h-4 w-4" />
+                  {status === "loading" ? "Sending..." : "Submit Brief"}
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    fill="none"
+                    style={{ transform: "rotate(-45deg)" }}
+                  >
+                    <path
+                      d="M1 11L11 1M11 1H4M11 1V8"
+                      stroke="#FFF8EE"
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </button>
-              </form>
-            )}
-          </div>
+              </div>
+            </form>
+          )}
+        </motion.div>
+      </div>
+
+      {/* Footer */}
+      <div
+        className="px-8 md:px-14 mt-px py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
+        style={{
+          border: "1px solid rgba(4,50,34,0.10)",
+          borderTop: "none",
+          backgroundColor: "#FFF8EE",
+        }}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#043222" }}
+          />
+          <span className="micro-label" style={{ color: "rgba(4,50,34,0.4)" }}>
+            Forma Studio © 2026
+          </span>
         </div>
+        <span className="micro-label" style={{ color: "rgba(4,50,34,0.22)" }}>
+          New York · London · Remote
+        </span>
+        <span
+          style={{
+            fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+            fontSize: "0.68rem",
+            color: "rgba(4,50,34,0.22)",
+          }}
+        >
+          Senior-led. Outcome-focused.
+        </span>
       </div>
     </section>
-  );
-}
-
-function Field({
-  name,
-  label,
-  type = "text",
-  required = true,
-}: {
-  name: string;
-  label: string;
-  type?: string;
-  required?: boolean;
-}) {
-  return (
-    <div>
-      <label className="label-eyebrow text-cream/60">{label}</label>
-      <input
-        name={name}
-        type={type}
-        required={required}
-        maxLength={255}
-        className="mt-2 w-full border-b border-cream/30 bg-transparent py-3 text-cream placeholder-cream/40 outline-none focus:border-cream"
-      />
-    </div>
-  );
-}
-
-function Select({
-  name,
-  label,
-  options,
-}: {
-  name: string;
-  label: string;
-  options: string[];
-}) {
-  return (
-    <div>
-      <label className="label-eyebrow text-cream/60">{label}</label>
-      <select
-        name={name}
-        required
-        defaultValue=""
-        className="mt-2 w-full border-b border-cream/30 bg-transparent py-3 text-cream outline-none focus:border-cream"
-      >
-        <option value="" disabled className="bg-forest text-cream">
-          Select…
-        </option>
-        {options.map((o) => (
-          <option key={o} value={o} className="bg-forest text-cream">
-            {o}
-          </option>
-        ))}
-      </select>
-    </div>
   );
 }

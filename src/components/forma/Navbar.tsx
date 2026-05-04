@@ -1,90 +1,182 @@
+import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
 
-const links = [
-  { label: "WORK", to: "/", hash: "work" },
-  { label: "SERVICES", to: "/", hash: "services" },
-  { label: "STUDIO", to: "/", hash: "studio" },
-  { label: "CONTACT", to: "/", hash: "contact" },
+const NAV_LINKS = [
+  { label: "Work", href: "#work" },
+  { label: "Services", href: "#services" },
+  { label: "Studio", href: "#studio" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const fn = () => setScrolled(window.scrollY > 48);
+    window.addEventListener("scroll", fn, { passive: true });
+    return () => window.removeEventListener("scroll", fn);
   }, []);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-        scrolled ? "bg-cream/95 backdrop-blur" : "bg-transparent"
-      }`}
+    <nav
+      className="fixed top-0 left-0 right-0 z-[9000] transition-all duration-700"
+      style={{
+        borderBottom: scrolled ? "1px solid rgba(4,50,34,0.09)" : "1px solid transparent",
+        backgroundColor: scrolled ? "rgba(246,233,217,0.94)" : "transparent",
+        backdropFilter: scrolled ? "blur(20px) saturate(1.5)" : "none",
+      }}
     >
-      <div className="mx-auto flex max-w-[1480px] items-center justify-between px-6 py-5 md:px-12 md:py-6">
-        <Link to="/" className="nav-link flex items-center gap-2">
-          <span className="inline-block h-1.5 w-1.5 rounded-full bg-forest" />
-          FORMA STUDIO
+      <div className="px-8 md:px-14 py-5 flex items-center justify-between">
+        <Link
+          to="/"
+          className="flex items-center gap-2.5 group"
+          data-cursor=""
+          style={{ textDecoration: "none" }}
+        >
+          <div
+            style={{ width: "5px", height: "5px", borderRadius: "50%", backgroundColor: "#043222" }}
+          />
+          <span
+            style={{
+              color: "#043222",
+              fontSize: "0.7rem",
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+              fontWeight: 600,
+            }}
+          >
+            Forma Studio
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-9 md:flex">
-          {links.map((l) => (
-            <a key={l.label} href={`#${l.hash}`} className="nav-link">
-              {l.label}
+        <div className="hidden md:flex items-center gap-10">
+          {NAV_LINKS.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="group relative transition-colors duration-300"
+              style={{
+                color: "#4F5B57",
+                fontSize: "0.68rem",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                textDecoration: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#043222";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "#4F5B57";
+              }}
+              data-cursor=""
+            >
+              {link.label}
+              <span
+                className="absolute -bottom-0.5 left-0 w-0 h-px group-hover:w-full transition-all duration-500"
+                style={{ backgroundColor: "#043222" }}
+              />
             </a>
           ))}
-        </nav>
-
-        <a href="#contact" className="btn-primary hidden md:inline-flex">
-          NEW INQUIRY
-        </a>
+          <a
+            href="#contact"
+            className="px-5 py-2.5 transition-all duration-400 rounded-sm"
+            style={{
+              backgroundColor: "#043222",
+              color: "#FFF8EE",
+              fontSize: "0.65rem",
+              letterSpacing: "0.14em",
+              textTransform: "uppercase",
+              fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+              fontWeight: 500,
+              textDecoration: "none",
+              cursor: "none",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "#003631";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "#043222";
+            }}
+            data-cursor=""
+          >
+            New Inquiry
+          </a>
+        </div>
 
         <button
-          className="md:hidden text-forest"
-          onClick={() => setOpen(true)}
-          aria-label="Open menu"
+          className="md:hidden flex flex-col gap-1.5 p-2"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+          style={{ background: "none", border: "none", cursor: "none" }}
         >
-          <Menu className="h-6 w-6" />
+          <span
+            className="block w-6 h-px transition-all duration-400"
+            style={{
+              backgroundColor: "#043222",
+              transform: menuOpen ? "rotate(45deg) translate(3px,3px)" : "",
+            }}
+          />
+          <span
+            className="block w-4 h-px transition-opacity duration-300"
+            style={{ backgroundColor: "#043222", opacity: menuOpen ? 0 : 1 }}
+          />
+          <span
+            className="block w-6 h-px transition-all duration-400"
+            style={{
+              backgroundColor: "#043222",
+              transform: menuOpen ? "rotate(-45deg) translate(3px,-3px)" : "",
+            }}
+          />
         </button>
       </div>
 
-      {open && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-cream md:hidden">
-          <div className="flex items-center justify-between px-6 py-5">
-            <span className="nav-link flex items-center gap-2">
-              <span className="inline-block h-1.5 w-1.5 rounded-full bg-forest" />
-              FORMA STUDIO
-            </span>
-            <button onClick={() => setOpen(false)} aria-label="Close menu">
-              <X className="h-6 w-6 text-forest" />
-            </button>
-          </div>
-          <nav className="flex flex-1 flex-col items-start gap-6 px-8 pt-12">
-            {links.map((l) => (
-              <a
-                key={l.label}
-                href={`#${l.hash}`}
-                onClick={() => setOpen(false)}
-                className="display-serif text-5xl text-forest"
-              >
-                {l.label.toLowerCase()}
-              </a>
-            ))}
+      <div
+        className="md:hidden overflow-hidden transition-all duration-600"
+        style={{
+          maxHeight: menuOpen ? "360px" : "0",
+          borderTop: menuOpen ? "1px solid rgba(4,50,34,0.10)" : "none",
+          backgroundColor: "#FFF8EE",
+        }}
+      >
+        <div className="px-8 py-8 flex flex-col gap-5">
+          {NAV_LINKS.map((link) => (
             <a
-              href="#contact"
-              onClick={() => setOpen(false)}
-              className="btn-primary mt-6"
+              key={link.label}
+              href={link.href}
+              className="transition-colors duration-300"
+              style={{
+                color: "#043222",
+                fontSize: "2.2rem",
+                letterSpacing: "-0.03em",
+                lineHeight: 1,
+                fontFamily: "Boska, ui-serif, Georgia, serif",
+                textDecoration: "none",
+              }}
+              onClick={() => setMenuOpen(false)}
             >
-              NEW INQUIRY
+              {link.label}
             </a>
-          </nav>
+          ))}
+          <a
+            href="#contact"
+            className="mt-2"
+            style={{
+              color: "#043222",
+              fontSize: "0.75rem",
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+              textDecoration: "none",
+            }}
+            onClick={() => setMenuOpen(false)}
+          >
+            New Inquiry →
+          </a>
         </div>
-      )}
-    </header>
+      </div>
+    </nav>
   );
 }

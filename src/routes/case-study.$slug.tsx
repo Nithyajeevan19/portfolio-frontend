@@ -1,206 +1,490 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ArrowUpRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import type { Tables } from "@/integrations/supabase/types";
+import { useQuery } from "@tanstack/react-query";
+import CustomCursor from "@/components/forma/CustomCursor";
 import { Navbar } from "@/components/forma/Navbar";
-import { Footer } from "@/components/forma/Footer";
 
 export const Route = createFileRoute("/case-study/$slug")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.slug.replace(/-/g, " ")} — Forma Studio` },
-      { name: "description", content: "Case study by Forma Studio." },
-    ],
-  }),
-  component: CaseStudyPage,
+  component: CaseStudy,
 });
 
-function CaseStudyPage() {
-  const { slug } = useParams({ from: "/case-study/$slug" });
-  const [cs, setCs] = useState<Tables<"case_studies"> | null>(null);
-  const [next, setNext] = useState<Tables<"case_studies"> | null>(null);
-  const [loading, setLoading] = useState(true);
+export default function CaseStudy() {
+  const { slug } = Route.useParams();
 
-  useEffect(() => {
-    let active = true;
-    setLoading(true);
-    (async () => {
-      const { data } = await supabase
+  const { data: study, isLoading } = useQuery({
+    queryKey: ["case_study", slug],
+    queryFn: async () => {
+      const { data, error } = await supabase
         .from("case_studies")
         .select("*")
         .eq("slug", slug)
-        .maybeSingle();
-      if (!active) return;
-      setCs(data ?? null);
+        .single();
 
-      if (data) {
-        const { data: all } = await supabase
-          .from("case_studies")
-          .select("*")
-          .order("sort_order", { ascending: true });
-        if (all && all.length) {
-          const idx = all.findIndex((x) => x.slug === slug);
-          setNext(all[(idx + 1) % all.length] ?? null);
-        }
-      }
-      setLoading(false);
-    })();
-    return () => {
-      active = false;
-    };
-  }, [slug]);
+      if (error) throw error;
+      return data;
+    },
+  });
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen bg-cream text-forest">
-        <Navbar />
-        <div className="flex min-h-screen items-center justify-center">
-          <p className="label-eyebrow-muted">LOADING…</p>
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#0A0A0A",
+        }}
+      >
+        <p
+          style={{
+            fontFamily: "Inter,sans-serif",
+            fontSize: "0.7rem",
+            letterSpacing: "0.2em",
+            color: "rgba(255,255,255,0.3)",
+          }}
+        >
+          LOADING CASE STUDY...
+        </p>
+      </div>
+    );
+  }
+
+  if (!study) {
+    return (
+      <div
+        style={{
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#0A0A0A",
+        }}
+      >
+        <div style={{ textAlign: "center" }}>
+          <p
+            style={{
+              fontFamily: "Inter,sans-serif",
+              fontSize: "0.8rem",
+              color: "white",
+              marginBottom: "1.5rem",
+            }}
+          >
+            STUDY NOT FOUND
+          </p>
+          <Link to="/" style={{ color: "#FFEDA8", fontSize: "0.7rem", textDecoration: "none" }}>
+            Return Home
+          </Link>
         </div>
       </div>
     );
   }
 
-  if (!cs) {
-    return (
-      <div className="min-h-screen bg-cream text-forest">
-        <Navbar />
-        <div className="flex min-h-screen items-center justify-center flex-col gap-4">
-          <p className="display-serif text-5xl">Project not found.</p>
-          <Link to="/" className="btn-primary">BACK HOME</Link>
-        </div>
-      </div>
-    );
+  // Cast to any to avoid TS errors on older schema fields
+  const data = study as any;
+
+  // Normalized field mapping
+  const projectTitle = data.title || data.project_title;
+  const clientName = data.client || data.client_name;
+  const industryCategory = data.category || data.industry_category;
+  const heroImage = data.cover_image || data.hero_image;
+  const gallery = data.gallery || data.visual_gallery || [];
+
+  // Content blocks
+  const blocks = [
+    { label: "The Context", content: data.the_context },
+    { label: "The Challenge", content: data.the_challenge },
+    { label: "The Approach", content: data.the_approach },
+  ].filter((b) => b.content);
+
+  // If no specific blocks, use the main content field
+  if (blocks.length === 0 && data.content) {
+    blocks.push({ label: "The Project", content: data.content });
   }
 
   return (
-    <div className="min-h-screen bg-cream text-forest">
+    <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
+      <CustomCursor />
       <Navbar />
 
-      {/* Hero */}
-      <section className="relative h-screen min-h-[640px] w-full overflow-hidden bg-ink">
-        <img
-          src={cs.cover_image}
-          alt={cs.title}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="relative mx-auto flex h-full max-w-[1480px] flex-col justify-end px-6 md:px-12 pb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex justify-between items-end gap-6"
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={slug}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          {/* Hero Section */}
+          <section
+            className="relative w-full overflow-hidden"
+            style={{ height: "85vh", borderBottom: "1px solid #1A1A1A" }}
           >
-            <div className="max-w-3xl">
-              <span
-                className="inline-block rounded-full px-3 py-1 text-[10px] font-medium tracking-[0.18em] text-forest"
-                style={{ backgroundColor: "var(--color-lime)" }}
-              >
-                {cs.category.toUpperCase()} // {cs.year}
-              </span>
-              <h1 className="mt-6 text-4xl md:text-6xl lg:text-7xl font-semibold tracking-tight text-cream leading-[1.05]">
-                {cs.title}
-              </h1>
-            </div>
-            <div className="text-right hidden md:block">
-              <p className="label-eyebrow text-cream/70">CLIENT</p>
-              <p className="mt-2 text-cream text-lg">{cs.client}</p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Meta bar */}
-      <section className="bg-cream border-b border-forest/15">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-12 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
-          {[
-            ["CLIENT", cs.client],
-            ["YEAR", String(cs.year)],
-            ["CATEGORY", cs.category],
-            ["SERVICES", cs.services],
-          ].map(([label, value]) => (
-            <div key={label}>
-              <p className="label-eyebrow-muted">{label}</p>
-              <p className="mt-3 text-[15px] text-forest">{value}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Body */}
-      <section className="bg-cream py-24 md:py-32">
-        <div className="mx-auto max-w-[1480px] px-6 md:px-12">
-          <p className="display-serif max-w-3xl text-2xl md:text-[28px] leading-snug text-forest">
-            {cs.description}
-          </p>
-
-          {cs.gallery?.[0] && (
-            <img
-              src={cs.gallery[0]}
-              alt=""
-              className="mt-20 w-full rounded-md object-cover aspect-[16/9]"
-            />
-          )}
-
-          {cs.content && (
-            <div className="mt-20 grid grid-cols-1 lg:grid-cols-12 gap-12">
-              <p className="label-eyebrow lg:col-span-3">— APPROACH</p>
-              <div className="lg:col-span-7 space-y-6 text-[16px] leading-[1.75] text-forest/85 whitespace-pre-line">
-                {cs.content}
-              </div>
-            </div>
-          )}
-
-          {cs.gallery && cs.gallery.length > 1 && (
-            <div className="mt-20 grid grid-cols-1 md:grid-cols-2 gap-6">
-              {cs.gallery.slice(1).map((g, i) => (
-                <img
-                  key={i}
-                  src={g}
-                  alt=""
-                  className="w-full rounded-md object-cover aspect-[4/5]"
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Next */}
-      {next && (
-        <section className="bg-cream pb-24 md:pb-32">
-          <div className="mx-auto max-w-[1480px] px-6 md:px-12">
-            <Link
-              to="/case-study/$slug"
-              params={{ slug: next.slug }}
-              className="group relative block overflow-hidden rounded-md bg-ink aspect-[16/8]"
-            >
-              <img
-                src={next.cover_image}
-                alt={next.title}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]"
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+              <motion.div
+                initial={{ scale: 1.1, opacity: 0 }}
+                animate={{ scale: 1, opacity: 0.6 }}
+                transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundImage: `url(${heroImage})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 md:p-12 flex items-end justify-between">
-                <div>
-                  <p className="label-eyebrow text-cream/70">NEXT PROJECT</p>
-                  <h3 className="display-serif mt-4 text-3xl md:text-5xl text-cream">
-                    {next.title}
-                  </h3>
-                </div>
-                <span className="flex h-12 w-12 items-center justify-center rounded-full border border-cream/40 text-cream transition-colors group-hover:bg-cream group-hover:text-forest">
-                  <ArrowUpRight className="h-5 w-5" />
-                </span>
-              </div>
-            </Link>
-          </div>
-        </section>
-      )}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent opacity-80" />
+            </div>
 
-      <Footer />
+            {/* Title Content */}
+            <div className="relative z-10 h-full flex flex-col justify-end px-8 md:px-12 pb-20">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="max-w-5xl"
+              >
+                <div
+                  className="micro-label mb-6"
+                  style={{
+                    color: "#888888",
+                    fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                  }}
+                >
+                  CASE STUDY // {data.year}
+                </div>
+                <h1
+                  style={{
+                    fontFamily: "Boska, ui-serif, Georgia, serif",
+                    fontSize: "clamp(2.5rem, 8vw, 7.5rem)",
+                    lineHeight: "0.94",
+                    letterSpacing: "-0.04em",
+                    color: "#FFF8EE",
+                    margin: 0,
+                  }}
+                >
+                  {projectTitle}
+                </h1>
+                {data.live_site_link && (
+                  <a
+                    href={data.live_site_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="micro-label flex items-center gap-2 mt-8 transition-colors hover:text-white"
+                    style={{
+                      color: "#C8FF00",
+                      fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                      textDecoration: "none",
+                    }}
+                    data-cursor=""
+                  >
+                    View Live Site →
+                  </a>
+                )}
+              </motion.div>
+            </div>
+          </section>
+
+          {/* Meta bar + Context */}
+          <section className="px-8 md:px-12" style={{ paddingTop: "10vh", paddingBottom: "10vh" }}>
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-16">
+              {/* Sticky metadata */}
+              <div className="md:col-span-3">
+                <div className="sticky top-28 flex flex-col gap-8">
+                  <div>
+                    <div
+                      className="micro-label mb-2"
+                      style={{
+                        color: "#888888",
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                      }}
+                    >
+                      Client
+                    </div>
+                    <p
+                      style={{
+                        color: "#F4F4F0",
+                        fontSize: "0.9rem",
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                        margin: 0,
+                      }}
+                    >
+                      {clientName}
+                    </p>
+                  </div>
+                  <div style={{ width: "100%", height: "1px", backgroundColor: "#1A1A1A" }} />
+                  <div>
+                    <div
+                      className="micro-label mb-2"
+                      style={{
+                        color: "#888888",
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                      }}
+                    >
+                      Services
+                    </div>
+                    <p
+                      style={{
+                        color: "#F4F4F0",
+                        fontSize: "0.9rem",
+                        lineHeight: "1.6",
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                        margin: 0,
+                      }}
+                    >
+                      {data.services}
+                    </p>
+                  </div>
+                  <div style={{ width: "100%", height: "1px", backgroundColor: "#1A1A1A" }} />
+                  <div>
+                    <div
+                      className="micro-label mb-2"
+                      style={{
+                        color: "#888888",
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                      }}
+                    >
+                      Year
+                    </div>
+                    <p
+                      style={{
+                        color: "#F4F4F0",
+                        fontSize: "0.9rem",
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                        margin: 0,
+                      }}
+                    >
+                      {data.year}
+                    </p>
+                  </div>
+                  <div style={{ width: "100%", height: "1px", backgroundColor: "#1A1A1A" }} />
+                  <div>
+                    <div
+                      className="micro-label mb-2"
+                      style={{
+                        color: "#888888",
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                      }}
+                    >
+                      Industry
+                    </div>
+                    <p
+                      className="micro-label"
+                      style={{
+                        color: "#C8FF00",
+                        border: "1px solid rgba(200,255,0,0.2)",
+                        padding: "4px 8px",
+                        display: "inline-block",
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                        margin: 0,
+                      }}
+                    >
+                      {industryCategory}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Content Blocks */}
+              <div className="md:col-span-9 flex flex-col gap-16">
+                {blocks.map((block, i) => (
+                  <motion.div
+                    key={block.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
+                  >
+                    <div
+                      className="micro-label mb-5"
+                      style={{
+                        color: "#C8FF00",
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                      }}
+                    >
+                      {String(i + 1).padStart(2, "0")} // {block.label.toUpperCase()}
+                    </div>
+                    <p
+                      style={{
+                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                        fontSize: "clamp(1.3rem, 2.5vw, 2rem)",
+                        lineHeight: "1.4",
+                        letterSpacing: "-0.02em",
+                        color: "#F4F4F0",
+                        margin: 0,
+                      }}
+                    >
+                      {block.content}
+                    </p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Visual Gallery */}
+          {gallery.length > 0 && (
+            <section className="px-8 md:px-12" style={{ paddingBottom: "10vh" }}>
+              <div
+                className="micro-label mb-8"
+                style={{
+                  color: "#888888",
+                  fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                }}
+              >
+                VISUAL SYSTEM
+              </div>
+              <div
+                className="mb-4"
+                style={{ height: "60vh", overflow: "hidden", border: "1px solid #1A1A1A" }}
+              >
+                <img
+                  src={gallery[0]}
+                  alt="Gallery 1"
+                  className="w-full h-full object-cover"
+                  style={{ filter: "brightness(0.85)" }}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {gallery.slice(1, 3).map((img: string, i: number) => (
+                  <div
+                    key={i}
+                    style={{
+                      aspectRatio: "16/10",
+                      overflow: "hidden",
+                      border: "1px solid #1A1A1A",
+                    }}
+                  >
+                    <img
+                      src={img}
+                      alt={`Gallery ${i + 2}`}
+                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                      style={{ filter: "brightness(0.85)" }}
+                    />
+                  </div>
+                ))}
+              </div>
+              {gallery[3] && (
+                <div
+                  className="mt-4"
+                  style={{ height: "40vh", overflow: "hidden", border: "1px solid #1A1A1A" }}
+                >
+                  <img
+                    src={gallery[3]}
+                    alt="Gallery 4"
+                    className="w-full h-full object-cover"
+                    style={{ filter: "brightness(0.85)" }}
+                  />
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* Impact */}
+          {(data.impact_metric_1 || data.the_impact) && (
+            <section
+              className="px-8 md:px-12 py-20 mx-8 md:mx-12 mb-20"
+              style={{ border: "1px solid #1A1A1A", backgroundColor: "#0D0D0D" }}
+            >
+              <div
+                className="micro-label mb-10"
+                style={{
+                  color: "#C8FF00",
+                  fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                }}
+              >
+                04 // THE IMPACT
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
+                {[
+                  { metric: data.impact_metric_1, label: data.impact_label_1 },
+                  { metric: data.impact_metric_2, label: data.impact_label_2 },
+                ]
+                  .filter((m) => m.metric)
+                  .map((item, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: i * 0.2 }}
+                    >
+                      <div
+                        style={{
+                          fontFamily: "Boska, ui-serif, Georgia, serif",
+                          fontSize: "clamp(3rem, 8vw, 8rem)",
+                          lineHeight: 1,
+                          letterSpacing: "-0.04em",
+                          color: "#FFF8EE",
+                        }}
+                      >
+                        {item.metric}
+                      </div>
+                      <div
+                        className="micro-label mt-3"
+                        style={{
+                          color: "#888888",
+                          fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                        }}
+                      >
+                        {item.label?.toUpperCase()}
+                      </div>
+                    </motion.div>
+                  ))}
+              </div>
+              {data.the_impact && (
+                <p
+                  style={{
+                    fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                    fontSize: "clamp(1.1rem, 2vw, 1.5rem)",
+                    lineHeight: "1.4",
+                    letterSpacing: "-0.02em",
+                    color: "#888888",
+                    maxWidth: "42rem",
+                    margin: 0,
+                  }}
+                >
+                  {data.the_impact}
+                </p>
+              )}
+            </section>
+          )}
+
+          {/* Footer Navigation */}
+          <div
+            className="px-8 md:px-12 pb-20 flex items-center justify-between"
+            style={{ borderTop: "1px solid #1A1A1A", paddingTop: "3rem" }}
+          >
+            <Link
+              to="/"
+              className="micro-label flex items-center gap-3 transition-colors hover:text-white"
+              style={{
+                color: "#888888",
+                fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                textDecoration: "none",
+              }}
+              data-cursor=""
+            >
+              ← All Work
+            </Link>
+            <a
+              href="#contact"
+              className="micro-label flex items-center gap-3 px-6 py-3 transition-all"
+              style={{
+                border: "1px solid #1A1A1A",
+                color: "#C8FF00",
+                fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                textDecoration: "none",
+              }}
+              data-cursor=""
+            >
+              Start Your Project →
+            </a>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }

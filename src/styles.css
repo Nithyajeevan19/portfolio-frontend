@@ -1,14 +1,15 @@
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&f[]=boska@400,500,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss" source(none);
-@source "../src";
 @import "tw-animate-css";
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600&display=swap');
+@source "../src";
 
 @custom-variant dark (&:is(.dark *));
 
 /*
  * Forma Studio design system.
- * Colors are warm cream + deep forest green. All headings use Cormorant Garamond.
+ * Colors are warm cream + deep forest green. All headings use Boska.
  * Body / labels / nav use Inter (uppercase for labels).
  */
 
@@ -46,21 +47,21 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-serif: "Cormorant Garamond", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Boska", ui-serif, Georgia, serif;
+  --font-sans: "Satoshi", "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
   --radius: 0.25rem;
 
   /* Forma palette */
-  --cream: oklch(0.945 0.018 85);          /* #F2EDE4 */
-  --forest: oklch(0.245 0.045 155);        /* #0D2B1A deep forest green */
+  --cream: oklch(0.945 0.018 85); /* #F2EDE4 */
+  --forest: oklch(0.245 0.045 155); /* #0D2B1A deep forest green */
   --forest-ghost: oklch(0.245 0.045 155 / 0.22);
   --forest-muted: oklch(0.245 0.045 155 / 0.6);
-  --lime: oklch(0.92 0.22 125);            /* #C5F135 */
-  --gold: oklch(0.78 0.085 75);            /* warm gold */
-  --ink: oklch(0.12 0 0);                  /* near-black */
+  --lime: oklch(0.92 0.22 125); /* #C5F135 */
+  --gold: oklch(0.78 0.085 75); /* warm gold */
+  --ink: oklch(0.12 0 0); /* near-black */
 
   --background: var(--cream);
   --foreground: var(--forest);
@@ -135,7 +136,9 @@
     color: var(--color-forest);
     transition: opacity 0.2s ease;
   }
-  .nav-link:hover { opacity: 0.6; }
+  .nav-link:hover {
+    opacity: 0.6;
+  }
 
   .display-serif {
     font-family: var(--font-serif);
@@ -173,9 +176,14 @@
     text-transform: uppercase;
     padding: 0.95rem 1.4rem;
     border-radius: 4px;
-    transition: transform 0.25s ease, background-color 0.25s ease;
+    transition:
+      transform 0.25s ease,
+      background-color 0.25s ease;
   }
-  .btn-primary:hover { background-color: oklch(0.18 0.04 155); transform: translateY(-1px); }
+  .btn-primary:hover {
+    background-color: oklch(0.18 0.04 155);
+    transform: translateY(-1px);
+  }
 
   .btn-ghost {
     display: inline-flex;
@@ -191,9 +199,14 @@
     text-transform: uppercase;
     padding: 0.95rem 1.4rem;
     border-radius: 4px;
-    transition: background-color 0.25s ease, color 0.25s ease;
+    transition:
+      background-color 0.25s ease,
+      color 0.25s ease;
   }
-  .btn-ghost:hover { background-color: var(--color-forest); color: var(--color-cream); }
+  .btn-ghost:hover {
+    background-color: var(--color-forest);
+    color: var(--color-cream);
+  }
 
   .pill-tag {
     display: inline-flex;
@@ -215,22 +228,30 @@
     height: 300px;
     border-radius: 50%;
     background:
-      radial-gradient(circle at 65% 30%, rgba(255,255,255,0.35) 0%, transparent 45%),
-      radial-gradient(circle at 75% 25%, rgba(200,220,210,0.25) 0%, transparent 35%),
-      radial-gradient(circle at 40% 70%, rgba(180,200,190,0.15) 0%, transparent 40%),
-      radial-gradient(circle at 50% 50%, #D8D4CC 0%, #C8C4BA 60%, #B8B4AA 100%);
+      radial-gradient(circle at 65% 30%, rgba(255, 255, 255, 0.35) 0%, transparent 45%),
+      radial-gradient(circle at 75% 25%, rgba(200, 220, 210, 0.25) 0%, transparent 35%),
+      radial-gradient(circle at 40% 70%, rgba(180, 200, 190, 0.15) 0%, transparent 40%),
+      radial-gradient(circle at 50% 50%, #d8d4cc 0%, #c8c4ba 60%, #b8b4aa 100%);
     box-shadow:
-      inset -28px -36px 70px rgba(120,120,110,0.35),
-      inset 24px 24px 60px rgba(255,255,255,0.35),
-      0 60px 120px -30px rgba(60,60,55,0.35);
+      inset -28px -36px 70px rgba(120, 120, 110, 0.35),
+      inset 24px 24px 60px rgba(255, 255, 255, 0.35),
+      0 60px 120px -30px rgba(60, 60, 55, 0.35);
   }
   @media (min-width: 768px) {
-    .sphere { width: 500px; height: 500px; }
+    .sphere {
+      width: 500px;
+      height: 500px;
+    }
   }
   .sphere-dot {
     position: absolute;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(120,230,200,0.95) 0%, rgba(80,200,170,0.5) 40%, transparent 70%);
+    background: radial-gradient(
+      circle,
+      rgba(120, 230, 200, 0.95) 0%,
+      rgba(80, 200, 170, 0.5) 40%,
+      transparent 70%
+    );
     filter: blur(0.5px);
     pointer-events: none;
   }
@@ -241,7 +262,7 @@
     font-weight: 400;
     line-height: 0.95;
     letter-spacing: -0.02em;
-    color: #0D2B1A;
+    color: #0d2b1a;
     font-size: clamp(56px, 7vw, 96px);
   }
   .section-headline-line2 {
@@ -250,24 +271,90 @@
     font-weight: 400;
     line-height: 0.95;
     letter-spacing: -0.02em;
-    color: rgba(13,43,26,0.22);
+    color: rgba(13, 43, 26, 0.22);
     font-size: clamp(56px, 7vw, 96px);
   }
   .section-headline-sub {
     font-family: var(--font-sans);
     font-size: 14px;
     line-height: 1.55;
-    color: #0D2B1A;
+    color: #0d2b1a;
     max-width: 300px;
     text-align: right;
     margin-left: auto;
   }
 
-  .divider-thin { height: 1px; background-color: oklch(0.245 0.045 155 / 0.18); }
+  .divider-thin {
+    height: 1px;
+    background-color: oklch(0.245 0.045 155 / 0.18);
+  }
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
-.animate-fade-up { animation: fade-up 0.8s ease-out both; }
+.animate-fade-up {
+  animation: fade-up 0.8s ease-out both;
+}
+
+.font-boska {
+  font-family: "Boska", Georgia, serif;
+}
+.font-satoshi {
+  font-family: "Inter", sans-serif;
+}
+.micro-label {
+  font-family: "Inter", sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+* {
+  cursor: none;
+}
+
+/* ── Orbit wrapper ─────────────────────────────── */
+.orbit-wrap {
+  opacity: 0.32;
+  filter: blur(0.3px);
+  mix-blend-mode: multiply;
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0.9),
+    rgba(0, 0, 0, 0.22) 58%,
+    transparent 76%
+  );
+  mask-image: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0.9),
+    rgba(0, 0, 0, 0.22) 58%,
+    transparent 76%
+  );
+}
+
+/* ── Noise bg ──────────────────────────────────── */
+.noise-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.022;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ── Impact numbers ────────────────────────────── */
+.impact-number {
+  font-family: "Boska", Georgia, serif;
+  color: var(--green);
+  letter-spacing: -0.04em;
+}

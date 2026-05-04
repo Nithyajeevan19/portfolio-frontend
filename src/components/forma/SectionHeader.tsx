@@ -19,7 +19,9 @@ export function SectionHeader({ number, label, line1, line2, supporting }: Props
         transition={{ duration: 0.7 }}
         className="lg:col-span-8"
       >
-        <p className="label-eyebrow">{number} —— {label}</p>
+        <p className="label-eyebrow">
+          {number} —— {label}
+        </p>
         <h2 className="mt-8">
           <span className="section-headline-line1 block">{line1}</span>
           <span className="section-headline-line2 block">{line2}</span>
