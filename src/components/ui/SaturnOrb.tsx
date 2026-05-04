@@ -244,8 +244,8 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
     const planet = new THREE.Mesh(
       new THREE.SphereGeometry(1.82, 128, 128),
       new THREE.MeshPhysicalMaterial({
-        color: 0xd8cfc1,
-        roughness: 0.65, // Lowered from 0.96 for lighting contrast
+        color: 0xff0000, // [HARD TEST] Red planet
+        roughness: 0.4,
         metalness: 0.1,  // Slight metallic hint
         clearcoat: 0.4,  // Increased for surface highlights
         clearcoatRoughness: 0.2,
@@ -436,15 +436,16 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
       const delta = clock.getDelta(); // Frame-rate independent time
       const t = clock.getElapsedTime();
 
-      // [FIX 1] Continuous spinning (clearly visible)
-      // Boosted speed to 2.0 for debug visibility as requested
-      planet.rotation.y += delta * 2.0;
+      // [HARD TEST] Extreme rotation
+      planet.rotation.y += 0.1;
 
+      /* [TEMP REMOVED COMPLEX LOGIC]
       // [GSAP] Velocity Inertia Integration
       if (!isDragging.current) {
         root.rotation.y += dragVelocity.current.x;
         root.rotation.x = clamp(root.rotation.x + dragVelocity.current.y, -0.7, 0.7);
       }
+      */
 
       // Orbiters position updates (manual math for circular orbits)
       orbiters.forEach((o, i) => {

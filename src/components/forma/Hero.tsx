@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import LuxuryOrb from "./LuxuryOrb";
+import SaturnOrb from "../ui/SaturnOrb";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -243,7 +244,9 @@ export function Hero() {
               flexShrink: 0,
             }}
           >
-            <LuxuryOrb size={orbSize} />
+            <div style={{ width: orbSize, height: orbSize }}>
+              <SaturnOrb mousePos={{ x: 0, y: 0 }} /> 
+            </div>
           </motion.div>
         </div>
       </div>
