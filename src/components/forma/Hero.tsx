@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import LuxuryOrb from "./LuxuryOrb";
-import SaturnOrb from "../ui/SaturnOrb";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -163,7 +162,7 @@ export function Hero() {
                 color: "#043222",
               }}
             >
-              BRAND STRATEGY · DIGITAL PRODUCT · INTERACTIVE WEB
+              Web Experiences · Digital Systems · Scalable SaaS
             </motion.p>
 
             <motion.h1
@@ -183,8 +182,10 @@ export function Hero() {
                 maxWidth: "12ch",
               }}
             >
-              Build digital worlds with{" "}
-              <em style={{ fontStyle: "italic", color: "rgba(4,50,34,0.25)" }}>quiet gravity.</em>
+             Design that works. {" "}
+             <em style={{ fontStyle: "italic", color: "rgba(4,50,34,0.25)" }}>Systems that scale</em>,
+             <em style={{ fontStyle: "italic", color: "rgba(4,50,34,0.25)"}}>Value that lasts.</em>
+            
             </motion.h1>
 
             <motion.div
@@ -244,9 +245,7 @@ export function Hero() {
               flexShrink: 0,
             }}
           >
-            <div style={{ width: orbSize, height: orbSize }}>
-              <SaturnOrb mousePos={{ x: 0, y: 0 }} /> 
-            </div>
+            <LuxuryOrb size={orbSize} />
           </motion.div>
         </div>
       </div>

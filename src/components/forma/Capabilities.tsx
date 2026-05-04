@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const SERVICES = [
   {
     index: "01",
-    title: "Brand Strategy\n& Identity",
+    title: "Web Experiences",
     body: "We define market position, naming, and voice. Then we build the visual system — identity, typography, colour, motion — to hold it for a decade.",
     deliverables: [
       "Positioning & Messaging",
@@ -16,7 +16,7 @@ const SERVICES = [
   },
   {
     index: "02",
-    title: "Digital Product\nDesign",
+    title: "Digital Systems",
     body: "From zero-to-one product strategy to mature design systems. We reduce friction, increase conversion, and create interfaces people return to.",
     deliverables: [
       "UX Strategy & Research",
@@ -28,7 +28,7 @@ const SERVICES = [
   },
   {
     index: "03",
-    title: "Interactive Web\nExperiences",
+    title: "Scalable SaaS",
     body: "Award-calibre marketing sites, campaign platforms, and editorial spaces. Built with precision front-end engineering and cinematic art direction.",
     deliverables: [
       "Creative Direction",

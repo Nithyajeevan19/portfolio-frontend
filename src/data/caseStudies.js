@@ -7,13 +7,13 @@ export const CASE_STUDIES = [
   {
     id: "sweet-magic",
     slug: "sweet-magic",
-    project_title: "SweetMagic — Designing Effortless Recipe Discovery",
+    project_title: "",
     client_name: "SweetMagic Kitchen",
     category: "Food & Recipe",
     services: "UI/UX Design, Frontend Development",
     year: 2025,
     featured: true,
-    cover_image: "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=1800&q=80",
+    cover_image: "https://res.cloudinary.com/dhgkvhtol/image/upload/v1777886011/Screenshot_2026-05-04_144236_fpr6sr.png",
     description:
       "SweetMagic was conceived as a modern recipe platform in a space saturated with cluttered and outdated experiences.",
     the_context:
