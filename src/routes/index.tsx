@@ -9,22 +9,6 @@ import { Contact } from "@/components/forma/Contact";
 import { Footer } from "@/components/forma/Footer";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Forma Studio — Brand, Product & Interactive Web" },
-      {
-        name: "description",
-        content:
-          "Senior-led studio building brand systems, digital products, and interactive web experiences for ambitious companies.",
-      },
-      { property: "og:title", content: "Forma Studio — Brand, Product & Interactive Web" },
-      {
-        property: "og:description",
-        content:
-          "Work that earns its place. A focused selection led by senior principals from strategy through delivery.",
-      },
-    ],
-  }),
   component: Index,
 });
 
