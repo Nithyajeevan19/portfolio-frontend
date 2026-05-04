@@ -1,0 +1,158 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   ANTIGRAVITY ANIMATION SYSTEM — Global tokens, keyframes & utilities
+   Matched to SaturnOrb's physics constants and lighting palette.
+───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Animation design tokens ───────────────────────────────────────────────── */
+:root {
+  /* Easing */
+  --ease-antigravity:   cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-magnetic:      cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-collapse:      cubic-bezier(0.4, 0, 0.6, 1);
+  --ease-expand:        cubic-bezier(0, 0, 0.2, 1);
+  --ease-shock:         cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Durations */
+  --dur-instant: 80ms;
+  --dur-fast:    160ms;
+  --dur-medium:  320ms;
+  --dur-slow:    550ms;
+  --dur-float:   900ms;
+
+  /* SaturnOrb palette tokens */
+  --color-energy:   #fff8ee;
+  --color-rim:      #8bb8ff;
+  --color-particle: #ded6c9;
+  --color-shock:    #fff6e0;
+  --color-moon-0:   #c6fff6;
+  --color-moon-1:   #e8fff9;
+  --color-moon-2:   #b9e4d8;
+
+  /* Cursor tracking (updated by usePortfolioAnimations hook) */
+  --cursor-x: 0;
+  --cursor-y: 0;
+  --scroll-progress: 0;
+}
+
+/* ── Global keyframes ───────────────────────────────────────────────────────── */
+
+/* Law 1 — Everything breathes */
+@keyframes breathe {
+  0%, 100% { transform: translateY(0)    scale(1);      }
+  30%       { transform: translateY(-2px) scale(1.003); }
+  70%       { transform: translateY(1px)  scale(0.998); }
+}
+
+/* Accordion slide */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes slideUp {
+  from { opacity: 1; transform: translateY(0);    }
+  to   { opacity: 0; transform: translateY(-6px); }
+}
+
+/* Alert orbital orbit */
+@keyframes orbit {
+  from { transform: rotate(0deg)   translateX(2px) rotate(0deg);    }
+  to   { transform: rotate(360deg) translateX(2px) rotate(-360deg); }
+}
+
+/* Alert particle entry */
+@keyframes particleEntry {
+  from { opacity: 0; transform: translateX(-12px) scale(0.98); }
+  to   { opacity: 1; transform: translateX(0)      scale(1);   }
+}
+
+/* Dialog cinematic open */
+@keyframes dialogOpen {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.88) translateY(12px); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1)    translateY(0);    }
+}
+@keyframes dialogClose {
+  from { opacity: 1; transform: translate(-50%, -50%) scale(1)    rotate(0deg);  }
+  to   { opacity: 0; transform: translate(-50%, -50%) scale(0.94) rotate(-1deg); }
+}
+
+/* Law 3 — Clicks have mass */
+@keyframes shockwave {
+  to { box-shadow: 0 0 0 20px transparent; }
+}
+@keyframes clickBurst {
+  0%   { transform: translate(-50%, -50%) scale(0);  opacity: 0.85; }
+  60%  { transform: translate(-50%, -50%) scale(6);  opacity: 0.25; }
+  100% { transform: translate(-50%, -50%) scale(12); opacity: 0;    }
+}
+
+/* Glow pulse */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0   0   rgba(139, 184, 255, 0.15); }
+  50%       { box-shadow: 0 0 24px 4px rgba(139, 184, 255, 0.30); }
+}
+
+/* Rim flash on destructive */
+@keyframes rimFlash {
+  0%   { box-shadow: 0 0 0   0  rgba(255, 246, 224, 0.8); }
+  50%  { box-shadow: 0 0 32px 8px rgba(255, 246, 224, 0.4); }
+  100% { box-shadow: 0 0 0   0  transparent; }
+}
+
+/* Existing keyframes — kept intact */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+/* ── Utility classes ────────────────────────────────────────────────────────── */
+
+/* Breathing */
+.animate-breathe      { animation: breathe 5s   var(--ease-antigravity) infinite; }
+.animate-breathe-slow { animation: breathe 7.5s var(--ease-antigravity) infinite; }
+
+/* Particle entry */
+.animate-particle-entry {
+  animation: particleEntry var(--dur-medium) var(--ease-antigravity) both;
+}
+
+/* Click shockwave on interactive elements */
+.interactive {
+  position: relative;
+  overflow: hidden;
+}
+.interactive::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 var(--color-shock);
+  pointer-events: none;
+}
+.interactive:active::after {
+  animation: shockwave var(--dur-slow) var(--ease-shock) forwards;
+}
+
+/* Click burst dot (injected by usePortfolioAnimations hook) */
+.click-burst {
+  pointer-events: none;
+  position: fixed;
+  z-index: 9999;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  background: var(--color-shock);
+  animation: clickBurst 600ms ease-out forwards;
+}
+
+/* Magnetic card glow */
+.mag-glow {
+  box-shadow: 0 0 0 1px rgba(139, 184, 255, 0.08);
+  transition: box-shadow var(--dur-slow) var(--ease-antigravity);
+  will-change: transform;
+}
+.mag-glow:hover {
+  box-shadow:
+    0 0 32px rgba(139, 184, 255, 0.18),
+    0 0 1px  rgba(139, 184, 255, 0.35);
+}

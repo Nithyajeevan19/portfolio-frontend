@@ -1,15 +1,32 @@
 import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
 import { Toaster } from "@/components/ui/sonner";
 import CustomCursor from "@/components/forma/CustomCursor";
+import { usePortfolioAnimations } from "@/hooks/usePortfolioAnimations";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4" style={{ backgroundColor: "#F6E9D9" }}>
+    <div
+      className="flex min-h-screen items-center justify-center px-4"
+      style={{ backgroundColor: "#F6E9D9" }}
+    >
       <div className="max-w-md text-center">
-        <h1 style={{ fontFamily: "Boska, Georgia, serif", fontSize: "6rem", color: "#043222", margin: 0 }}>
+        <h1
+          style={{
+            fontFamily: "Boska, Georgia, serif",
+            fontSize: "6rem",
+            color: "#043222",
+            margin: 0,
+          }}
+        >
           404
         </h1>
-        <p style={{ fontFamily: "Satoshi, Inter, sans-serif", color: "rgba(4,50,34,0.5)", marginBottom: "2rem" }}>
+        <p
+          style={{
+            fontFamily: "Satoshi, Inter, sans-serif",
+            color: "rgba(4,50,34,0.5)",
+            marginBottom: "2rem",
+          }}
+        >
           Page not found.
         </p>
         <Link
@@ -39,6 +56,11 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  // ── Wire global animation system ─────────────────────────────────────────────
+  // Sets --cursor-x / --cursor-y / --scroll-progress CSS vars on <html>
+  // and injects click-burst DOM particles on every click.
+  usePortfolioAnimations();
+
   return (
     <>
       <CustomCursor />
