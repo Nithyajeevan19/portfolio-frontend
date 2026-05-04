@@ -245,23 +245,17 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
       new THREE.SphereGeometry(1.82, 128, 128),
       new THREE.MeshPhysicalMaterial({
         color: 0xd8cfc1,
-        roughness: 0.96,
-        metalness: 0.02,
-        clearcoat: 0.18,
-        clearcoatRoughness: 0.9,
-        sheen: 0.55,
+        roughness: 0.65, // Lowered from 0.96 for lighting contrast
+        metalness: 0.1,  // Slight metallic hint
+        clearcoat: 0.4,  // Increased for surface highlights
+        clearcoatRoughness: 0.2,
+        sheen: 0.8,
         sheenColor: new THREE.Color(0xf8f3eb),
       }),
     );
     root.add(planet);
 
-    // [GSAP] INFINITE ROTATION
-    gsap.to(planet.rotation, {
-      y: Math.PI * 2,
-      duration: 25,
-      repeat: -1,
-      ease: "none"
-    });
+    // [FIX] Removed GSAP rotation to prevent conflicts with animate loop
 
     // Atmosphere
     const atmo = new THREE.Mesh(
@@ -439,7 +433,12 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
 
     const clock = new THREE.Clock();
     const animate = () => {
+      const delta = clock.getDelta(); // Frame-rate independent time
       const t = clock.getElapsedTime();
+
+      // [FIX 1] Continuous spinning (clearly visible)
+      // Boosted speed to 2.0 for debug visibility as requested
+      planet.rotation.y += delta * 2.0;
 
       // [GSAP] Velocity Inertia Integration
       if (!isDragging.current) {
