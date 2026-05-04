@@ -35,19 +35,19 @@ export function Navbar() {
           style={{ textDecoration: "none" }}
         >
           <div
-            style={{ width: "5px", height: "5px", borderRadius: "50%", backgroundColor: "#043222" }}
+           
           />
           <span
             style={{
               color: "#043222",
-              fontSize: "0.7rem",
+              fontSize: "0.9rem",
               letterSpacing: "0.22em",
               textTransform: "uppercase",
               fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
               fontWeight: 600,
             }}
           >
-            Forma Studio
+          DEVNest
           </span>
         </Link>
 

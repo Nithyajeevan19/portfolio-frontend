@@ -146,7 +146,7 @@ export function Hero() {
                   flexShrink: 0,
                 }}
               />
-              AVAILABLE Q3 2026
+              Now accepting new projects
             </motion.div>
             <motion.p
               initial={{ opacity: 0, y: 5 }}
@@ -179,13 +179,19 @@ export function Hero() {
                 color: "#043222",
                 overflow: "visible",
                 paddingBottom: "0.2rem",
-                maxWidth: "12ch",
+                maxWidth: "15ch",
               }}
             >
-             Design that works. {" "}
-             <em style={{ fontStyle: "italic", color: "rgba(4,50,34,0.25)" }}>Systems that scale</em>,
-             <em style={{ fontStyle: "italic", color: "rgba(4,50,34,0.25)"}}>Value that lasts.</em>
-            
+              Design that <br />
+              works,{" "}
+              <span style={{ fontStyle: "italic" }}>
+                <span style={{ color: "rgba(4,50,34,0.25)" }}>
+                  Systems <br />
+                  that scale,
+                </span>{" "}
+                Value <br />
+                that lasts.
+              </span>
             </motion.h1>
 
             <motion.div
@@ -214,8 +220,7 @@ export function Hero() {
                 color: "#4F5B57",
               }}
             >
-              A senior-led creative studio. We partner with ambitious brands and product teams to
-              build brand systems, digital experiences, and interactive work that endures.
+             A modern creative studio for ambitious brands. We craft high-impact web experiences, build smart systems, and turn ideas into scalable products.
             </motion.p>
 
             {/* CTAs */}
