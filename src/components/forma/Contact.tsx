@@ -1,6 +1,5 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
 
 const PROJECT_SCOPES = [
   "Brand Strategy & Identity",
@@ -43,20 +42,40 @@ export function Contact() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,
   ) => setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
+
+  const isValidEmail = (email: string) => {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!isValidEmail(form.email)) {
+      alert("Enter a valid email");
+      return;
+    }
+
     setStatus("loading");
+
     try {
-      const { error } = await supabase.from("contact_submissions").insert([{
-        name: form.name,
-        email: form.email,
-        project_type: form.project_scope,
-        budget_range: form.budget,
-        message: form.message,
-      }]);
-      if (error) throw error;
+      const res = await fetch("https://portfolio-backend-0o1b.onrender.com/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (!res.ok) throw new Error("Failed");
+
       setStatus("success");
-      setForm({ name: "", email: "", project_scope: "", budget: "", message: "" });
+      setForm({
+        name: "",
+        email: "",
+        project_scope: "",
+        budget: "",
+        message: "",
+      });
     } catch (err) {
       console.error(err);
       setStatus("idle");
@@ -348,7 +367,7 @@ export function Contact() {
                     <input
                       name={f.name}
                       type={f.type}
-                      value={(form as any)[f.name]}
+                      value={form[f.name as keyof typeof form]}
                       onChange={handleChange}
                       required
                       placeholder={f.placeholder}
@@ -537,3 +556,5 @@ export function Contact() {
     </section>
   );
 }
+
+export default Contact;

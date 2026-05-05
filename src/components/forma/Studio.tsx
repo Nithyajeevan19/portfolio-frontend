@@ -1,5 +1,6 @@
+import React from "react";
 import { motion } from "framer-motion";
-import { SectionHeader } from "./SectionHeader";
+// import { SectionHeader } from "./SectionHeader";
 
 const TEAM = [
   {
@@ -22,7 +23,7 @@ const TEAM = [
     name: "Nithyajeevan M",
     role: "Product & UX",
     bio: "Has shipped interfaces used by tens of millions. Brings research rigour and an instinct for what people actually need.",
-    image: "/images/nithya.jpg",
+    image: "https://res.cloudinary.com/dhgkvhtol/image/upload/v1777986194/Screenshot_20260504_191113_Gallery_fks98h.jpg",
     initials: "SO",
     showConnect: false,
   },
@@ -48,10 +49,14 @@ const ease = [0.16, 1, 0.3, 1] as const;
 function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 22 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial="initial"
+      whileInView="visible"
+      whileHover="hover"
+      variants={{
+        initial: { opacity: 0, y: 22 },
+        visible: { opacity: 1, y: 0, transition: { duration: 1.1, ease, delay: index * 0.08 } },
+      }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 1.1, ease, delay: index * 0.08 }}
       data-cursor="Connect"
     >
       <div
@@ -65,27 +70,48 @@ function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }
           backgroundColor: "#EDE3D4",
         }}
       >
-        <div
+        <motion.div
+          variants={{
+            initial: { 
+              scale: 1, 
+              filter: "grayscale(50%) contrast(1.02) brightness(0.92) blur(0.8px)" 
+            },
+            visible: { 
+              scale: 1, 
+              filter: "grayscale(50%) contrast(1.02) brightness(0.92) blur(0.8px)" 
+            },
+            hover: { 
+              scale: 1.03, 
+              filter: "grayscale(0%) contrast(1) brightness(1.05) blur(0px)" 
+            }
+          }}
+          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           style={{
             position: "absolute",
             inset: 0,
             backgroundImage: `url(${member.image})`,
             backgroundSize: "cover",
             backgroundPosition: "center top",
-            filter: "grayscale(100%) contrast(1.04) brightness(0.80)",
-            transition: "filter 0.75s ease, transform 0.75s cubic-bezier(0.16,1,0.3,1)",
-          }}
-          onMouseEnter={(e) => {
-            (e.currentTarget as HTMLDivElement).style.filter =
-              "grayscale(0%) contrast(1.0) brightness(0.88)";
-            (e.currentTarget as HTMLDivElement).style.transform = "scale(1.04)";
-          }}
-          onMouseLeave={(e) => {
-            (e.currentTarget as HTMLDivElement).style.filter =
-              "grayscale(100%) contrast(1.04) brightness(0.80)";
-            (e.currentTarget as HTMLDivElement).style.transform = "scale(1)";
           }}
         />
+        
+        {/* Coffee Overlay */}
+        <motion.div
+          variants={{
+            initial: { opacity: 0.32 },
+            visible: { opacity: 0.32 },
+            hover: { opacity: 0 }
+          }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundColor: "#6F4E37",
+            zIndex: 1,
+            pointerEvents: "none",
+          }}
+        />
+
         {/* Initials watermark */}
         <div
           style={{
@@ -94,7 +120,7 @@ function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            zIndex: 0,
+            zIndex: 2,
             pointerEvents: "none",
           }}
         >
@@ -109,6 +135,7 @@ function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }
             {member.initials}
           </span>
         </div>
+
         {/* CONNECT badge — only on Seren */}
         {member.showConnect && (
           <div

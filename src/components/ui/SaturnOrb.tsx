@@ -1,7 +1,6 @@
 /**
  * SaturnOrb — Awwwards-Level Cinematic Experience
- * An "insane-level" interactive celestial body featuring gravitational distortion,
- * magnetic cursor fields, and high-end physics-based motion.
+ * Refined for thicker rings, scaled-down sphere, and realistic volumetric lighting.
  */
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
@@ -25,8 +24,8 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
   const lastMouse = useRef({ x: 0, y: 0 });
   const dragVelocity = useRef({ x: 0, y: 0 });
   const proximityRef = useRef(0);
-  const energyRef = useRef(0); // 0 to 1 based on interaction intensity
-  const clickMassRef = useRef(0); // shockwave power
+  const energyRef = useRef(0);
+  const clickMassRef = useRef(0);
 
   // ── GSAP Instances ─────────────────────────────────────────────────────────
   const timelines = useRef<{
@@ -47,10 +46,10 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
   // ─── Interaction Logic ──────────────────────────────────────────────────────
   useEffect(() => {
     const handleClick = () => {
-      // [GSAP] EXPLOSIVE PULSE TIMELINE
       if (timelines.current.click) timelines.current.click.kill();
       
-      const { root, camera, shockRing, burstMat, planet, ringRoot } = sceneRef.current;
+      const { camera, shockRing, burstMat, planet, ringRoot } = sceneRef.current;
+      if (!camera || !shockRing || !burstMat || !planet || !ringRoot) return;
       const tl = gsap.timeline();
       timelines.current.click = tl;
 
@@ -92,8 +91,6 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
 
     const onUp = () => {
       isDragging.current = false;
-      const dx = dragVelocity.current.x;
-      const dy = dragVelocity.current.y;
       gsap.to(dragVelocity.current, { x: 0, y: 0, duration: 2, ease: "power2.out" });
     };
 
@@ -142,56 +139,61 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
     const root = new THREE.Group();
     scene.add(root);
 
-    // ── Lighting (Premium Setup) ───────────────────────────────────────────────
-    const ambient = new THREE.AmbientLight(0xf7efe4, 0.4);
+    // ── Lighting (Deepened Shadows) ──────────────────────────────────────────────
+    // Lowered ambient light from 0.4 to 0.15 to let directional lights cast darker, realistic shadows
+    const ambient = new THREE.AmbientLight(0xf7efe4, 0.15);
     scene.add(ambient);
 
-    const key = new THREE.DirectionalLight(0xfffbf3, 3.5);
-    key.position.set(5, 5, 5);
+    const key = new THREE.DirectionalLight(0xfffbf3, 4.0);
+    key.position.set(5, 6, 4);
     scene.add(key);
 
-    const rim = new THREE.DirectionalLight(0x8bb8ff, 4.0);
+    const rim = new THREE.DirectionalLight(0xfff5e6, 4.0);
     rim.position.set(-6, 4, -5);
     scene.add(rim);
 
-    const back = new THREE.PointLight(0xffe8c0, 2.0, 25);
+    const back = new THREE.PointLight(0xffe8c0, 1.5, 25);
     back.position.set(3, -4, -6);
     scene.add(back);
 
-    // ── Planet Body ────────────────────────────────────────────────────────────
+    // ── Planet Body (Smaller & More Volumetric) ──────────────────────────────────
+    // Scaled down radius from 1.82 to 1.0
     const planet = new THREE.Mesh(
-      new THREE.SphereGeometry(1.82, 128, 128),
+      new THREE.SphereGeometry(1.0, 128, 128),
       new THREE.MeshPhysicalMaterial({
-        color: 0xd8cfc1,
-        roughness: 0.35,
-        metalness: 0.2,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.1,
-        sheen: 0.9,
-        sheenColor: new THREE.Color(0xf8f3eb),
+        color: 0xf5ecd8, 
+        roughness: 0.4,
+        metalness: 0.1,
+        clearcoat: 0.8,
+        clearcoatRoughness: 0.2,
+        sheen: 1.0,
+        sheenColor: new THREE.Color(0xffffff),
+        transmission: 0.1, // Sub-surface scattering feel
+        thickness: 0.5     // Enhances the 3D depth of the material
       }),
     );
     root.add(planet);
 
     // ── Atmosphere Glow ────────────────────────────────────────────────────────
+    // Scaled down accordingly
     const atmo = new THREE.Mesh(
-      new THREE.SphereGeometry(1.98, 90, 90),
+      new THREE.SphereGeometry(1.15, 90, 90),
       new THREE.MeshBasicMaterial({ color: 0xfff8ee, transparent: true, opacity: 0.08 }),
     );
     root.add(atmo);
 
-    // ── Ring System (Layered Cinematic) ────────────────────────────────────────
+    // ── Ring System (Thicker & Darker) ─────────────────────────────────────────
     const ringRoot = new THREE.Group();
     ringRoot.rotation.x = -1.13;
     ringRoot.rotation.z = 0.34;
     root.add(ringRoot);
 
+    // Adjusted inner/outer gaps for thickness and updated hex codes for the palette
     const ringSpecs = [
-      { inner: 2.18, outer: 2.22, color: "#1a1917", opacity: 0.9 },
-      { inner: 2.24, outer: 2.58, color: "#242320", opacity: 0.6 },
-      { inner: 2.62, outer: 2.96, color: "#2f2d29", opacity: 0.45 },
-      { inner: 3.02, outer: 3.38, color: "#1a1917", opacity: 0.3 },
-      { inner: 3.42, outer: 3.85, color: "#242320", opacity: 0.15 },
+      { inner: 1.4, outer: 1.48, color: "#8a7d65", opacity: 0.9 }, // Darkest, thickest inner ring
+      { inner: 1.55, outer: 1.75, color: "#a89d85", opacity: 0.65 },
+      { inner: 1.85, outer: 2.15, color: "#c8bfae", opacity: 0.45 },
+      { inner: 2.25, outer: 2.65, color: "#d1c8b6", opacity: 0.25 },
     ];
 
     const rings: THREE.Mesh[] = [];
@@ -207,14 +209,14 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
         clearcoat: 0.2,
       });
       const m = new THREE.Mesh(geo, mat);
-      m.position.z = i * 0.002; // depth layers
+      m.position.z = i * 0.002;
       ringRoot.add(m);
       rings.push(m);
     });
 
-    // Shock Ring
+    // Scaled down Shock Ring to match new planet size
     const shockRing = new THREE.Mesh(
-      new THREE.RingGeometry(1.85, 2.05, 128),
+      new THREE.RingGeometry(1.05, 1.25, 128),
       new THREE.MeshBasicMaterial({ color: 0xfff6e0, transparent: true, opacity: 0, blending: THREE.AdditiveBlending })
     );
     root.add(shockRing);
@@ -228,7 +230,7 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
     const offsetArr = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
-      const radius = 2.2 + Math.random() * 4;
+      const radius = 1.6 + Math.random() * 2.5; // Brought particles closer to smaller planet
       const angle = Math.random() * Math.PI * 2;
       const speed = 0.005 + Math.random() * 0.02;
       const offset = (Math.random() - 0.5) * 0.2;
@@ -257,7 +259,7 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
     const particles = new THREE.Points(particlesGeo, particlesMat);
     ringRoot.add(particles);
 
-    // Burst particles (reused system)
+    // Burst particles
     const burstCount = 60;
     const burstPos = new Float32Array(burstCount * 3);
     const burstVels: THREE.Vector3[] = [];
@@ -289,7 +291,6 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
     window.addEventListener("resize", resize);
 
     const clock = new THREE.Clock();
-    let frame = 0;
 
     // ── Animation Loop ──────────────────────────────────────────────────────────
     const animate = () => {
@@ -297,7 +298,6 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
       const t = clock.getElapsedTime();
       const mouse = mouseRef.current;
 
-      // 1. Proximity & Energy Calculations
       const dist = Math.sqrt(Math.pow(mouse.x - 0.5, 2) + Math.pow(mouse.y - 0.5, 2));
       const targetProximity = Math.max(0, 1 - dist * 2.5);
       proximityRef.current = lerp(proximityRef.current, targetProximity, 0.08);
@@ -305,63 +305,48 @@ export default function SaturnOrb({ mousePos }: SaturnOrbProps) {
       energyRef.current = lerp(energyRef.current, prox > 0.4 ? 1 : 0, 0.05);
       const energy = energyRef.current;
 
-      // 2. Magnetic Hover Field (Distortion Simulation)
-      // Tilt the rings toward the cursor
       const targetTiltZ = 0.34 + (mouse.x - 0.5) * 0.4 * prox;
       const targetTiltX = -1.13 + (mouse.y - 0.5) * 0.4 * prox;
       ringRoot.rotation.z = lerp(ringRoot.rotation.z, targetTiltZ, 0.06);
       ringRoot.rotation.x = lerp(ringRoot.rotation.x, targetTiltX, 0.06);
 
-      // Organic Wobble (Noise-based illusion)
       const wobble = Math.sin(t * 1.5) * 0.02 + Math.cos(t * 2.1) * 0.01;
-      ringRoot.rotation.x += wobble * (1 - prox * 0.5); // wobble less when controlled
+      ringRoot.rotation.x += wobble * (1 - prox * 0.5);
 
-      // 3. Cinematic Scale & Depth
       const targetScale = 1 + prox * 0.08 + clickMassRef.current * 0.2;
       root.scale.setScalar(lerp(root.scale.x, targetScale, 0.1));
       
-      // Depth Illusion (Parallax)
       planet.position.z = prox * 0.15;
       ringRoot.position.z = prox * 0.05;
-      camera.position.z = 7.2 - prox * 0.4; // subtle zoom on hover
+      camera.position.z = 7.2 - prox * 0.4;
 
-      // 4. Lighting Animations
       rim.intensity = 4.0 + Math.sin(t * 2) * 0.5 + prox * 2;
-      key.intensity = 3.5 + prox * 1.5;
+      key.intensity = 4.0 + prox * 1.5; // Bumped key intensity slightly for contrast
       key.position.x = 5 + Math.sin(t * 0.4) * 2;
 
-      // 5. Particle Engine (Acceleration & Trails)
       const pPos = (particlesGeo.attributes.position as THREE.BufferAttribute).array as Float32Array;
       const pCount = radiusArr.length;
       for (let i = 0; i < pCount; i++) {
-        // Particles orbit faster when energized
         const speedBoost = 1 + energy * 2.5 + clickMassRef.current * 5;
         angleArr[i] += speedArr[i] * speedBoost;
         
-        // Gravitational Pull simulation: particles cluster toward cursor direction subtly
         const targetRadius = radiusArr[i] * (1 - prox * 0.05);
         
         pPos[i * 3] = Math.cos(angleArr[i]) * targetRadius;
         pPos[i * 3 + 1] = Math.sin(angleArr[i]) * targetRadius;
-        // Ripple effect simulation
         pPos[i * 3 + 2] = offsetArr[i] + Math.sin(angleArr[i] * 5 + t * 4) * 0.03 * prox;
       }
       particlesGeo.attributes.position.needsUpdate = true;
       particlesMat.opacity = 0.4 + prox * 0.4;
       particlesMat.size = 0.025 + energy * 0.01;
 
-      // 6. Ring Life & Texture illusion
       rings.forEach((ring, i) => {
-        // Layer separation on hover
         ring.position.z = i * (0.005 + prox * 0.02);
-        // Subtle counter-rotation
         ring.rotation.z += 0.001 * (i + 1) * (1 + energy);
       });
 
-      // Planet Spin
       planet.rotation.y += delta * 0.4 * (1 + energy * 2);
 
-      // Update Burst Particles
       if (burstMat.opacity > 0) {
         const bP = burstGeo.attributes.position.array as Float32Array;
         for (let i = 0; i < burstCount; i++) {
