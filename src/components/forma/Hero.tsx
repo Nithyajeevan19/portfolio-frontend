@@ -248,9 +248,12 @@ export function Hero() {
               alignItems: "center",
               justifyContent: "center",
               flexShrink: 0,
+              width: "100%",
             }}
           >
-            <LuxuryOrb size={orbSize} />
+            <div className="orb-wrapper">
+              <LuxuryOrb size={orbSize} />
+            </div>
           </motion.div>
         </div>
       </div>
@@ -360,7 +363,22 @@ export function Hero() {
       </div>
 
       <style>{`
-        @media (max-width: 767px) { .hero-grid { grid-template-columns: 1fr !important; gap: 4rem !important; } .hero-orb-col { order: -1; } }
+        @media (max-width: 767px) { 
+          .hero-grid { grid-template-columns: 1fr !important; gap: 4rem !important; } 
+          .hero-orb-col { 
+            order: -1; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          .orb-wrapper {
+            width: 260px;
+            height: 260px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+        }
       `}</style>
     </section>
   );
