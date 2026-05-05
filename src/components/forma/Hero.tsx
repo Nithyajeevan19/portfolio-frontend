@@ -367,11 +367,16 @@ export function Hero() {
           .hero-grid { grid-template-columns: 1fr !important; gap: 4rem !important; } 
           .hero-orb-col { 
             order: -1; 
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
+            height: 260px;
           }
           .orb-wrapper {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
             width: 260px;
             height: 260px;
             display: flex;
