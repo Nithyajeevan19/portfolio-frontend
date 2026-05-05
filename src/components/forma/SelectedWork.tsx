@@ -1,31 +1,14 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "@tanstack/react-router";
-import { CASE_STUDIES } from "@/data/caseStudies";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-interface Project {
-  id: string;
-  slug: string;
-  project_title: string;
-  client_name: string;
-  category: string;
-  services: string;
-  year: number;
-  description: string;
-  cover_image: string;
-  featured: boolean;
-}
-
-// ─── WorkCard ─────────────────────────────────────────────────────────────────
+import { CASE_STUDIES, type CaseStudy } from "../../data/caseStudies";
 
 function WorkCard({
   project,
   index,
   size = "normal",
 }: {
-  project: Project;
+  project: CaseStudy;
   index: number;
   size?: "normal" | "large";
 }) {
@@ -302,11 +285,11 @@ function WorkCard({
 // ─── SelectedWork ─────────────────────────────────────────────────────────────
 
 export function SelectedWork() {
-  const items = CASE_STUDIES as Project[];
+  const items = CASE_STUDIES as CaseStudy[];
 
   // Alternating layout: large → [small + small] → large → repeat
   const rows: Array<
-    { type: "single"; item: Project } | { type: "pair"; items: [Project, Project] }
+    { type: "single"; item: CaseStudy } | { type: "pair"; items: [CaseStudy, CaseStudy] }
   > = [];
   let i = 0;
   let rowIndex = 0;

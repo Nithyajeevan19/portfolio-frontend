@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { CASE_STUDIES } from "@/data/caseStudies";
-import CustomCursor from "@/components/forma/CustomCursor";
-import { Navbar } from "@/components/forma/Navbar";
+import { CASE_STUDIES, type CaseStudy } from "../data/caseStudies";
+import CustomCursor from "../components/forma/CustomCursor";
+import { Navbar } from "../components/forma/Navbar";
 
 export const Route = createFileRoute("/case-study/$slug")({
   component: CaseStudy,
@@ -10,7 +10,10 @@ export const Route = createFileRoute("/case-study/$slug")({
 
 export default function CaseStudy() {
   const { slug } = Route.useParams();
-  const study = CASE_STUDIES.find((s) => s.slug === slug);
+  const study = CASE_STUDIES.find((s) => s.slug.trim() === slug.trim());
+  console.log("Slug:", slug);
+  console.log("All studies:", CASE_STUDIES);
+  console.log("Selected study:", study);
 
   if (!study) {
     return (
@@ -46,7 +49,7 @@ export default function CaseStudy() {
     { label: "The Context", content: study.the_context },
     { label: "The Challenge", content: study.the_challenge },
     { label: "The Approach", content: study.the_approach },
-  ].filter((b) => b.content);
+  ].filter((b) => b.content !== undefined);
 
   return (
     <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>

@@ -3,11 +3,34 @@
  * To add/edit projects, update this file directly.
  */
 
-export const CASE_STUDIES = [
+export interface CaseStudy {
+  id: string;
+  slug: string;
+  project_title: string;
+  client_name: string;
+  category: string;
+  services: string;
+  year: number;
+  featured: boolean;
+  cover_image: string;
+  description: string;
+  the_context: string;
+  the_challenge: string;
+  the_approach: string;
+  the_impact: string;
+  impact_metric_1: string;
+  impact_label_1: string;
+  impact_metric_2: string;
+  impact_label_2: string;
+  live_site_link: string;
+  gallery: string[];
+}
+
+export const CASE_STUDIES: CaseStudy[] = [
   {
     id: "sweet-magic",
     slug: "sweet-magic",
-    project_title: "",
+    project_title: "SweetMagic Kitchen — A Modern Recipe Experience",
     client_name: "SweetMagic Kitchen",
     category: "Food & Recipe",
     services: "UI/UX Design, Frontend Development",
@@ -34,38 +57,6 @@ export const CASE_STUDIES = [
       "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=1200&q=80",
       "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&q=80",
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80",
-    ],
-  },
-  {
-    id: "cozy-culinary",
-    slug: "cozy-culinary",
-    project_title: "Cozy Culinary Canvas — Crafting a Warm Digital Experience",
-    client_name: "Culinary Canvas Studio",
-    category: "Food & Lifestyle",
-    services: "UI/UX Design, Frontend Development",
-    year: 2025,
-    featured: true,
-    cover_image: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1800&q=80",
-    description:
-      "Cozy Culinary Canvas was designed to create an immersive and emotionally engaging food experience.",
-    the_context:
-      "Cozy Culinary Canvas was designed to create an immersive and emotionally engaging food experience. Unlike traditional recipe platforms focused purely on functionality, this project aimed to combine storytelling with usability, making users feel inspired while exploring content.",
-    the_challenge:
-      "The challenge was to design a visually rich interface without sacrificing clarity and performance. Creating a cozy and warm aesthetic required careful balance to ensure the interface remained intuitive, accessible, and fast across all devices.",
-    the_approach:
-      "A design-first approach was used, focusing on warm tones, soft layouts, and high-quality imagery. Strong visual hierarchy and whitespace were used to guide users naturally. Components were designed to be reusable and scalable, ensuring consistency throughout the platform.",
-    the_impact:
-      "The platform delivers a highly engaging browsing experience, encouraging users to explore and interact with content more deeply. By blending aesthetics with usability, it demonstrates the power of experience-driven design in increasing user engagement.",
-    impact_metric_1: "+55%",
-    impact_label_1: "Increase in user engagement",
-    impact_metric_2: "+30%",
-    impact_label_2: "Improved session duration",
-    live_site_link: "https://cozy-culinary-canvas-main.vercel.app/",
-    gallery: [
-      "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=1200&q=80",
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80",
-      "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=1200&q=80",
-      "https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=1200&q=80",
     ],
   },
   {
@@ -103,33 +94,33 @@ export const CASE_STUDIES = [
   {
     id: "invoice-management",
     slug: "invoice-management",
-    project_title: "Invoice Management — Streamlining Financial Workflows",
+    project_title: "Invoice Management System",
     client_name: "FinFlow Systems",
     category: "Fintech / SaaS",
     services: "Product Design, Frontend Development",
     year: 2025,
     featured: true,
-    cover_image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1800&q=80",
+    cover_image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&q=80",
     description:
-      "The Invoice Management system was created to simplify and digitize traditional billing workflows.",
+      "A modern invoice management platform designed to streamline billing workflows, centralize financial data, and surface actionable business insights.",
     the_context:
-      "The Invoice Management system was created to simplify and digitize traditional billing workflows. Many businesses rely on manual processes or fragmented tools, resulting in inefficiencies and lack of visibility.",
+      "The Invoice Management System was built to address the inefficiencies of traditional billing processes, where businesses rely on spreadsheets, scattered tools, and manual data entry. This fragmentation often leads to errors, lack of visibility, and delayed decision-making. The goal was to create a unified platform that centralizes invoices, payments, customer data, and analytics into a single, intuitive system.",
     the_challenge:
-      "The key challenge was designing a system that handles complex financial data while remaining simple and intuitive. Presenting invoices, payments, and client data in a clear and structured way required careful UI/UX decisions.",
+      "The primary challenge was designing a system capable of handling complex financial data while remaining simple and accessible for everyday users. Managing large datasets, multiple workflows, and real-time updates required careful structuring. Additionally, integrating features like file uploads, editable records, payment tracking, and AI-driven insights without overwhelming the interface demanded a strong balance between functionality and usability.",
     the_approach:
-      "A dashboard-centric approach was used to surface critical information efficiently. Modular components were built for scalability, and workflows were optimized to reduce friction in invoice creation and tracking. The interface was designed to minimize cognitive load and improve usability.",
+      "A dashboard-first approach was adopted to provide users with immediate visibility into key financial metrics. The system was structured into clear modules including invoice management, payments, customers, and analytics. Clean layouts, consistent spacing, and intuitive filtering mechanisms were used to simplify navigation. AI-powered insights were integrated to enhance decision-making, offering forecasts, anomaly detection, and customer-level analytics, all while maintaining a fast and responsive user experience.",
     the_impact:
-      "The system improves efficiency in managing financial workflows by centralizing invoice operations. It demonstrates the ability to design scalable SaaS products with real-world business value.",
-    impact_metric_1: "+60%",
+      "The platform transforms fragmented billing workflows into a streamlined, data-driven system. Users can manage invoices, track payments, and gain actionable insights from a single interface, significantly improving efficiency and visibility across financial operations.",
+    impact_metric_1: "2x",
     impact_label_1: "Faster invoice processing",
-    impact_metric_2: "-40%",
-    impact_label_2: "Reduction in manual effort",
-    live_site_link: "https://invoice-management-ashen.vercel.app/",
+    impact_metric_2: "+45%",
+    impact_label_2: "Improved financial visibility",
+    live_site_link: "https://invoice-management-ruddy.vercel.app/",
     gallery: [
-      "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&q=80",
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80",
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
-      "https://images.unsplash.com/photo-1518186285589-2f7649de83e0?w=1200&q=80",
+      "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=1200&q=80",
+      "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&q=80",
+      "https://images.unsplash.com/photo-1554224154-22dec7ec8818?w=1200&q=80",
     ],
   },
 ];
