@@ -60,40 +60,44 @@ export const CASE_STUDIES: CaseStudy[] = [
     ],
   },
   {
-    id: "ipl-auction",
-    slug: "ipl-auction",
-    project_title: "IPL Auction — Real-Time Bidding Simulation",
-    client_name: "Gavel Auction Platform",
-    category: "Sports Tech",
-    services: "UI/UX Design, Frontend Development",
-    year: 2025,
-    featured: true,
-    cover_image: "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1800&q=80",
-    description:
-      "The IPL Auction platform was developed to simulate the excitement and strategy of real-world cricket auctions.",
-    the_context:
-      "The IPL Auction platform was developed to simulate the excitement and strategy of real-world cricket auctions. The goal was to create an interactive system where users could experience live bidding, team building, and competitive decision-making.",
-    the_challenge:
-      "The biggest challenge was handling real-time interactions and complex state updates. Auction systems require instant feedback, accurate bid tracking, and smooth user experience under rapid interactions, making state management a critical factor.",
-    the_approach:
-      "A component-based architecture was implemented to manage dynamic states efficiently. Real-time bidding logic was designed to handle updates, validations, and user actions seamlessly. The UI was optimized for clarity, ensuring users can quickly understand auction status and make decisions.",
-    the_impact:
-      "The platform successfully replicates a real IPL auction experience, showcasing advanced frontend capabilities including real-time updates, state management, and interactive UI design. It stands out as a technically strong and engaging product.",
-    impact_metric_1: "Real-time",
-    impact_label_1: "Dynamic bidding system",
-    impact_metric_2: "+70%",
-    impact_label_2: "User interaction rate",
-    live_site_link: "https://www.iplauction.fun/",
-    gallery: [
-      "https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=1200&q=80",
-      "https://images.unsplash.com/photo-1517649763962-0c623066013b?w=1200&q=80",
-      "https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?w=1200&q=80",
-      "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&q=80",
-    ],
-  },
+  "id": "medcare-plus",
+  "slug": "medcare-plus",
+  "project_title": "MedCare+ AI Healthcare Portal",
+  "client_name": "MedCare Health (Concept)",
+  "category": "Healthcare / SaaS",
+  "services": "UI/UX Design, Full-Stack Development, AI Integration",
+  "year": 2026,
+  "featured": true,
+  "cover_image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80",
+
+  "description": "A cutting-edge, patient-focused healthcare portal featuring a multi-step booking flow and an integrated AI care assistant designed to deliver a frictionless scheduling experience.",
+
+  "the_context": "Traditional healthcare booking systems are often clunky, disjointed, and frustrating for patients seeking immediate care. The MedCare+ project was conceived to modernize this workflow. The goal was to bridge the gap between clinical efficiency and accessible patient care by creating a unified portal that handles symptom triage, appointment scheduling, and patient dashboards seamlessly.",
+
+  "the_challenge": "The primary challenge was designing an interface that felt professional and trustworthy, yet warm and approachable. Technically, this required building a robust multi-step booking flow (Service Selection, Date/Time, User Details) and integrating a mocked AI-assistant widget without cluttering the screen. Ensuring the calendar component felt native across all devices while maintaining strict form validation added complexity to the frontend architecture.",
+
+  "the_approach": "The application was developed utilizing Next.js, Tailwind CSS, and Shadcn UI. A 'glassmorphism' aesthetic was applied using a carefully selected color palette of pristine white, soft slate blue, and subtle drop shadows. A floating AI widget was anchored to the UI to provide 24/7 symptom guidance. The dashboard was structured to give users immediate visibility into their upcoming appointments, prioritizing a clean layout and consistent spacing.",
+
+  "the_impact": "The resulting platform significantly reduces patient friction during the booking process. The intuitive, step-by-step UI combined with AI-driven triage builds immediate user trust and streamlines administrative workflows, allowing clinics to focus on patient care rather than scheduling logistics.",
+
+  "impact_metric_1": "< 2 Days",
+  "impact_label_1": "Average Wait Time",
+
+  "impact_metric_2": "4.9 / 5",
+  "impact_label_2": "Patient Satisfaction Rating",
+
+  "live_site_link": "https://ai-assisted-healthca-93mj.bolt.host",
+
+  "gallery": [
+    "https://images.unsplash.com/photo-1551076805-e1869033e561?w=1200&q=80",
+    "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1200&q=80",
+    "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80",
+    "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80"
+  ]
+},
   {
     id: "invoice-management",
-    slug: "invoice-management",
+    slug: "TEST CHANGE WORKING",
     project_title: "Invoice Management System",
     client_name: "FinFlow Systems",
     category: "Fintech / SaaS",
