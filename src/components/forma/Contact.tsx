@@ -461,25 +461,24 @@ export function Contact() {
                   name="message"
                   value={form.message}
                   onChange={handleChange}
-                  rows={1}
+                  rows={3}
                   placeholder="Tell us what you're building, what's at stake, and when you need it..."
-                  style={{ ...inputBase, resize: "none", lineHeight: "1.65" }}
+                  style={{ ...inputBase, resize: "none", lineHeight: "1.65", paddingTop: "0.5rem" }}
                   onFocus={(e) => {
                     e.target.style.borderBottomColor = "#043222";
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderBottomColor = "rgba(4,50,34,0.15)";
                   }}
                 />
               </div>
 
-              <div className="flex items-center justify-between pt-1">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 pt-2">
                 <p
                   style={{
                     fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
                     fontSize: "0.68rem",
-                    color: "rgba(4,50,34,0.3)",
+                    color: "rgba(4,50,34,0.45)",
                     margin: 0,
+                    maxWidth: "180px",
+                    fontWeight: 600
                   }}
                 >
                   * Required. All submissions reviewed personally.
@@ -490,7 +489,7 @@ export function Contact() {
                   whileHover={status !== "loading" ? { y: -2, scale: 1.01, backgroundColor: "#003631" } : {}}
                   whileTap={status !== "loading" ? { scale: 0.98 } : {}}
                   transition={{ duration: 0.4, ease: luxuryEase }}
-                  className="micro-label flex items-center gap-4 px-8 py-4 rounded-sm"
+                  className="micro-label flex items-center justify-center gap-4 px-10 py-4 rounded-sm w-full md:w-auto"
                   style={{
                     backgroundColor: "#043222",
                     color: "#FFF8EE",
@@ -525,7 +524,7 @@ export function Contact() {
 
       {/* Footer */}
       <div
-        className="px-8 md:px-14 mt-px py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3"
+        className="px-8 md:px-14 mt-px py-8 flex flex-col md:flex-row items-center justify-between gap-6 md:gap-3"
         style={{
           border: "1px solid rgba(4,50,34,0.10)",
           borderTop: "none",
@@ -536,11 +535,11 @@ export function Contact() {
           <div
             style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#043222" }}
           />
-          <span className="micro-label" style={{ color: "rgba(4,50,34,0.4)" }}>
+          <span className="micro-label" style={{ color: "rgba(4,50,34,0.55)", fontWeight: 600 }}>
             DEVNest © 2026
           </span>
         </div>
-        <span className="micro-label" style={{ color: "rgba(4,50,34,0.22)" }}>
+        <span className="micro-label" style={{ color: "rgba(4,50,34,0.45)", fontWeight: 600 }}>
           India · Hyderabad · Remote
         </span>
         <span
