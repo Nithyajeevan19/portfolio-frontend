@@ -269,7 +269,7 @@ export function Hero() {
         }}
       >
         {/* Stat row */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 1.35 }}
@@ -323,7 +323,7 @@ export function Hero() {
               </p>
             </div>
           ))}
-        </motion.div>
+        </motion.div> */}
 
         {/* Scroll indicator */}
         <motion.div
@@ -385,6 +385,9 @@ export function Hero() {
           }
         }
       `}</style>
+
+
+
     </section>
   );
 }

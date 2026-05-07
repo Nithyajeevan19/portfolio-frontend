@@ -102,7 +102,7 @@ export function Navbar() {
             }}
             data-cursor=""
           >
-            New Inquiry
+            Start A Project
           </a>
         </div>
 

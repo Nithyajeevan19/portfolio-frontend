@@ -9,7 +9,7 @@ const PROJECT_SCOPES = [
   "Full Studio Engagement",
   "Creative Direction",
 ];
-const BUDGETS = ["$25k – $50k", "$50k – $100k", "$100k – $250k", "$250k+", "To be discussed"];
+const BUDGETS = ["₹25k – ₹50k", "₹50k – ₹100k", "₹100k – ₹250k", "₹250k+", "To be discussed"];
 const SOCIALS = [
   { label: "LinkedIn", indicator: "LI", href: "https://linkedin.com" },
   { label: "Awwwards", indicator: "AW", href: "https://awwwards.com" },
@@ -137,7 +137,7 @@ export function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="md:col-span-4 p-10 flex flex-col gap-9"
+          className="md:col-span-4 p-10 md:pt-7 flex flex-col gap-9 relative md:-top-4"
           style={{ borderRight: "1px solid rgba(4,50,34,0.10)", backgroundColor: "#FFF8EE" }}
         >
           {/* Availability */}
@@ -229,7 +229,7 @@ export function Contact() {
             </a>
           </div>
 
-          <div>
+          {/* <div>
             <div className="micro-label mb-4" style={{ color: "#043222" }}>
               Find Our Work
             </div>
@@ -260,7 +260,7 @@ export function Contact() {
                 </span>
               </a>
             ))}
-          </div>
+          </div> */}
 
           <p
             style={{
@@ -537,11 +537,11 @@ export function Contact() {
             style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#043222" }}
           />
           <span className="micro-label" style={{ color: "rgba(4,50,34,0.4)" }}>
-            Forma Studio © 2026
+            DEVNest © 2026
           </span>
         </div>
         <span className="micro-label" style={{ color: "rgba(4,50,34,0.22)" }}>
-          New York · London · Remote
+          India · Hyderabad · Remote
         </span>
         <span
           style={{
@@ -550,7 +550,7 @@ export function Contact() {
             color: "rgba(4,50,34,0.22)",
           }}
         >
-          Senior-led. Outcome-focused.
+         
         </span>
       </div>
     </section>

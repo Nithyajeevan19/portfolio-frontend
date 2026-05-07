@@ -37,12 +37,12 @@ const TEAM = [
   },
 ];
 
-const STATS = [
-  { value: "40+", label: "Engagements" },
-  { value: "12", label: "Industry verticals" },
-  { value: "8yr", label: "Senior avg. exp." },
-  { value: "4", label: "Active clients max" },
-];
+// const STATS = [
+//   { value: "40+", label: "Engagements" },
+//   { value: "12", label: "Industry verticals" },
+//   { value: "8yr", label: "Senior avg. exp." },
+//   { value: "4", label: "Active clients max" },
+// ];
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
@@ -387,7 +387,7 @@ export function Studio() {
       </div>
 
       {/* Stats bar */}
-      <div
+      {/* <div
         className="mx-8 md:mx-14"
         style={{
           display: "grid",
@@ -440,7 +440,7 @@ export function Studio() {
             </div>
           </motion.div>
         ))}
-      </div>
+      </div> */}
     </section>
   );
 }
