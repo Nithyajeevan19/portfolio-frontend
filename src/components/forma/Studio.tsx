@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { revealVariants, viewportConfig } from "../../lib/motion";
-// import { SectionHeader } from "./SectionHeader";
 
 const TEAM = [
   {
@@ -38,20 +37,39 @@ const TEAM = [
     image: "/images/ajay.jpg",
     initials: "TM",
     showConnect: false,
-    linkedin:undefined,
   },
 ];
-
-// const STATS = [
-//   { value: "40+", label: "Engagements" },
-//   { value: "12", label: "Industry verticals" },
-//   { value: "8yr", label: "Senior avg. exp." },
-//   { value: "4", label: "Active clients max" },
-// ];
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
 function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }) {
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+      const check = () => setIsMobile(window.innerWidth < 768);
+      check();
+      window.addEventListener("resize", check);
+      return () => window.removeEventListener("resize", check);
+    }, []);
+
+    const variants = {
+      initial: { 
+        scale: 1, 
+        filter: isMobile 
+          ? "grayscale(0%) contrast(1) brightness(1) blur(0px)" 
+          : "grayscale(50%) contrast(1.02) brightness(0.92) blur(0.8px)" 
+      },
+      visible: { 
+        scale: 1, 
+        filter: isMobile 
+          ? "grayscale(0%) contrast(1) brightness(1) blur(0px)" 
+          : "grayscale(50%) contrast(1.02) brightness(0.92) blur(0.8px)" 
+      },
+      hover: { 
+        scale: isMobile ? 1 : 1.03, 
+        filter: "grayscale(0%) contrast(1) brightness(1.05) blur(0px)" 
+      }
+    };
+
   const content = (
     <motion.div
       initial="initial"
@@ -77,20 +95,7 @@ function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }
         }}
       >
         <motion.div
-          variants={{
-            initial: { 
-              scale: 1, 
-              filter: "grayscale(50%) contrast(1.02) brightness(0.92) blur(0.8px)" 
-            },
-            visible: { 
-              scale: 1, 
-              filter: "grayscale(50%) contrast(1.02) brightness(0.92) blur(0.8px)" 
-            },
-            hover: { 
-              scale: 1.03, 
-              filter: "grayscale(0%) contrast(1) brightness(1.05) blur(0px)" 
-            }
-          }}
+          variants={variants}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
           style={{
             position: "absolute",

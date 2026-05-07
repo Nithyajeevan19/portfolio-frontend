@@ -139,7 +139,7 @@ export function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="md:col-span-3 p-14 md:p-16 flex flex-col gap-12 relative md:-top-4"
+          className="md:col-span-3 p-8 md:p-16 flex flex-col gap-12 relative md:-top-4"
           style={{ borderRight: "1px solid rgba(4,50,34,0.10)", backgroundColor: "#FFF8EE" }}
         >
           {/* Availability */}
@@ -285,7 +285,7 @@ export function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.15 }}
-          className="md:col-span-5 p-14 md:p-16"
+          className="md:col-span-5 p-8 md:p-16"
           style={{ backgroundColor: "#F6E9D9" }}
         >
           {status === "success" ? (

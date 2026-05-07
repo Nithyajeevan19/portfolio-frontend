@@ -119,11 +119,8 @@ export function Methodology() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-60px" }}
-        className="mx-8 md:mx-14"
+        className="mx-8 md:mx-14 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-px"
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
-          gap: "1px",
           border: "1px solid rgba(4,50,34,0.09)",
           borderRadius: "2px",
           overflow: "hidden",
@@ -134,10 +131,11 @@ export function Methodology() {
             key={phase.index}
             variants={itemVariants}
             transition={{ delay: i * 0.1 }}
+            className="border-b last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0"
             style={{
               padding: "2.5rem",
               backgroundColor: "#FFF8EE",
-              borderRight: i < 2 ? "1px solid rgba(4,50,34,0.09)" : "none",
+              borderColor: "rgba(4,50,34,0.09)",
               display: "flex",
               flexDirection: "column",
               gap: "1.5rem",

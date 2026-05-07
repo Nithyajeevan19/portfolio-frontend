@@ -66,18 +66,23 @@ function WorkCard({
             : "0 2px 10px rgba(4,50,34,0.04)",
           transition: "box-shadow 0.65s ease",
           textDecoration: "none",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          minHeight: "440px",
         }}
         onMouseEnter={() => setHov(true)}
         onMouseLeave={() => setHov(false)}
         onMouseMove={onMove}
         data-cursor="View"
       >
-        {/* Image */}
+        {/* Image container should take fixed space */}
         <div
           style={{
             position: "relative",
             overflow: "hidden",
-            height: isLarge ? "clamp(300px,46vw,600px)" : "clamp(220px,28vw,380px)",
+            height: isLarge ? "clamp(300px,46vw,600px)" : "clamp(240px,28vw,380px)",
+            flexShrink: 0,
           }}
         >
           <motion.div
@@ -262,16 +267,18 @@ function WorkCard({
           </div>
         </div>
 
-        {/* Result strip */}
+        {/* Result strip — set minHeight to equalize cards */}
         <div
           style={{
-            padding: "0.9rem 1.5rem",
+            padding: "1.2rem 1.5rem",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
             backgroundColor: hov ? "rgba(4,50,34,0.03)" : "#FFF8EE",
             transition: "background-color 0.4s",
             borderTop: "1px solid rgba(4,50,34,0.06)",
+            flex: 1,
+            minHeight: "80px",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
@@ -289,7 +296,7 @@ function WorkCard({
                 fontFamily: "Satoshi, Inter, sans-serif",
                 fontSize: "0.72rem",
                 color: "#4F5B57",
-                lineHeight: 1.5,
+                lineHeight: "1.5",
               }}
             >
               {project.description}
@@ -423,13 +430,14 @@ export function SelectedWork() {
       </div>
 
       {/* Mobile swiper — hidden on md+ */}
-      <div className="md:hidden px-6 pb-2">
+      <div className="md:hidden pb-2">
         <Swiper
           modules={[Pagination]}
-          spaceBetween={14}
-          slidesPerView={1.12}
+          spaceBetween={20}
+          slidesPerView={1.15}
+          centeredSlides={true}
           pagination={{ clickable: true }}
-          style={{ paddingBottom: '2.5rem' }}>
+          style={{ paddingBottom: '3.5rem' }}>
           {items.map((cs, i) => (
             <SwiperSlide key={cs.id}>
               <WorkCard project={cs} index={i} />

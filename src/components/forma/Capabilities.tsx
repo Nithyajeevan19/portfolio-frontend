@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { revealVariants, viewportConfig } from "../../lib/motion";
 
@@ -88,6 +88,15 @@ const ease = [0.16, 1, 0.3, 1];
 
 export function Capabilities() {
   const [active, setActive] = useState(0);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   return (
     <section
@@ -105,29 +114,7 @@ export function Capabilities() {
           viewport={viewportConfig}
           variants={revealVariants}
         >
-          <div
-            style={{
-              fontFamily: "Satoshi,Inter,sans-serif",
-              fontSize: "0.60rem",
-              fontWeight: 600,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "rgba(4,50,34,0.40)",
-              marginBottom: "0.75rem",
-              display: "flex",
-              alignItems: "center",
-              gap: "0.75rem",
-            }}
-          >
-            <span style={{ color: "rgba(4,50,34,0.28)" }}>03</span>
-            <span
-              style={{
-                width: "14px",
-                height: "1px",
-                backgroundColor: "rgba(4,50,34,0.22)",
-                display: "inline-block",
-              }}
-            />
+          <div className="micro-label mb-5" style={{ color: "#043222", fontFamily: "Satoshi,Inter,sans-serif", fontSize: "0.60rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase" }}>
             Capabilities
           </div>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
@@ -142,8 +129,7 @@ export function Capabilities() {
                 paddingBottom: "0.12em",
               }}
             >
-              What we
-              <br />
+              What we<br />
               <span style={{ fontStyle: "italic", color: "rgba(4,50,34,0.28)" }}>do best.</span>
             </h2>
             <p
@@ -156,177 +142,222 @@ export function Capabilities() {
                 margin: 0,
               }}
             >
-              Five focused capabilities. No generalism — we go deep on work that creates compounding
-              value.
+              Built for performance and high-intent engagement. We don't just build websites; we
+              architect digital systems that drive growth.
             </p>
           </div>
         </motion.div>
       </div>
 
-      <div
-        className="px-8 md:px-14"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          border: "1px solid rgba(4,50,34,0.09)",
-          borderRadius: "2px",
-          overflow: "hidden",
-        }}
-        id="svc-grid"
-      >
-        <div style={{ display: "grid", gridTemplateColumns: "1fr" }} className="svc-inner">
-          {/* Accordion */}
-          <div style={{ borderRight: "1px solid rgba(4,50,34,0.09)" }} className="svc-accordion">
-            {SERVICES.map((svc, i) => (
-              <motion.button
-                key={svc.index}
-                className="w-full text-left"
-                style={{
-                  padding: "1.65rem 2.25rem",
-                  borderBottom: i < SERVICES.length - 1 ? "1px solid rgba(4,50,34,0.09)" : "none",
-                  backgroundColor: active === i ? "rgba(4,50,34,0.035)" : "#FFF8EE",
-                  transition: "background-color 0.35s ease",
-                  cursor: "pointer",
-                  borderTop: "none",
-                  borderLeft: "none",
-                  borderRight: "none",
-                }}
-                onClick={() => setActive(i)}
-                onMouseEnter={() => setActive(i)}
-                data-cursor=""
-                initial={{ opacity: 0, x: -12 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, ease: ease as any, delay: i * 0.06 }}
-              >
-                <div
+      <div className="md:px-14">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 rounded-sm overflow-hidden"
+          style={{ border: "1px solid rgba(4,50,34,0.09)" }}
+        >
+          <div style={{ borderRight: isMobile ? "none" : "1px solid rgba(4,50,34,0.09)", backgroundColor: "#FFF8EE" }}>
+            {/* Services List (Accordion Style for both Mobile & Desktop) */}
+            <div className="w-full">
+              {SERVICES.map((svc, i) => (
+                <motion.button
+                  key={svc.index}
+                  className="w-full text-left"
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: "1rem",
+                    padding: "1.65rem 2.25rem",
+                    borderBottom: i < SERVICES.length - 1 ? "1px solid rgba(4,50,34,0.09)" : "none",
+                    backgroundColor: active === i ? "rgba(4,50,34,0.035)" : "#FFF8EE",
+                    transition: "background-color 0.35s ease",
+                    cursor: "pointer",
+                    borderTop: "none",
+                    borderLeft: "none",
+                    borderRight: "none",
                   }}
+                  onClick={() => setActive(i)}
+                  onMouseEnter={() => !isMobile && setActive(i)}
+                  data-cursor=""
+                  initial={{ opacity: 0, x: -12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease: ease as any, delay: i * 0.06 }}
                 >
                   <div
                     style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: "1.25rem",
-                      minWidth: 0,
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontFamily: "Satoshi,Inter,sans-serif",
-                        fontSize: "0.58rem",
-                        fontWeight: 600,
-                        letterSpacing: "0.18em",
-                        textTransform: "uppercase",
-                        color: active === i ? "#043222" : "rgba(4,50,34,0.22)",
-                        paddingTop: "0.2rem",
-                        flexShrink: 0,
-                        transition: "color 0.35s",
-                      }}
-                    >
-                      {svc.index}
-                    </span>
-                    <h3
-                      style={{
-                        margin: 0,
-                        fontFamily: "Boska,Georgia,serif",
-                        fontSize: "clamp(1.2rem,1.9vw,1.65rem)",
-                        lineHeight: "1.1",
-                        letterSpacing: "-0.032em",
-                        color: active === i ? "#043222" : "#5a6b62",
-                        whiteSpace: "pre-line",
-                        transition: "color 0.35s",
-                        paddingBottom: "0.06em",
-                      }}
-                    >
-                      {svc.title}
-                    </h3>
-                  </div>
-                  <div
-                    style={{
-                      flexShrink: 0,
-                      width: "18px",
-                      height: "18px",
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
-                      border: "1px solid",
-                      borderColor: active === i ? "#043222" : "rgba(4,50,34,0.16)",
-                      borderRadius: "50%",
-                      transform: active === i ? "rotate(45deg)" : "rotate(0deg)",
-                      transition: "transform 0.4s ease, border-color 0.3s ease",
+                      justifyContent: "space-between",
+                      gap: "1rem",
                     }}
                   >
-                    <svg width="6" height="6" viewBox="0 0 8 8" fill="none">
-                      <path
-                        d="M1 7L7 1M7 1H3M7 1V5"
-                        stroke={active === i ? "#043222" : "rgba(4,50,34,0.32)"}
-                        strokeWidth="1.2"
-                        strokeLinecap="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    overflow: "hidden",
-                    maxHeight: active === i ? "240px" : "0",
-                    marginTop: active === i ? "1.1rem" : "0",
-                    transition: "max-height 0.5s cubic-bezier(0.16,1,0.3,1), margin-top 0.4s ease",
-                  }}
-                >
-                  <p
-                    style={{
-                      fontFamily: "Satoshi,Inter,sans-serif",
-                      fontSize: "0.81rem",
-                      lineHeight: "1.76",
-                      color: "#4F5B57",
-                      marginLeft: "2.6rem",
-                      marginBottom: "0.9rem",
-                      marginTop: 0,
-                    }}
-                  >
-                    {svc.body}
-                  </p>
-                  <div
-                    style={{
-                      marginLeft: "2.6rem",
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "0.45rem",
-                    }}
-                  >
-                    {svc.deliverables.map((d) => (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: "1.25rem",
+                        minWidth: 0,
+                      }}
+                    >
                       <span
-                        key={d}
                         style={{
                           fontFamily: "Satoshi,Inter,sans-serif",
                           fontSize: "0.58rem",
                           fontWeight: 600,
-                          letterSpacing: "0.15em",
+                          letterSpacing: "0.18em",
                           textTransform: "uppercase",
-                          padding: "0.28rem 0.65rem",
-                          borderRadius: "2px",
-                          border: "1px solid rgba(4,50,34,0.11)",
-                          color: "#4F5B57",
-                          backgroundColor: "rgba(4,50,34,0.025)",
+                          color: active === i ? "#043222" : "rgba(4,50,34,0.22)",
+                          paddingTop: "0.2rem",
+                          flexShrink: 0,
+                          transition: "color 0.35s",
                         }}
                       >
-                        {d}
+                        {svc.index}
                       </span>
-                    ))}
+                      <h3
+                        style={{
+                          margin: 0,
+                          fontFamily: "Boska,Georgia,serif",
+                          fontSize: "clamp(1.2rem,1.9vw,1.65rem)",
+                          lineHeight: "1.1",
+                          letterSpacing: "-0.032em",
+                          color: active === i ? "#043222" : "#5a6b62",
+                          whiteSpace: "pre-line",
+                          transition: "color 0.35s",
+                          paddingBottom: "0.06em",
+                        }}
+                      >
+                        {svc.title}
+                      </h3>
+                    </div>
+                    <div
+                      style={{
+                        flexShrink: 0,
+                        width: "20px",
+                        height: "20px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        border: "1px solid",
+                        borderColor: active === i ? "#043222" : "rgba(4,50,34,0.16)",
+                        borderRadius: "50%",
+                        transform: active === i ? "rotate(180deg)" : "rotate(0deg)",
+                        transition: "transform 0.4s ease, border-color 0.3s ease",
+                      }}
+                    >
+                      <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                        <path
+                          d="M2.5 3.75L5 6.25L7.5 3.75"
+                          stroke={active === i ? "#043222" : "rgba(4,50,34,0.32)"}
+                          strokeWidth="1.2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </div>
                   </div>
+
+                  <div
+                    style={{
+                      overflow: "hidden",
+                      maxHeight: active === i ? "280px" : "0",
+                      marginTop: active === i ? "1.1rem" : "0",
+                      transition: "max-height 0.5s cubic-bezier(0.16,1,0.3,1), margin-top 0.4s ease",
+                    }}
+                  >
+                    <p
+                      style={{
+                        fontFamily: "Satoshi,Inter,sans-serif",
+                        fontSize: "0.81rem",
+                        lineHeight: "1.76",
+                        color: "#4F5B57",
+                        marginLeft: "2.6rem",
+                        marginBottom: "0.9rem",
+                        marginTop: 0,
+                      }}
+                    >
+                      {svc.body}
+                    </p>
+                    <div
+                      style={{
+                        marginLeft: "2.6rem",
+                        display: "flex",
+                        flexWrap: "wrap",
+                        gap: "0.45rem",
+                      }}
+                    >
+                      {svc.deliverables.map((d) => (
+                        <span
+                          key={d}
+                          style={{
+                            fontFamily: "Satoshi,Inter,sans-serif",
+                            fontSize: "0.58rem",
+                            fontWeight: 600,
+                            letterSpacing: "0.15em",
+                            textTransform: "uppercase",
+                            padding: "0.28rem 0.65rem",
+                            borderRadius: "2px",
+                            border: "1px solid rgba(4,50,34,0.11)",
+                            color: "#4F5B57",
+                            backgroundColor: "rgba(4,50,34,0.025)",
+                          }}
+                        >
+                          {d}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </motion.button>
+              ))}
+            </div>
+
+            {/* Mobile Content Display (Static below dropdown) */}
+            {isMobile && (
+              <motion.div
+                key={`mobile-content-${active}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={{ padding: "2.2rem 1.75rem", backgroundColor: "#FFF8EE" }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: "0.8rem", marginBottom: "1.2rem" }}>
+                  <div style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#043222" }} />
+                  <span style={{ fontFamily: "Satoshi, sans-serif", fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "rgba(4,50,34,0.5)" }}>
+                    Overview
+                  </span>
                 </div>
-              </motion.button>
-            ))}
+                <p
+                  style={{
+                    fontFamily: "Satoshi,Inter,sans-serif",
+                    fontSize: "0.88rem",
+                    lineHeight: "1.8",
+                    color: "#4F5B57",
+                    marginBottom: "2rem",
+                    margin: 0,
+                  }}
+                >
+                  {SERVICES[active].body}
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginTop: "1.5rem" }}>
+                  {SERVICES[active].deliverables.map((d) => (
+                    <span
+                      key={d}
+                      style={{
+                        fontFamily: "Satoshi,Inter,sans-serif",
+                        fontSize: "0.6rem",
+                        fontWeight: 600,
+                        letterSpacing: "0.12em",
+                        textTransform: "uppercase",
+                        padding: "0.35rem 0.75rem",
+                        borderRadius: "2px",
+                        border: "1px solid rgba(4,50,34,0.11)",
+                        color: "#4F5B57",
+                        backgroundColor: "rgba(4,50,34,0.02)",
+                      }}
+                    >
+                      {d}
+                    </span>
+                  ))}
+                </div>
+              </motion.div>
+            )}
           </div>
 
-          {/* Image panel — hidden on mobile */}
           <div
             className="svc-img-panel"
             style={{
