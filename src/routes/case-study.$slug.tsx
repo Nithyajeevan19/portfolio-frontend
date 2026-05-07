@@ -1,8 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CASE_STUDIES, type CaseStudy } from "../data/caseStudies";
 import CustomCursor from "../components/forma/CustomCursor";
 import { Navbar } from "../components/forma/Navbar";
+import { revealVariants, viewportConfig, luxuryEase, transition } from "../lib/motion";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export const Route = createFileRoute("/case-study/$slug")({
   component: CaseStudy,
@@ -11,9 +17,50 @@ export const Route = createFileRoute("/case-study/$slug")({
 export default function CaseStudy() {
   const { slug } = Route.useParams();
   const study = CASE_STUDIES.find((s) => s.slug.trim() === slug.trim());
-  console.log("Slug:", slug);
-  console.log("All studies:", CASE_STUDIES);
-  console.log("Selected study:", study);
+
+  useEffect(() => {
+    if (!study) return;
+
+    // Pin meta bar briefly on scroll past hero
+    const metaBar = document.querySelector(".cs-meta-bar");
+    if (metaBar) {
+      gsap.from(metaBar, {
+        opacity: 0,
+        y: 20,
+        duration: 0.8,
+        scrollTrigger: { trigger: metaBar, start: "top 85%", toggleActions: "play none none none" },
+      });
+    }
+
+    // Stagger gallery images in
+    const galleryImgs = document.querySelectorAll(".cs-gallery-img");
+    galleryImgs.forEach((img, i) => {
+      gsap.from(img, {
+        opacity: 0,
+        y: 40,
+        duration: 1.1,
+        ease: "power3.out",
+        delay: i * 0.1,
+        scrollTrigger: { trigger: img, start: "top 88%", toggleActions: "play none none none" },
+      });
+    });
+
+    // Description text character-by-word reveal
+    const desc = document.querySelectorAll(".cs-description");
+    desc.forEach((d) => {
+      gsap.from(d, {
+        opacity: 0,
+        y: 30,
+        duration: 1.2,
+        ease: "power3.out",
+        scrollTrigger: { trigger: d, start: "top 80%", toggleActions: "play none none none" },
+      });
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, [study]);
 
   if (!study) {
     return (
@@ -73,7 +120,6 @@ export default function CaseStudy() {
               <motion.div
                 initial={{ scale: 1.1, opacity: 0 }}
                 animate={{ scale: 1, opacity: 0.6 }}
-                transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -81,24 +127,34 @@ export default function CaseStudy() {
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
+                transition={{ duration: 1.8, ease: luxuryEase }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent opacity-80" />
             </div>
 
             <div className="relative z-10 h-full flex flex-col justify-end px-8 md:px-12 pb-20">
               <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                initial="hidden"
+                animate="visible"
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { staggerChildren: 0.12, delayChildren: 0.2, ...transition },
+                  },
+                }}
                 className="max-w-5xl"
               >
-                <div
+                <motion.div
+                  variants={revealVariants}
                   className="micro-label mb-6"
                   style={{ color: "#888888", fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif" }}
                 >
                   CASE STUDY // {study.year}
-                </div>
-                <h1
+                </motion.div>
+                <motion.h1
+                  variants={revealVariants}
                   style={{
                     fontFamily: "Boska, ui-serif, Georgia, serif",
                     fontSize: "clamp(2.5rem, 8vw, 7.5rem)",
@@ -109,9 +165,10 @@ export default function CaseStudy() {
                   }}
                 >
                   {study.project_title}
-                </h1>
+                </motion.h1>
                 {study.live_site_link && (
-                  <a
+                  <motion.a
+                    variants={revealVariants}
                     href={study.live_site_link}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -124,7 +181,7 @@ export default function CaseStudy() {
                     data-cursor=""
                   >
                     View Live Site →
-                  </a>
+                  </motion.a>
                 )}
               </motion.div>
             </div>
@@ -135,7 +192,7 @@ export default function CaseStudy() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-16">
               {/* Sticky sidebar */}
               <div className="md:col-span-3">
-                <div className="sticky top-28 flex flex-col gap-8">
+                <div className="cs-meta-bar sticky top-28 flex flex-col gap-8">
                   {[
                     { label: "Client", value: study.client_name },
                     { label: "Services", value: study.services },
@@ -191,10 +248,10 @@ export default function CaseStudy() {
                 {blocks.map((block, i) => (
                   <motion.div
                     key={block.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={viewportConfig}
+                    variants={revealVariants}
                   >
                     <div
                       className="micro-label mb-5"
@@ -203,6 +260,7 @@ export default function CaseStudy() {
                       {String(i + 1).padStart(2, "0")} // {block.label.toUpperCase()}
                     </div>
                     <p
+                      className="cs-description"
                       style={{
                         fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
                         fontSize: "clamp(1.3rem, 2.5vw, 2rem)",
@@ -230,10 +288,14 @@ export default function CaseStudy() {
                 VISUAL SYSTEM
               </div>
               <div className="mb-4" style={{ height: "60vh", overflow: "hidden", border: "1px solid #1A1A1A" }}>
-                <img
+                <motion.img
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={viewportConfig}
+                  transition={{ duration: 1.2, ease: luxuryEase }}
                   src={study.gallery[0]}
                   alt="Gallery 1"
-                  className="w-full h-full object-cover"
+                  className="cs-gallery-img w-full h-full object-cover"
                   style={{ filter: "brightness(0.85)" }}
                 />
               </div>
@@ -243,7 +305,7 @@ export default function CaseStudy() {
                     <img
                       src={img}
                       alt={`Gallery ${i + 2}`}
-                      className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                      className="cs-gallery-img w-full h-full object-cover transition-transform duration-700 hover:scale-105"
                       style={{ filter: "brightness(0.85)" }}
                     />
                   </div>
@@ -254,7 +316,7 @@ export default function CaseStudy() {
                   <img
                     src={study.gallery[3]}
                     alt="Gallery 4"
-                    className="w-full h-full object-cover"
+                    className="cs-gallery-img w-full h-full object-cover"
                     style={{ filter: "brightness(0.85)" }}
                   />
                 </div>
@@ -283,10 +345,10 @@ export default function CaseStudy() {
                   .map((item, i) => (
                     <motion.div
                       key={i}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 1, delay: i * 0.2 }}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={viewportConfig}
+                      variants={revealVariants}
                     >
                       <div
                         style={{
@@ -362,3 +424,4 @@ export default function CaseStudy() {
     </div>
   );
 }
+

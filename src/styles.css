@@ -347,7 +347,7 @@
   content: "";
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   opacity: 0.022;
   pointer-events: none;
   z-index: 9999;
@@ -358,4 +358,16 @@
   font-family: "Boska", Georgia, serif;
   color: var(--green);
   letter-spacing: -0.04em;
+}
+/* ── Swiper Pagination ─────────────────────────── */
+.swiper-pagination-bullet {
+  background: rgba(4, 50, 34, 0.25) !important;
+  width: 5px !important;
+  height: 5px !important;
+  opacity: 1 !important;
+}
+.swiper-pagination-bullet-active {
+  background: #043222 !important;
+  width: 18px !important;
+  border-radius: 3px !important;
 }

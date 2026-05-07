@@ -1,7 +1,12 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "@tanstack/react-router";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
 import { CASE_STUDIES, type CaseStudy } from "../../data/caseStudies";
+import { revealVariants, viewportConfig, revealTransition, luxuryEase } from "../../lib/motion";
 
 function WorkCard({
   project,
@@ -16,6 +21,10 @@ function WorkCard({
   const [xy, setXY] = useState({ x: 50, y: 50 });
   const isLarge = size === "large";
 
+  const cardRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: cardRef, offset: ["start end", "end start"] });
+  const imageY = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+
   const onMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     setXY({
@@ -26,10 +35,23 @@ function WorkCard({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
+      ref={cardRef}
+      initial="hidden"
+      whileInView="visible"
+      whileHover="hover"
+      viewport={viewportConfig}
+      variants={{
+        hidden: { opacity: 0, y: 20 },
+        visible: { 
+          opacity: 1, 
+          y: 0, 
+          transition: { ...revealTransition, delay: (index % 3) * 0.12 } 
+        },
+        hover: { 
+          y: -8,
+          transition: { duration: 0.6, ease: luxuryEase }
+        }
+      }}
     >
       <Link
         to="/case-study/$slug"
@@ -40,10 +62,9 @@ function WorkCard({
           border: "1px solid rgba(4,50,34,0.09)",
           backgroundColor: "#FFF8EE",
           boxShadow: hov
-            ? "0 22px 56px rgba(4,50,34,0.10)"
+            ? "0 32px 64px -16px rgba(4,50,34,0.12)"
             : "0 2px 10px rgba(4,50,34,0.04)",
-          transform: hov ? "translateY(-2px)" : "translateY(0)",
-          transition: "box-shadow 0.65s ease, transform 0.65s cubic-bezier(0.16,1,0.3,1)",
+          transition: "box-shadow 0.65s ease",
           textDecoration: "none",
         }}
         onMouseEnter={() => setHov(true)}
@@ -59,18 +80,31 @@ function WorkCard({
             height: isLarge ? "clamp(300px,46vw,600px)" : "clamp(220px,28vw,380px)",
           }}
         >
-          <div
+          <motion.div
             style={{
+              y: imageY,
               position: "absolute",
-              inset: 0,
-              backgroundImage: `url(${project.cover_image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              transform: hov ? "scale(1.055)" : "scale(1.0)",
-              filter: hov ? "brightness(0.68) saturate(0.88)" : "brightness(0.62) saturate(0.80)",
-              transition: "transform 1.0s cubic-bezier(0.16,1,0.3,1), filter 0.7s ease",
+              inset: "-10%",
             }}
-          />
+          >
+            <motion.div
+              variants={{
+                hover: { 
+                  scale: 1.08,
+                  filter: "brightness(0.72) saturate(0.95)",
+                }
+              }}
+              transition={{ duration: 1.2, ease: luxuryEase }}
+              style={{
+                position: "absolute",
+                inset: 0,
+                backgroundImage: `url(${project.cover_image})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                filter: "brightness(0.62) saturate(0.80)",
+              }}
+            />
+          </motion.div>
 
           {/* Radial hover glow */}
           <div
@@ -388,10 +422,26 @@ export function SelectedWork() {
         </motion.div>
       </div>
 
-      {/* Grid */}
+      {/* Mobile swiper — hidden on md+ */}
+      <div className="md:hidden px-6 pb-2">
+        <Swiper
+          modules={[Pagination]}
+          spaceBetween={14}
+          slidesPerView={1.12}
+          pagination={{ clickable: true }}
+          style={{ paddingBottom: '2.5rem' }}>
+          {items.map((cs, i) => (
+            <SwiperSlide key={cs.id}>
+              <WorkCard project={cs} index={i} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+
+      {/* Grid — hidden on mobile */}
       <div
-        className="px-8 md:px-14"
-        style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}
+        className="hidden md:flex px-8 md:px-14"
+        style={{ flexDirection: "column", gap: "0.85rem" }}
       >
         {rows.map((row, ri) => {
           if (row.type === "single") {

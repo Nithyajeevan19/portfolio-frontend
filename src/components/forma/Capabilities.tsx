@@ -1,63 +1,88 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { revealVariants, viewportConfig } from "../../lib/motion";
 
 const SERVICES = [
   {
     index: "01",
     title: "Web Experiences",
-    body: "We define market position, naming, and voice. Then we build the visual system — identity, typography, colour, motion — to hold it for a decade.",
+    body: "We design high-performing websites and digital experiences that help brands stand out, build trust, and convert attention into action. Every interaction is crafted with clarity, motion, and purpose.",
     deliverables: [
-      "Positioning & Messaging",
-      "Visual Identity Systems",
-      "Brand Guidelines",
-      "Verbal Identity",
+      "Custom Website Design",
+      "Interactive Landing Pages",
+      "UI/UX Design",
+      "Performance & Responsive Build",
     ],
-    image: "https://images.unsplash.com/photo-1558655146-d09347e92766?w=900&q=85",
+    image:
+      "https://images.unsplash.com/photo-1558655146-d09347e92766?w=900&q=85",
   },
   {
     index: "02",
     title: "Digital Systems",
-    body: "From zero-to-one product strategy to mature design systems. We reduce friction, increase conversion, and create interfaces people return to.",
+    body: "We build smart digital systems that simplify operations, improve customer experience, and create scalable foundations for growing businesses.",
     deliverables: [
-      "UX Strategy & Research",
-      "Interface Design",
-      "Design Systems",
-      "Prototype & Test",
+      "Booking & Management Systems",
+      "Automation Workflows",
+      "CRM & Business Dashboards",
+      "Digital Operations Systems",
     ],
-    image: "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=900&q=85",
+    image:
+      "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=900&q=85",
   },
   {
     index: "03",
     title: "Scalable SaaS",
-    body: "Award-calibre marketing sites, campaign platforms, and editorial spaces. Built with precision front-end engineering and cinematic art direction.",
+    body: "From early-stage concepts to scalable platforms, we turn ideas into digital products focused on usability, scalability, and long-term growth.",
     deliverables: [
-      "Creative Direction",
-      "Motion & Animation",
-      "Front-End Engineering",
-      "CMS Integration",
+      "SaaS Product Design",
+      "MVP Development",
+      "User Flows & Product Strategy",
+      "Scalable Product Systems",
     ],
-    image: "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=900&q=85",
+    image:
+      "https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=900&q=85",
   },
   {
     index: "04",
-    title: "Creative\nTechnology",
-    body: "WebGL, Three.js, generative systems, and AI-augmented interfaces. We push the technical edge where the brief demands it — never as decoration.",
-    deliverables: ["3D & WebGL", "Generative Systems", "AI Integration", "Technical R&D"],
-    image: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=900&q=85",
+    title: "Growth & Media",
+    body: "We help modern brands grow through strategic content, social presence, paid campaigns, and digital storytelling that connects with the right audience.",
+    deliverables: [
+      "Meta Ads & Campaigns",
+      "Social Media Management",
+      "Content Strategy",
+      "Short-Form Video & Creative",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=85",
   },
   {
     index: "05",
-    title: "Creative\nDirection",
-    body: "Embedded creative leadership for campaigns, product launches, and brand moments. We set the visual standard and hold it across every channel.",
+    title: "Creative\nTechnology",
+    body: "We combine design with modern technology to create immersive and future-forward digital experiences that add real value.",
     deliverables: [
-      "Campaign Concepting",
-      "Art Direction",
-      "Photography & Film Brief",
-      "Brand Governance",
+      "3D & Interactive Experiences",
+      "Three.js & Web Animations",
+      "AI-Powered Features",
+      "Creative Development & R&D",
     ],
-    image: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=900&q=85",
+    image:
+      "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=900&q=85",
+  },
+  {
+    index: "06",
+    title: "Creative\nDirection",
+    body: "We help brands maintain a strong and consistent visual presence across products, campaigns, and digital platforms.",
+    deliverables: [
+      "Brand Visual Direction",
+      "Campaign Concepts",
+      "Design System Oversight",
+      "Digital Brand Consistency",
+    ],
+    image:
+      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=900&q=85",
   },
 ];
+
 
 const ease = [0.16, 1, 0.3, 1];
 
@@ -75,10 +100,10 @@ export function Capabilities() {
         style={{ borderBottom: "1px solid rgba(4,50,34,0.09)", paddingBottom: "2.5rem" }}
       >
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: ease as any }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+          variants={revealVariants}
         >
           <div
             style={{

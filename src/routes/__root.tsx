@@ -1,7 +1,10 @@
 import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import CustomCursor from "@/components/forma/CustomCursor";
 import { usePortfolioAnimations } from "@/hooks/usePortfolioAnimations";
+import { initLenis } from '@/lib/lenis';
+import { PageLoader } from "@/components/forma/PageLoader";
 
 function NotFoundComponent() {
   return (
@@ -61,8 +64,13 @@ function RootComponent() {
   // and injects click-burst DOM particles on every click.
   usePortfolioAnimations();
 
+  useEffect(() => {
+    initLenis();
+  }, []);
+
   return (
     <>
+      <PageLoader />
       <CustomCursor />
       <Outlet />
       <Toaster />

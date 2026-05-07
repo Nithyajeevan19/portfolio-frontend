@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { revealVariants, viewportConfig } from "../../lib/motion";
 // import { SectionHeader } from "./SectionHeader";
 
 const TEAM = [
@@ -266,10 +267,10 @@ export function Studio() {
           }}
         />
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.3 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+          variants={revealVariants}
           style={{
             position: "absolute",
             inset: 0,
@@ -306,10 +307,10 @@ export function Studio() {
         style={{ borderBottom: "1px solid rgba(4,50,34,0.09)", paddingBottom: "2.5rem" }}
       >
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+          variants={revealVariants}
           className="flex flex-col md:flex-row md:items-end md:justify-between gap-6"
         >
           <div>

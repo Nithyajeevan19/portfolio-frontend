@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
+import { motion, AnimatePresence } from "framer-motion";
+import { luxuryEase } from "../../lib/motion";
 
 const NAV_LINKS = [
   { label: "Work", href: "#work" },
@@ -8,9 +10,12 @@ const NAV_LINKS = [
   { label: "Contact", href: "#contact" },
 ];
 
+import { useMagnetic } from "@/hooks/useMagnetic";
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const mag = useMagnetic(0.25);
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 48);
@@ -34,9 +39,7 @@ export function Navbar() {
           data-cursor=""
           style={{ textDecoration: "none" }}
         >
-          <div
-           
-          />
+          <div />
           <span
             style={{
               color: "#043222",
@@ -47,7 +50,7 @@ export function Navbar() {
               fontWeight: 600,
             }}
           >
-          DEVNest
+            DEVNest
           </span>
         </Link>
 
@@ -80,31 +83,40 @@ export function Navbar() {
               />
             </a>
           ))}
-          <a
-            href="#contact"
-            className="px-5 py-2.5 transition-all duration-400 rounded-sm"
-            style={{
-              backgroundColor: "#043222",
-              color: "#FFF8EE",
-              fontSize: "0.65rem",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
-              fontWeight: 500,
-              textDecoration: "none",
-              cursor: "none",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = "#003631";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = "#043222";
-            }}
-            data-cursor=""
+          <motion.div
+            ref={mag.ref as any}
+            style={{ x: mag.pos.x, y: mag.pos.y }}
+            onMouseMove={mag.onMouseMove}
+            onMouseLeave={mag.onMouseLeave}
           >
-            Start A Project
-          </a>
+            <a
+              href="#contact"
+              className="px-5 py-2.5 transition-all duration-400 rounded-sm"
+              style={{
+                display: "inline-block",
+                backgroundColor: "#043222",
+                color: "#FFF8EE",
+                fontSize: "0.65rem",
+                letterSpacing: "0.14em",
+                textTransform: "uppercase",
+                fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                fontWeight: 500,
+                textDecoration: "none",
+                cursor: "none",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#003631";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#043222";
+              }}
+              data-cursor=""
+            >
+              Start A Project
+            </a>
+          </motion.div>
         </div>
+
 
         <button
           className="md:hidden flex flex-col gap-1.5 p-2"
@@ -133,50 +145,64 @@ export function Navbar() {
         </button>
       </div>
 
-      <div
-        className="md:hidden overflow-hidden transition-all duration-600"
-        style={{
-          maxHeight: menuOpen ? "360px" : "0",
-          borderTop: menuOpen ? "1px solid rgba(4,50,34,0.10)" : "none",
-          backgroundColor: "#FFF8EE",
-        }}
-      >
-        <div className="px-8 py-8 flex flex-col gap-5">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="transition-colors duration-300"
-              style={{
-                color: "#043222",
-                fontSize: "2.2rem",
-                letterSpacing: "-0.03em",
-                lineHeight: 1,
-                fontFamily: "Boska, ui-serif, Georgia, serif",
-                textDecoration: "none",
-              }}
-              onClick={() => setMenuOpen(false)}
-            >
-              {link.label}
-            </a>
-          ))}
-          <a
-            href="#contact"
-            className="mt-2"
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.6, ease: luxuryEase }}
+            className="md:hidden overflow-hidden"
             style={{
-              color: "#043222",
-              fontSize: "0.75rem",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
-              textDecoration: "none",
+              borderTop: "1px solid rgba(4,50,34,0.10)",
+              backgroundColor: "#FFF8EE",
             }}
-            onClick={() => setMenuOpen(false)}
           >
-            New Inquiry →
-          </a>
-        </div>
-      </div>
+            <div className="px-8 py-10 flex flex-col gap-6">
+              {NAV_LINKS.map((link, i) => (
+                <motion.a
+                  key={link.label}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.08, duration: 0.5 }}
+                  href={link.href}
+                  className="transition-colors duration-300"
+                  style={{
+                    color: "#043222",
+                    fontSize: "2.4rem",
+                    letterSpacing: "-0.04em",
+                    lineHeight: 1,
+                    fontFamily: "Boska, ui-serif, Georgia, serif",
+                    textDecoration: "none",
+                  }}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {link.label}
+                </motion.a>
+              ))}
+              <motion.a
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                href="#contact"
+                className="mt-4"
+                style={{
+                  color: "#043222",
+                  fontSize: "0.78rem",
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
+                  textDecoration: "none",
+                  fontWeight: 600,
+                }}
+                onClick={() => setMenuOpen(false)}
+              >
+                New Inquiry →
+              </motion.a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

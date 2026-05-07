@@ -1,30 +1,41 @@
 import { motion } from "framer-motion";
+import { revealVariants, viewportConfig } from "../../lib/motion";
 
 const PHASES = [
   {
     index: "01",
     label: "Discover",
-    title: "We interrogate\nthe brief.",
-    body: "Two to three weeks of stakeholder conversations, competitive mapping, and strategic diagnosis before a single frame is designed.",
-    points: ["Stakeholder Interviews", "Competitive Landscape", "Opportunity Mapping"],
+    title: "We find\nthe real problem.",
+    body: "We dig into the business, user behavior, and data to uncover the underlying friction. Through research, conversation, and analysis, we define the right problem to solve—before writing a single line of code.",
+    points: ["Market & User Research", "Friction Mapping", "Tech Opportunity Audit"],
   },
   {
     index: "02",
     label: "Architect",
-    title: "Structure is\nthe foundation.",
-    body: "Brand architecture, product logic, or information framework — the invisible scaffolding that makes every downstream decision feel inevitable.",
-    points: ["Brand Architecture", "IA & User Flows", "System Design"],
+    title: "We build\nthe right system.",
+    body: "We turn the problem into a clear, scalable solution: product logic, data architecture, and experience structure. Everything we design is built to be robust, maintainable, and ready to grow.",
+    points: ["Product & System Architecture",
+"Data & Tech Flow","Scalable UX Patterns"],
   },
   {
     index: "03",
-    label: "Execute",
-    title: "Craft at the\nright level.",
-    body: "Senior execution from concept to handoff. Every deliverable is precise, defensible, and documented. We do not ship work we would not sign our names to.",
-    points: ["Pixel-Precise Delivery", "Motion & Interaction", "Handoff & Documentation"],
+    label: "Launch & Scale",
+    title: "We ship\nright then grow.",
+    body: "From prototype to production, we refine, launch, and evolve the solution. We design for performance, clarity, and iteration so the product can scale with the business, not work against it.",
+    points: ["MVP Delivery & Launch", "Performance & Analytics", "Iteration & Growth Systems"],
   },
 ];
 
-const ease = [0.16, 1, 0.3, 1] as const;
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.12 } },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 22 },
+  visible: { opacity: 1, y: 0, transition: { duration: 1.0, ease: [0.16, 1, 0.3, 1] as const } },
+};
+
 
 export function Methodology() {
   return (
@@ -38,10 +49,10 @@ export function Methodology() {
         style={{ borderBottom: "1px solid rgba(4,50,34,0.09)", paddingBottom: "2.5rem" }}
       >
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+          variants={revealVariants}
           className="flex flex-col md:flex-row md:items-end md:justify-between gap-6"
         >
           <div>
@@ -103,7 +114,11 @@ export function Methodology() {
       </div>
 
       {/* Three columns */}
-      <div
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-60px" }}
         className="mx-8 md:mx-14"
         style={{
           display: "grid",
@@ -117,10 +132,8 @@ export function Methodology() {
         {PHASES.map((phase, i) => (
           <motion.div
             key={phase.index}
-            initial={{ opacity: 0, y: 22 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 1.1, ease, delay: i * 0.1 }}
+            variants={itemVariants}
+            transition={{ delay: i * 0.1 }}
             style={{
               padding: "2.5rem",
               backgroundColor: "#FFF8EE",
@@ -220,7 +233,7 @@ export function Methodology() {
             </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Principle pullquote */}
       <motion.div

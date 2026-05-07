@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, memo } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import LuxuryOrb from "./LuxuryOrb";
+import { staggerContainer, fadeUp, luxuryEase } from "../../lib/motion";
+import { useMagnetic } from "@/hooks/useMagnetic";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-function HeroBtn({
+const HeroBtn = memo(({
   href,
   primary,
   children,
@@ -12,39 +14,47 @@ function HeroBtn({
   href: string;
   primary?: boolean;
   children: React.ReactNode;
-}) {
-  const [hov, setHov] = useState(false);
+}) => {
+  const mag = useMagnetic(0.25);
   return (
-    <a
-      href={href}
-      data-cursor=""
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: "0.48rem",
-        height: "56px",
-        padding: "0 2.8rem",
-        borderRadius: "2px",
-        backgroundColor: primary ? (hov ? "#002619" : "#043222") : hov ? "#FFFBF0" : "#FFF8EE",
-        color: primary ? "#FFF8EE" : "#043222",
-        fontFamily: "Inter,sans-serif",
-        fontSize: "0.65rem",
-        fontWeight: 600,
-        letterSpacing: "0.14em",
-        textTransform: "uppercase" as const,
-        textDecoration: "none",
-        border: primary ? "1px solid transparent" : "1px solid rgba(4,50,34,0.14)",
-        transform: hov ? "translateY(-1px)" : "translateY(0)",
-        transition: "all 300ms ease",
-        whiteSpace: "nowrap" as const,
-      }}
+    <motion.div
+      ref={mag.ref as any}
+      style={{ x: mag.pos.x, y: mag.pos.y, willChange: "transform" }}
+      onMouseMove={mag.onMouseMove}
+      onMouseLeave={mag.onMouseLeave}
+      onMouseEnter={mag.onMouseEnter}
     >
-      {children}
-    </a>
+      <motion.a
+        href={href}
+        data-cursor=""
+        whileHover={{ y: -2, scale: 1.01 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.4, ease: luxuryEase }}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.48rem",
+          height: "56px",
+          padding: "0 2.8rem",
+          borderRadius: "2px",
+          backgroundColor: primary ? "#043222" : "#FFF8EE",
+          color: primary ? "#FFF8EE" : "#043222",
+          fontFamily: "Inter,sans-serif",
+          fontSize: "0.65rem",
+          fontWeight: 600,
+          letterSpacing: "0.14em",
+          textTransform: "uppercase" as const,
+          textDecoration: "none",
+          border: primary ? "1px solid transparent" : "1px solid rgba(4,50,34,0.14)",
+          whiteSpace: "nowrap" as const,
+        }}
+      >
+        {children}
+      </motion.a>
+    </motion.div>
   );
-}
+});
+
 
 export function Hero() {
   const [orbSize, setOrbSize] = useState(380);
@@ -62,6 +72,10 @@ export function Hero() {
     return () => window.removeEventListener("resize", calc);
   }, []);
 
+  const { scrollY } = useScroll();
+  const rawY = useTransform(scrollY, [0, 600], [0, -80]);
+  const parallaxY = useSpring(rawY, { stiffness: 60, damping: 20 });
+
   return (
     <section
       className="hero-section"
@@ -74,19 +88,29 @@ export function Hero() {
         flexDirection: "column",
       }}
     >
-      {/* Grain overlay */}
-      <div
-        aria-hidden
+      {/* Background Parallax Layer */}
+      <motion.div
         style={{
+          y: parallaxY,
           position: "absolute",
           inset: 0,
           zIndex: 0,
           pointerEvents: "none",
-          opacity: 0.02,
-          backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.78' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+          willChange: "transform",
         }}
-      />
+      >
+        {/* Grain overlay - Optimized numOctaves */}
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            opacity: 0.015,
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+          }}
+        />
+      </motion.div>
 
       <div
         style={{
@@ -113,12 +137,16 @@ export function Hero() {
           className="hero-grid"
         >
           {/* LEFT: Copy */}
-          <div className="hero-text-col" style={{ minWidth: 0 }}>
+          <motion.div 
+            className="hero-text-col" 
+            style={{ minWidth: 0 }}
+            variants={staggerContainer}
+            initial="initial"
+            animate="animate"
+          >
             {/* Availability badge */}
             <motion.div
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, delay: 0.18, ease }}
+              variants={fadeUp}
               style={{
                 marginBottom: "clamp(2rem,3.2vh,2.8rem)",
                 display: "inline-flex",
@@ -149,10 +177,9 @@ export function Hero() {
               />
               Now accepting new projects
             </motion.div>
+
             <motion.p
-              initial={{ opacity: 0, y: 5 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease }}
+              variants={fadeUp}
               style={{
                 margin: "0 0 clamp(0.8rem,1.5vh,1.2rem)",
                 fontFamily: "Inter,sans-serif",
@@ -167,9 +194,7 @@ export function Hero() {
             </motion.p>
 
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.2, ease, delay: 0.4 }}
+              variants={fadeUp}
               style={{
                 margin: 0,
                 fontFamily: "Boska, ui-serif, Georgia, serif",
@@ -196,9 +221,7 @@ export function Hero() {
             </motion.h1>
 
             <motion.div
-              initial={{ scaleX: 0, opacity: 0 }}
-              animate={{ scaleX: 1, opacity: 1 }}
-              transition={{ duration: 1.1, ease, delay: 0.68 }}
+              variants={fadeUp}
               style={{
                 height: "1px",
                 width: "80px",
@@ -209,9 +232,7 @@ export function Hero() {
             />
 
             <motion.p
-              initial={{ opacity: 0, y: 7 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.0, ease, delay: 0.8 }}
+              variants={fadeUp}
               style={{
                 margin: 0,
                 maxWidth: "38rem",
@@ -221,14 +242,12 @@ export function Hero() {
                 color: "#4F5B57",
               }}
             >
-             A modern creative studio for ambitious brands. We craft high-impact web experiences, build smart systems, and turn ideas into scalable products.
+              A modern creative studio for ambitious brands. We craft high-impact web experiences, build smart systems, and turn ideas into scalable products.
             </motion.p>
 
             {/* CTAs */}
             <motion.div
-              initial={{ opacity: 0, y: 7 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.95, ease, delay: 1.02 }}
+              variants={fadeUp}
               style={{ display: "flex", flexWrap: "wrap", gap: "1.2rem", marginTop: "3.5rem" }}
             >
               <HeroBtn href="#work" primary>
@@ -236,13 +255,14 @@ export function Hero() {
               </HeroBtn>
               <HeroBtn href="#contact">START A PROJECT</HeroBtn>
             </motion.div>
-          </div>
+          </motion.div>
+
 
           {/* RIGHT: CSS Orb */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 2.2, ease, delay: 0.1 }}
+            transition={{ duration: 2.2, ease: luxuryEase, delay: 0.1 }}
             className="hero-orb-col"
             style={{
               display: "flex",
@@ -253,7 +273,7 @@ export function Hero() {
             }}
           >
             <div className="orb-wrapper">
-              <LuxuryOrb size={orbSize} />
+              <MemoizedLuxuryOrb size={orbSize} />
             </div>
           </motion.div>
         </div>
@@ -417,3 +437,4 @@ export function Hero() {
     </section>
   );
 }
+const MemoizedLuxuryOrb = memo(LuxuryOrb);

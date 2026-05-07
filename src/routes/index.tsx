@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Navbar } from "@/components/forma/Navbar";
 import { Hero } from "@/components/forma/Hero";
+import { MarqueeStrip } from "@/components/forma/MarqueeStrip";
 import { SelectedWork } from "@/components/forma/SelectedWork";
 import { Capabilities } from "@/components/forma/Capabilities";
 import { Methodology } from "@/components/forma/Methodology";
@@ -18,6 +19,7 @@ function Index() {
       <Navbar />
       <main>
         <Hero />
+        <MarqueeStrip />
         <SelectedWork />
         <Capabilities />
         <Methodology />

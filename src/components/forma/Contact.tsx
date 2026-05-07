@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { revealVariants, viewportConfig, luxuryEase } from "../../lib/motion";
 
 const PROJECT_SCOPES = [
   "Brand Strategy & Identity",
@@ -20,14 +21,15 @@ const SOCIALS = [
 const inputBase = {
   borderBottom: "1px solid rgba(4,50,34,0.15)",
   color: "#111111",
-  fontSize: "0.9rem",
+  fontSize: "0.92rem",
   backgroundColor: "transparent",
   width: "100%",
-  padding: "0.75rem 0",
+  padding: "0.85rem 0",
   outline: "none",
   fontFamily: "Satoshi, Inter, sans-serif",
-  transition: "border-color 0.3s",
+  transition: "all 0.5s cubic-bezier(0.16, 1, 0.3, 1)",
 };
+
 
 export function Contact() {
   const [form, setForm] = useState({
@@ -90,10 +92,10 @@ export function Contact() {
       {/* Big headline */}
       <div className="px-8 md:px-14 mb-16 overflow-hidden">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.3, ease: [0.16, 1, 0.3, 1] }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportConfig}
+          variants={revealVariants}
         >
           <div className="micro-label mb-5 flex items-center gap-3" style={{ color: "#043222" }}>
             <span style={{ color: "rgba(4,50,34,0.35)" }}>06</span>
@@ -482,21 +484,19 @@ export function Contact() {
                 >
                   * Required. All submissions reviewed personally.
                 </p>
-                <button
+                <motion.button
                   type="submit"
                   disabled={status === "loading"}
-                  className="micro-label flex items-center gap-4 px-7 py-3.5 rounded-sm transition-all duration-400"
+                  whileHover={status !== "loading" ? { y: -2, scale: 1.01, backgroundColor: "#003631" } : {}}
+                  whileTap={status !== "loading" ? { scale: 0.98 } : {}}
+                  transition={{ duration: 0.4, ease: luxuryEase }}
+                  className="micro-label flex items-center gap-4 px-8 py-4 rounded-sm"
                   style={{
                     backgroundColor: "#043222",
                     color: "#FFF8EE",
                     opacity: status === "loading" ? 0.6 : 1,
                     border: "none",
-                  }}
-                  onMouseEnter={(e) => {
-                    if (status !== "loading") e.currentTarget.style.backgroundColor = "#003631";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = "#043222";
+                    boxShadow: "0 10px 20px -10px rgba(4,50,34,0.3)",
                   }}
                   data-cursor=""
                 >
@@ -516,7 +516,7 @@ export function Contact() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                </button>
+                </motion.button>
               </div>
             </form>
           )}
