@@ -79,7 +79,7 @@ const SERVICES = [
       "Digital Brand Consistency",
     ],
     image:
-      "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=900&q=85",
+      "https://res.cloudinary.com/dhgkvhtol/image/upload/v1778152839/2701822_uq0n0t.jpg",
   },
 ];
 

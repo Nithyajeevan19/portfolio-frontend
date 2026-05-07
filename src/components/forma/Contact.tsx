@@ -130,7 +130,7 @@ export function Contact() {
       </div>
 
       <div
-        className="px-8 md:px-14 grid grid-cols-1 md:grid-cols-12 gap-px rounded-sm overflow-hidden"
+        className="px-8 md:px-14 grid grid-cols-1 md:grid-cols-8 gap-px rounded-sm overflow-hidden"
         style={{ border: "1px solid rgba(4,50,34,0.10)" }}
       >
         {/* Info panel */}
@@ -139,14 +139,14 @@ export function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
-          className="md:col-span-4 p-10 md:pt-7 flex flex-col gap-9 relative md:-top-4"
+          className="md:col-span-3 p-14 md:p-16 flex flex-col gap-12 relative md:-top-4"
           style={{ borderRight: "1px solid rgba(4,50,34,0.10)", backgroundColor: "#FFF8EE" }}
         >
           {/* Availability */}
           <div
             style={{
               border: "1px solid rgba(4,50,34,0.12)",
-              padding: "1.4rem",
+              padding: "2.2rem",
               backgroundColor: "#FFEDA8",
               borderRadius: "0.25rem",
             }}
@@ -193,10 +193,10 @@ export function Contact() {
             <p
               style={{
                 fontFamily: "Boska, ui-serif, Georgia, serif",
-                fontSize: "1.45rem",
+                fontSize: "2.2rem",
                 letterSpacing: "-0.03em",
                 color: "#043222",
-                lineHeight: 1.1,
+                lineHeight: 1.05,
                 margin: 0,
               }}
             >
@@ -215,7 +215,7 @@ export function Contact() {
               className="transition-colors duration-300"
               style={{
                 fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
-                fontSize: "0.85rem",
+                fontSize: "1.1rem",
                 color: "#4F5B57",
                 textDecoration: "none",
               }}
@@ -268,8 +268,8 @@ export function Contact() {
             style={{
               fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
               marginTop: "auto",
-              fontSize: "0.72rem",
-              color: "rgba(4,50,34,0.30)",
+              fontSize: "0.9rem",
+              color: "rgba(4,50,34,0.40)",
               lineHeight: "1.6",
               margin: 0,
             }}
@@ -285,7 +285,7 @@ export function Contact() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.15 }}
-          className="md:col-span-8 p-10"
+          className="md:col-span-5 p-14 md:p-16"
           style={{ backgroundColor: "#F6E9D9" }}
         >
           {status === "success" ? (
@@ -351,7 +351,7 @@ export function Contact() {
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex flex-col gap-7">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-10">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-7">
                 {[
                   { name: "name", label: "Your Name *", placeholder: "Jane Smith", type: "text" },
@@ -461,7 +461,7 @@ export function Contact() {
                   name="message"
                   value={form.message}
                   onChange={handleChange}
-                  rows={4}
+                  rows={1}
                   placeholder="Tell us what you're building, what's at stake, and when you need it..."
                   style={{ ...inputBase, resize: "none", lineHeight: "1.65" }}
                   onFocus={(e) => {
