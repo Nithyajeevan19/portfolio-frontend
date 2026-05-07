@@ -64,6 +64,7 @@ export function Hero() {
 
   return (
     <section
+      className="hero-section"
       style={{
         position: "relative",
         minHeight: "100svh",
@@ -112,7 +113,7 @@ export function Hero() {
           className="hero-grid"
         >
           {/* LEFT: Copy */}
-          <div style={{ minWidth: 0 }}>
+          <div className="hero-text-col" style={{ minWidth: 0 }}>
             {/* Availability badge */}
             <motion.div
               initial={{ opacity: 0, y: -6 }}
@@ -260,6 +261,7 @@ export function Hero() {
 
       {/* Bottom bar with Stats & Scroll */}
       <div
+        className="hero-bottom-bar"
         style={{
           padding: "0 clamp(1.5rem,5.5vw,5.5rem) clamp(2rem,4vh,3rem)",
           display: "grid",
@@ -367,24 +369,45 @@ export function Hero() {
 
       <style>{`
         @media (max-width: 767px) { 
-          .hero-grid { grid-template-columns: 1fr !important; gap: 4rem !important; } 
-          .hero-orb-col { 
-            order: -1; 
-            position: relative;
+          .hero-section {
+            min-height: 85svh !important;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 260px;
+            flex-direction: column;
+            justify-content: flex-start;
+          }
+          .hero-grid { 
+            grid-template-columns: 1fr !important; 
+            gap: 2rem !important; 
+            position: relative;
+            z-index: 1;
+            margin-top: 4vh !important;
+          } 
+          .hero-text-col {
+            position: relative;
+            z-index: 2;
+            margin-top: -2vh !important;
+          }
+          .hero-orb-col { 
+            position: absolute !important;
+            top: 42% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            z-index: 0 !important;
+            height: auto !important;
+            opacity: 0.85;
+            pointer-events: none !important;
           }
           .orb-wrapper {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 260px;
-            height: 260px;
+            position: relative;
+            width: 280px;
+            height: 280px;
             display: flex;
             justify-content: center;
             align-items: center;
+          }
+          /* Reduce spacing after scroll indicator */
+          .hero-bottom-bar {
+             padding-bottom: 1.5rem !important;
           }
         }
       `}</style>
