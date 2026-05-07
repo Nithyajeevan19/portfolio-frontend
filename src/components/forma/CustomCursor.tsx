@@ -22,40 +22,44 @@ export default function CustomCursor() {
     const textEl = textRef.current;
     if (!dot || !ringEl || !textEl) return;
 
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouch) {
+      dot.style.display = "none";
+      ringEl.style.display = "none";
+      return;
+    }
+
     const onMove = (e: MouseEvent) => {
       pos.current.x = e.clientX;
       pos.current.y = e.clientY;
     };
 
     const animate = (time: number) => {
-      // Smoothly interpolate ring position
       ring.current.x += (pos.current.x - ring.current.x) * 0.15;
       ring.current.y += (pos.current.y - ring.current.y) * 0.15;
 
       const state = stateRef.current;
-      const targetSize = state.isHovering ? (state.cursorText ? 76 : 42) : 34;
+      // Further reduced text-hover size (60px) and base (34px)
+      const targetSize = state.isHovering ? (state.cursorText ? 60 : 42) : 34;
       
-      // Smoothly interpolate size
       state.currentSize += (targetSize - state.currentSize) * 0.15;
 
-      // Update positions using translate3d for GPU acceleration
       dot.style.transform = `translate3d(${pos.current.x - 3}px, ${pos.current.y - 3}px, 0)`;
       
       const ringScale = state.currentSize / 34;
       ringEl.style.transform = `translate3d(${ring.current.x - 17}px, ${ring.current.y - 17}px, 0) scale(${ringScale})`;
 
-      // Update aesthetic properties only when they change significantly or on hover state change
-      if (Math.abs(state.currentSize - targetSize) > 0.1 || time - state.lastUpdate > 100) {
+      if (Math.abs(state.currentSize - targetSize) > 0.05 || time - state.lastUpdate > 100) {
         if (state.isHovering) {
-          ringEl.style.backgroundColor = state.cursorText ? "rgba(4,50,34,0.88)" : "rgba(4,50,34,0.06)";
-          ringEl.style.border = "none";
+          ringEl.style.backgroundColor = state.cursorText ? "rgba(4,50,34,0.92)" : "rgba(4,50,34,0.06)";
+          ringEl.style.borderColor = state.cursorText ? "transparent" : "rgba(4,50,34,0.22)";
           textEl.style.opacity = state.cursorText ? "1" : "0";
           if (state.cursorText && textEl.textContent !== state.cursorText) {
             textEl.textContent = state.cursorText;
           }
         } else {
           ringEl.style.backgroundColor = "transparent";
-          ringEl.style.border = "1px solid rgba(4,50,34,0.22)";
+          ringEl.style.borderColor = "rgba(4,50,34,0.22)";
           textEl.style.opacity = "0";
         }
         state.lastUpdate = time;
@@ -117,21 +121,28 @@ export default function CustomCursor() {
           willChange: "transform",
           backgroundColor: "transparent",
           border: "1px solid rgba(4,50,34,0.22)",
+          transformStyle: "preserve-3d",
+          backfaceVisibility: "hidden",
         }}
       >
         <span
           ref={textRef}
           style={{
             color: "#FFF8EE",
-            fontSize: "0.5rem",
-            fontWeight: "700",
-            letterSpacing: "0.12em",
+            fontSize: "0.36rem",
+            fontWeight: "600",
+            letterSpacing: "0.14em",
             textTransform: "uppercase",
             textAlign: "center",
             fontFamily: "Inter,sans-serif",
             opacity: 0,
             transition: "opacity 0.2s ease",
             pointerEvents: "none",
+            whiteSpace: "nowrap",
+            lineHeight: "1",
+            display: "block",
+            WebkitFontSmoothing: "antialiased",
+            textRendering: "optimizeLegibility",
           }}
         />
       </div>

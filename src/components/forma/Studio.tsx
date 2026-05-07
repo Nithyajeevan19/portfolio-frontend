@@ -11,6 +11,7 @@ const TEAM = [
     image: "/images/ajith.png",
     initials: "MV",
     showConnect: false,
+    linkedin: "https://www.linkedin.com/in/ajith-marella-92ba39317/",
   },
   {
     name: "Vineeth S",
@@ -19,6 +20,7 @@ const TEAM = [
     image: "https://res.cloudinary.com/dhgkvhtol/image/upload/v1777885609/WhatsApp_Image_2026-05-04_at_11.47.01_jxgybp.jpg",
     initials: "KN",
     showConnect: false,
+    linkedin: "https://www.linkedin.com/in/shakhamuri-vineeth-kumar/",
   },
   {
     name: "Nithyajeevan M",
@@ -27,6 +29,7 @@ const TEAM = [
     image: "https://res.cloudinary.com/dhgkvhtol/image/upload/v1777986194/Screenshot_20260504_191113_Gallery_fks98h.jpg",
     initials: "SO",
     showConnect: false,
+    linkedin: "https://www.linkedin.com/in/nithyajeevanmakili/",
   },
   {
     name: "Ajay V",
@@ -35,6 +38,7 @@ const TEAM = [
     image: "/images/ajay.jpg",
     initials: "TM",
     showConnect: false,
+    linkedin:undefined,
   },
 ];
 
@@ -48,7 +52,7 @@ const TEAM = [
 const ease = [0.16, 1, 0.3, 1] as const;
 
 function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }) {
-  return (
+  const content = (
     <motion.div
       initial="initial"
       whileInView="visible"
@@ -58,7 +62,8 @@ function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }
         visible: { opacity: 1, y: 0, transition: { duration: 1.1, ease, delay: index * 0.08 } },
       }}
       viewport={{ once: true, margin: "-50px" }}
-      data-cursor="Connect"
+      data-cursor={member.linkedin ? "Connect" : ""}
+      style={{ height: "100%", cursor: member.linkedin ? "pointer" : "default" }}
     >
       <div
         style={{
@@ -218,6 +223,21 @@ function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }
       </div>
     </motion.div>
   );
+
+  if (member.linkedin) {
+    return (
+      <a
+        href={member.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ textDecoration: "none", display: "block", height: "100%" }}
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return content;
 }
 
 export function Studio() {

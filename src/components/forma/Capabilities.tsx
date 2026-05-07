@@ -27,7 +27,7 @@ const SERVICES = [
       "Digital Operations Systems",
     ],
     image:
-      "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=900&q=85",
+      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=85",
   },
   {
     index: "03",
@@ -53,7 +53,7 @@ const SERVICES = [
       "Short-Form Video & Creative",
     ],
     image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=85",
+      "https://res.cloudinary.com/dqkbvljmo/image/upload/v1778151931/ONKJD40_ohrqhg.jpg",
   },
   {
     index: "05",
