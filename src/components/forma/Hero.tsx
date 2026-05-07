@@ -325,6 +325,9 @@ export function Hero() {
           ))}
         </motion.div> */}
 
+        {/* Left symmetry placeholder */}
+        <div />
+
         {/* Scroll indicator */}
         <motion.div
           initial={{ opacity: 0 }}

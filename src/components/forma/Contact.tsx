@@ -180,7 +180,7 @@ export function Contact() {
                 margin: 0,
               }}
             >
-              We take on 3–4 active engagements at a time. 2 slots available for Q3 2026.
+              We take on 3–4 active engagements at a time.
             </p>
           </div>
 
