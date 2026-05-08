@@ -114,7 +114,9 @@ export function Capabilities() {
           viewport={viewportConfig}
           variants={revealVariants}
         >
-          <div className="micro-label mb-5" style={{ color: "#043222", fontFamily: "Satoshi,Inter,sans-serif", fontSize: "0.60rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase" }}>
+          <div className="micro-label mb-5 flex items-center gap-3" style={{ color: "#043222", fontFamily: "Inter, sans-serif", fontSize: "0.60rem", fontWeight: 600, letterSpacing: "0.22em", textTransform: "uppercase" }}>
+            <span style={{ color: "rgba(4,50,34,0.30)" }}>01</span>
+            <span style={{ width: "16px", height: "1px", backgroundColor: "rgba(4,50,34,0.20)" }} />
             Capabilities
           </div>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">

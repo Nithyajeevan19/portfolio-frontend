@@ -70,7 +70,7 @@ export function Methodology() {
                 gap: "0.75rem",
               }}
             >
-              <span style={{ color: "rgba(4,50,34,0.28)" }}>05</span>
+              <span style={{ color: "rgba(4,50,34,0.28)" }}>03</span>
               <span
                 style={{
                   width: "14px",
@@ -233,70 +233,7 @@ export function Methodology() {
         ))}
       </motion.div>
 
-      {/* Principle pullquote */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, delay: 0.4 }}
-        className="mt-3 mx-8 md:mx-14 py-8 px-9"
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "1rem",
-          borderRadius: "2px",
-          border: "1px solid rgba(4,50,34,0.09)",
-          backgroundColor: "#FFEDA8",
-        }}
-        id="principle-row"
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: "1.5rem",
-            flexWrap: "wrap",
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "Inter,sans-serif",
-              fontSize: "0.58rem",
-              fontWeight: 600,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "rgba(4,50,34,0.50)",
-              flexShrink: 0,
-            }}
-          >
-            Principle
-          </div>
-          <div
-            style={{
-              width: "1px",
-              height: "28px",
-              backgroundColor: "rgba(4,50,34,0.16)",
-              flexShrink: 0,
-            }}
-            className="hidden md:block"
-          />
-          <p
-            style={{
-              margin: 0,
-              fontFamily: "Boska, ui-serif, Georgia, serif",
-              fontSize: "clamp(0.95rem,1.7vw,1.35rem)",
-              lineHeight: "1.38",
-              letterSpacing: "-0.022em",
-              color: "#003631",
-              fontStyle: "italic",
-            }}
-          >
-            "We do not believe in decoration for its own sake. Every decision should be defensible,
-            measurable, and made by someone who has done it before."
-          </p>
-        </div>
-      </motion.div>
+      
     </section>
   );
 }

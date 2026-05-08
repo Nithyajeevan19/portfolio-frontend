@@ -65,7 +65,12 @@ export const CASE_STUDIES: CaseStudy[] = [
       {
         url: "https://res.cloudinary.com/dqkbvljmo/image/upload/v1778236990/Screenshot_2026-05-08_161256_sez1xt.png",
         title: "Administrative Control Center"
+      },
+      {
+        url: "https://res.cloudinary.com/dqkbvljmo/image/upload/v1778258541/devnest_project_yuddgj.jpg",
+        title: "Mobile Responsiveness"
       }
+
     ],
     tech_stack: ["React", "Vite", "Framer Motion", "Cloudinary"],
     timeline: "8 Weeks",
@@ -100,17 +105,18 @@ export const CASE_STUDIES: CaseStudy[] = [
     live_site_link: "https://ai-assisted-healthca-93mj.bolt.host",
     gallery: [
       {
-        url: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=1200&q=80",
+        url: "https://res.cloudinary.com/dhgkvhtol/image/upload/v1778259063/Screenshot_2026-05-08_222041_odm937.png",
         title: "AI Patient Triage Interface"
       },
       {
-        url: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1200&q=80",
-        title: "Doctor Scheduling Dashboard"
+        url: "https://res.cloudinary.com/dhgkvhtol/image/upload/v1778258731/Screenshot_2026-05-08_221228_mvjyzx.png",
+        title: "Appointment Booking"
       },
       {
-        url: "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80",
-        title: "Medical Records Overview"
-      }
+        url: "https://res.cloudinary.com/dhgkvhtol/image/upload/v1778259037/Screenshot_2026-05-08_222014_uanihi.png",
+        title: "Mobile Responsive"
+      },
+      
     ],
     tech_stack: ["Next.js", "OpenAI", "Tailwind CSS", "Supabase"],
     timeline: "14 Weeks",

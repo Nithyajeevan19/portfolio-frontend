@@ -98,7 +98,7 @@ export function Contact() {
           variants={revealVariants}
         >
           <div className="micro-label mb-5 flex items-center gap-3" style={{ color: "#043222" }}>
-            <span style={{ color: "rgba(4,50,34,0.35)" }}>06</span>
+            <span style={{ color: "rgba(4,50,34,0.35)" }}>05</span>
             <span
               style={{
                 width: "16px",

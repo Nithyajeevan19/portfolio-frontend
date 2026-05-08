@@ -403,7 +403,7 @@ export function SelectedWork() {
   return (
     <section id="work" style={{ 
       paddingTop: 'var(--section-gap)', 
-      paddingBottom: 'var(--section-gap)', 
+      paddingBottom: 'clamp(2rem, 5vh, 4rem)', 
       backgroundColor: '#F6E9D9',
       overflow: 'hidden',
     }}>

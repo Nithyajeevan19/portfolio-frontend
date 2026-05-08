@@ -179,13 +179,13 @@ function CaseStudyComponent() {
             <div className="absolute inset-0 z-0">
               <motion.div
                 initial={{ scale: 1.1, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.4 }}
+                animate={{ scale: 1, opacity: 0.6 }}
                 style={{
                   width: "100%",
                   height: "100%",
                   backgroundImage: `url(${study.inner_cover_image})`,
                   backgroundSize: "cover",
-                  backgroundPosition: "center",
+                  backgroundPosition: "top center",
                 }}
                 transition={{ duration: 2.5, ease: luxuryEase }}
               />
@@ -256,7 +256,7 @@ function CaseStudyComponent() {
           </section>
 
           {/* 03. EDITORIAL STORYTELLING — Challenge & Solution */}
-          <section className="px-6 md:px-16 py-24 md:py-32 bg-[#080808] border-y border-[#1A1A1A]">
+          <section className="px-6 md:px-16 pt-24 md:pt-32 pb-16 md:pb-20 bg-[#080808] border-y border-[#1A1A1A]">
             <div className="max-w-[1440px] mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 md:gap-40">
                 
@@ -289,7 +289,7 @@ function CaseStudyComponent() {
           </section>
 
           {/* 04. IMPACT METRICS — Premium Strip */}
-          <section className="px-6 md:px-16 py-32 md:py-48 max-w-[1440px] mx-auto">
+          <section className="px-6 md:px-16 pt-16 md:pt-20 pb-32 md:pb-48 max-w-[1440px] mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
               <div className="lg:col-span-6">
                 <div className="flex items-center gap-6 mb-12">
@@ -347,7 +347,7 @@ function CaseStudyComponent() {
                     <img
                       src={study.gallery[0].url}
                       alt={study.gallery[0].title}
-                      className="cs-gallery-img w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
+                      className="cs-gallery-img w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-105"
                     />
                   </div>
                 </div>
@@ -364,11 +364,13 @@ function CaseStudyComponent() {
                       <span className="text-[10px] uppercase tracking-[0.4em] text-[#C8FF00] font-bold">0{i + 2}</span>
                       <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-bold">{item.title}</h4>
                     </div>
-                    <div className="aspect-[16/10] overflow-hidden bg-[#111] border border-white/5 relative">
+                    <div className={`overflow-hidden bg-[#111] border border-white/5 relative ${
+                      i % 3 === 0 ? 'aspect-[16/10]' : 'aspect-[16/20]'
+                    }`}>
                       <img
                         src={item.url}
                         alt={item.title}
-                        className="cs-gallery-img w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
+                        className="cs-gallery-img w-full h-full object-cover object-top transition-transform duration-[2s] group-hover:scale-110"
                       />
                     </div>
                   </div>
@@ -427,8 +429,8 @@ function CaseStudyComponent() {
               </Link>
               
               {/* Background preview of next study */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-1000 pointer-events-none">
-                <img src={nextStudy.cover_image} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[3s]" alt="" />
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none">
+                <img src={nextStudy.cover_image} className="w-full h-full object-cover object-top scale-110 group-hover:scale-100 transition-transform duration-[3s]" alt="" />
               </div>
             </section>
           )}

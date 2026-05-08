@@ -256,74 +256,105 @@ export function Studio() {
       <div
         style={{
           width: "100%",
-          height: "44vh",
+          height: "55vh",
           position: "relative",
           overflow: "hidden",
-          marginBottom: "7rem",
+          marginBottom: "8rem",
+          backgroundColor: "#050505",
         }}
       >
         <motion.div
-          initial={{ scale: 1.06 }}
-          whileInView={{ scale: 1 }}
+          initial={{ scale: 1.12 }}
+          whileInView={{ scale: 1.02 }}
           viewport={{ once: true }}
-          transition={{ duration: 2.2, ease }}
+          transition={{ duration: 3, ease: [0.23, 1, 0.32, 1] }}
           style={{
             position: "absolute",
             inset: 0,
             backgroundImage:
               "url(https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=2800&q=90)",
             backgroundSize: "cover",
-            backgroundPosition: "center 40%",
-            filter: "brightness(0.28) saturate(0.45)",
+            backgroundPosition: "center",
+            filter: "brightness(0.35) saturate(0.8)",
+          }}
+        />
+        
+        {/* Cinematic Vignette & Edge Blur */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "radial-gradient(circle at center, transparent 0%, rgba(5,5,5,0.4) 60%, #050505 95%)",
           }}
         />
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background:
-              "linear-gradient(to bottom,#FFF8EE 0%,transparent 18%,transparent 82%,#FFF8EE 100%)",
+            backdropFilter: "blur(2px)",
+            WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
+            maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
           }}
         />
         <div
           style={{
             position: "absolute",
             inset: 0,
-            background: "linear-gradient(to right,rgba(255,248,238,0.35) 0%,transparent 40%)",
+            background: "linear-gradient(to bottom, #FFF8EE 0%, transparent 15%, transparent 85%, #FFF8EE 100%)",
           }}
         />
+
         <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewportConfig}
-          variants={revealVariants}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.2, delay: 0.3 }}
           style={{
             position: "absolute",
             inset: 0,
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
             padding: "0 2rem",
+            zIndex: 10,
           }}
         >
-          <p
-            style={{
-              fontFamily: "Boska, ui-serif, Georgia, serif",
-              textAlign: "center",
-              fontSize: "clamp(1.25rem,2.8vw,2.8rem)",
-              letterSpacing: "-0.03em",
-              color: "#FFF8EE",
-              lineHeight: 1.22,
-              maxWidth: "680px",
-              opacity: 0.92,
-              paddingBottom: "0.06em",
-            }}
-          >
-            "We keep the studio small on purpose.{" "}
-            <span style={{ fontStyle: "italic", color: "#FFEDA8" }}>
-              Every client works directly with the principals."
+          <div className="animate-breathe-slow flex flex-col items-center">
+            <span 
+              style={{ 
+                fontFamily: "Inter, sans-serif", 
+                fontSize: "0.6rem", 
+                fontWeight: 700, 
+                letterSpacing: "0.3em", 
+                textTransform: "uppercase", 
+                color: "#FFEDA8", 
+                marginBottom: "2.5rem",
+                opacity: 0.8
+              }}
+            >
+              Our Philosophy
             </span>
-          </p>
+            <p
+              style={{
+                fontFamily: "Boska, ui-serif, Georgia, serif",
+                textAlign: "center",
+                fontSize: "clamp(1.5rem, 3.2vw, 3.5rem)",
+                letterSpacing: "-0.04em",
+                color: "#FFF8EE",
+                lineHeight: 1.15,
+                maxWidth: "900px",
+                margin: 0,
+                fontWeight: 400,
+              }}
+            >
+              "We do not believe in decoration for its own sake.{" "}
+              <br className="hidden md:block" />
+              <span style={{ fontStyle: "italic", color: "#FFEDA8", fontWeight: 400 }}>
+                Every decision should be defensible, measurable, and made by someone who has done it before."
+              </span>
+            </p>
+          </div>
         </motion.div>
       </div>
 

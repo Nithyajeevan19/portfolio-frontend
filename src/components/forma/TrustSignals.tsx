@@ -13,7 +13,7 @@ export function TrustSignals() {
   return (
     <div className="bg-[#F6E9D9]">
       {/* Testimonial Section */}
-      <section className="py-32 px-8 md:px-14">
+      <section className="pt-12 pb-32 px-8 md:px-14">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div {...fadeUp}>
             <span className="micro-label mb-12 block">Client Praise</span>
