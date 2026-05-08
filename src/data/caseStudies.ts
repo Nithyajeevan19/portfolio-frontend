@@ -45,17 +45,18 @@ export const CASE_STUDIES: CaseStudy[] = [
     inner_cover_image:
       "https://res.cloudinary.com/dqkbvljmo/image/upload/v1778236223/Screenshot_2026-05-08_160003_mhru3c.png",
     description:
-      "A modern recipe platform built for discovery — clean, fast, and designed to make cooking feel effortless.",
+      "A modern digital experience for a premium sweets & snacks brand — combining interactive menus, seamless browsing, and a scalable admin system",
     challenge:
       "Recipe platforms drown users in content. The challenge was making discovery feel instant and browsing feel enjoyable — without sacrificing visual richness.",
     solution:
-      "A minimal design system built around strong typography, clear categorisation, and performance-first image loading — so the food always takes centre stage.",
+    "We designed and developed a high-performance interactive landing page focused on visual storytelling and product discovery. The platform included a responsive UI, dynamic menu filtering, smooth animations, and a custom admin dashboard allowing real-time menu editing, category management, and promotional updates.",
     results:
-      "Users find what they want faster, with a browsing experience that feels more editorial than search engine.",
+     "The new experience improved customer engagement, streamlined internal menu management, and created a stronger premium brand perception across devices. The scalable structure also prepared the business for future integrations like online ordering and customer accounts.",
+
     impact_metric_1: "+40%",
     impact_label_1: "Faster navigation",
     impact_metric_2: "2×",
-    impact_label_2: "Content discovery speed",
+    impact_label_2: "Faster menu management",
     live_site_link: "https://sweetmagic-website-783c4e.netlify.app/",
     gallery: [
       {
