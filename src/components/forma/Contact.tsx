@@ -87,7 +87,7 @@ export function Contact() {
   return (
     <section
       id="contact"
-      style={{ paddingTop: "14vh", paddingBottom: "8vh", backgroundColor: "#F6E9D9" }}
+      style={{ paddingTop: "var(--section-gap)", paddingBottom: "0", backgroundColor: "#F6E9D9" }}
     >
       {/* Big headline */}
       <div className="px-8 md:px-14 mb-16 overflow-hidden">
@@ -363,15 +363,17 @@ export function Contact() {
                   },
                 ].map((f) => (
                   <div key={f.name} className="flex flex-col gap-2">
-                    <label className="micro-label" style={{ color: "#4F5B57" }}>
+                    <label htmlFor={`contact-${f.name}`} className="micro-label" style={{ color: "#4F5B57" }}>
                       {f.label}
                     </label>
                     <input
+                      id={`contact-${f.name}`}
                       name={f.name}
                       type={f.type}
                       value={form[f.name as keyof typeof form]}
                       onChange={handleChange}
                       required
+                      aria-required="true"
                       placeholder={f.placeholder}
                       style={{ ...inputBase }}
                       onFocus={(e) => {
@@ -386,14 +388,16 @@ export function Contact() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="micro-label" style={{ color: "#4F5B57" }}>
+                <label htmlFor="contact-project-scope" className="micro-label" style={{ color: "#4F5B57" }}>
                   Service Area *
                 </label>
                 <select
+                  id="contact-project-scope"
                   name="project_scope"
                   value={form.project_scope}
                   onChange={handleChange}
                   required
+                  aria-required="true"
                   style={{
                     ...inputBase,
                     color: form.project_scope ? "#111111" : "#4F5B57",
@@ -454,10 +458,11 @@ export function Contact() {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="micro-label" style={{ color: "#4F5B57" }}>
+                <label htmlFor="contact-message" className="micro-label" style={{ color: "#4F5B57" }}>
                   Brief
                 </label>
                 <textarea
+                  id="contact-message"
                   name="message"
                   value={form.message}
                   onChange={handleChange}

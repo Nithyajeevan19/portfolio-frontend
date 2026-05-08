@@ -123,29 +123,31 @@ function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }
           }}
         />
 
-        {/* Initials watermark */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 2,
-            pointerEvents: "none",
-          }}
-        >
-          <span
+        {/* Initials watermark — hide on mobile as per user request */}
+        {!isMobile && (
+          <div
             style={{
-              fontFamily: "Boska, ui-serif, Georgia, serif",
-              fontSize: "4.5rem",
-              color: "rgba(4,50,34,0.07)",
-              letterSpacing: "-0.04em",
+              position: "absolute",
+              inset: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 2,
+              pointerEvents: "none",
             }}
           >
-            {member.initials}
-          </span>
-        </div>
+            <span
+              style={{
+                fontFamily: "Boska, ui-serif, Georgia, serif",
+                fontSize: "4.5rem",
+                color: "rgba(4,50,34,0.07)",
+                letterSpacing: "-0.04em",
+              }}
+            >
+              {member.initials}
+            </span>
+          </div>
+        )}
 
         {/* CONNECT badge — only on Seren */}
         {member.showConnect && (

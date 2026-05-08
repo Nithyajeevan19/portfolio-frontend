@@ -130,10 +130,12 @@ export function Navbar({ isDark = false }: { isDark?: boolean }) {
         <button
           className="md:hidden flex flex-col gap-1.5 p-2"
           onClick={() => setMenuOpen(!menuOpen)}
-          aria-label="Toggle menu"
+          aria-label={menuOpen ? "Close menu" : "Open menu"}
+          aria-expanded={menuOpen}
           style={{ background: "none", border: "none", cursor: "none" }}
         >
           <span
+            aria-hidden="true"
             className="block w-6 h-px transition-all duration-400"
             style={{
               backgroundColor: scrolled ? "#043222" : (isDark ? "#FFF8EE" : "#043222"),
@@ -141,6 +143,7 @@ export function Navbar({ isDark = false }: { isDark?: boolean }) {
             }}
           />
           <span
+            aria-hidden="true"
             className="block w-4 h-px transition-opacity duration-300"
             style={{ 
               backgroundColor: scrolled ? "#043222" : (isDark ? "#FFF8EE" : "#043222"),
@@ -148,6 +151,7 @@ export function Navbar({ isDark = false }: { isDark?: boolean }) {
             }}
           />
           <span
+            aria-hidden="true"
             className="block w-6 h-px transition-all duration-400"
             style={{
               backgroundColor: scrolled ? "#043222" : (isDark ? "#FFF8EE" : "#043222"),

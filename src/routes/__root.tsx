@@ -5,6 +5,7 @@ import CustomCursor from "@/components/forma/CustomCursor";
 import { usePortfolioAnimations } from "@/hooks/usePortfolioAnimations";
 import { initLenis } from '@/lib/lenis';
 import { PageLoader } from "@/components/forma/PageLoader";
+import { Navbar } from "@/components/forma/Navbar";
 
 function NotFoundComponent() {
   return (
@@ -72,7 +73,12 @@ function RootComponent() {
     <>
       <PageLoader />
       <CustomCursor />
-      <Outlet />
+      <header>
+        <Navbar />
+      </header>
+      <main id="main-content">
+        <Outlet />
+      </main>
       <Toaster />
     </>
   );

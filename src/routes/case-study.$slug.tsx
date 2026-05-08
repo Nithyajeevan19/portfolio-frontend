@@ -30,7 +30,21 @@ function CaseStudyComponent() {
     window.scrollTo(0, 0);
     document.documentElement.scrollTo(0, 0);
     document.body.scrollTo(0, 0);
-  }, [slug]);
+
+    // Update SEO metadata
+    if (study) {
+      document.title = `${study.project_title} | Forma Studio Case Study`;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute("content", study.description || "");
+      }
+    }
+
+    return () => {
+      // Reset title when leaving
+      document.title = "Forma Studio — Senior-led brand & product design";
+    };
+  }, [slug, study]);
 
   useEffect(() => {
     if (!study) return;
@@ -134,12 +148,6 @@ function CaseStudyComponent() {
     );
   }
 
-  const blocks = [
-    { label: "The Context", content: study.the_context },
-    { label: "The Challenge", content: study.the_challenge },
-    { label: "The Approach", content: study.the_approach },
-  ].filter((b) => b.content && b.content.length > 0);
-
   return (
     <div
       style={{
@@ -150,10 +158,9 @@ function CaseStudyComponent() {
         overflowX: "hidden",
       }}
     >
-      <CustomCursor />
       <Navbar isDark />
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         <motion.div
           key={slug}
           initial={{ opacity: 0 }}
@@ -161,156 +168,193 @@ function CaseStudyComponent() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
         >
+          {/* 01. HERO SECTION — Cinematic & Editorial */}
           <section
             className="relative w-full overflow-hidden flex flex-col justify-end"
             style={{ 
-              height: "clamp(480px, 90vh, 92vh)", 
+              height: "clamp(600px, 95vh, 100vh)", 
               borderBottom: "1px solid #1A1A1A",
-              paddingTop: "80px", // Safety for navbar
             }}
           >
             <div className="absolute inset-0 z-0">
               <motion.div
-                initial={{ scale: 1.15, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.5 }}
+                initial={{ scale: 1.1, opacity: 0 }}
+                animate={{ scale: 1, opacity: 0.4 }}
                 style={{
                   width: "100%",
                   height: "100%",
-                  backgroundImage: `url(${study.cover_image})`,
+                  backgroundImage: `url(${study.inner_cover_image})`,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
-                transition={{ duration: 2.2, ease: luxuryEase }}
+                transition={{ duration: 2.5, ease: luxuryEase }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent opacity-90" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent opacity-95" />
             </div>
 
-            <div className="relative z-10 px-6 md:px-16 pb-12 md:pb-20 max-w-[1440px] mx-auto w-full">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 1, ease: luxuryEase }}
-              >
-                <div
-                  className="micro-label mb-6 text-[#C8FF00] tracking-[0.2em]"
-                  style={{ fontFamily: "Satoshi, sans-serif" }}
-                >
-                  PROJECT // {study.year}
-                </div>
-                <h1
-                  style={{
-                    fontFamily: "Boska, serif",
-                    fontSize: "clamp(3rem, 10vw, 8.5rem)",
-                    lineHeight: "0.9",
-                    letterSpacing: "-0.05em",
-                    color: "#FFF8EE",
-                    margin: "0 0 2rem 0",
-                  }}
-                >
-                  {study.project_title}
-                </h1>
-
-                <div className="flex flex-wrap items-center gap-8 mt-12">
-                  {study.live_site_link && (
-                    <a
-                      href={study.live_site_link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center gap-3 text-[#C8FF00] no-underline"
-                      data-cursor="View Site"
-                    >
-                      <span className="text-xs uppercase tracking-widest font-medium group-hover:mr-2 transition-all">
-                        View Live Project
+            <div className="relative z-10 px-6 md:px-16 pb-16 md:pb-24 max-w-[1440px] mx-auto w-full">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+                <div className="lg:col-span-8">
+                  <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 1, ease: luxuryEase }}
+                  >
+                    <div className="flex items-center gap-4 mb-8">
+                      <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8FF00] font-bold">
+                        {study.category}
                       </span>
-                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="group-hover:rotate-45 transition-transform">
-                        <path d="M1 13L13 1M13 1H4M13 1V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </a>
-                  )}
-                </div>
-              </motion.div>
-            </div>
-          </section>
-
-          {/* Details & Narrative Grid */}
-          <section className="px-6 md:px-16 py-24 md:py-32 max-w-[1440px] mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-              {/* Sidebar Info */}
-              <div className="lg:col-span-3">
-                <div className="cs-meta-bar sticky top-32 flex flex-col gap-12">
-                  {[
-                    { label: "Client", value: study.client_name },
-                    { label: "Services", value: study.services },
-                    { label: "Role", value: "Senior Lead Design" },
-                    { label: "Timeline", value: `${study.year}` },
-                  ].map(({ label, value }) => (
-                    <div key={label}>
-                      <div className="text-[10px] uppercase tracking-[0.2em] text-[#888888] mb-3">
-                        {label}
-                      </div>
-                      <p className="text-sm md:text-base text-[#F4F4F0] leading-relaxed m-0 font-medium">
-                        {value}
-                      </p>
-                      <div className="w-full h-[1px] bg-[#1A1A1A] mt-6" />
+                      <div className="w-12 h-[1px] bg-white/20" />
+                      <span className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold">
+                        {study.year}
+                      </span>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Main Narrative */}
-              <div className="lg:col-span-9 flex flex-col gap-24 md:gap-32">
-                {blocks.map((block, i) => (
-                  <div key={block.label} className="max-w-4xl">
-                    <div className="text-[10px] font-bold text-[#C8FF00] tracking-[0.3em] mb-6 flex items-center gap-4">
-                      <span className="text-[#333]">{String(i + 1).padStart(2, "0")}</span>
-                      {block.label.toUpperCase()}
-                    </div>
-                    <p
-                      className="cs-description"
+                    
+                    <h1
                       style={{
-                        fontFamily: "Satoshi, sans-serif",
-                        fontSize: "clamp(1.25rem, 3vw, 2.25rem)",
-                        lineHeight: "1.35",
-                        letterSpacing: "-0.02em",
-                        color: "#F4F4F0",
-                        margin: 0,
+                        fontFamily: "Boska, serif",
+                        fontSize: "clamp(3.5rem, 10vw, 9rem)",
+                        lineHeight: "0.85",
+                        letterSpacing: "-0.05em",
+                        color: "#FFF8EE",
+                        margin: "0 0 2.5rem 0",
                       }}
                     >
-                      {block.content}
+                      {study.project_title}
+                    </h1>
+
+                    <p className="text-lg md:text-2xl text-white/70 max-w-2xl leading-relaxed font-light mb-8">
+                      {study.description}
                     </p>
-                  </div>
-                ))}
+
+                    <div className="flex items-center gap-10">
+                      <div>
+                        <div className="text-[9px] uppercase tracking-[0.2em] text-white/30 mb-2">Client</div>
+                        <div className="text-sm uppercase tracking-widest font-medium text-white/90">{study.client_name}</div>
+                      </div>
+                      {study.live_site_link && (
+                        <a
+                          href={study.live_site_link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group flex items-center gap-3 text-[#C8FF00] no-underline pt-4"
+                          data-cursor="View Live"
+                        >
+                          <span className="text-[10px] uppercase tracking-[0.2em] font-bold group-hover:mr-2 transition-all">
+                            Visit Live Site
+                          </span>
+                          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" className="group-hover:rotate-45 transition-transform">
+                            <path d="M1 13L13 1M13 1H4M13 1V10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </a>
+                      )}
+                    </div>
+                  </motion.div>
+                </div>
               </div>
             </div>
           </section>
 
-          {/* Visual Showcase (Gallery) */}
-          {study.gallery.length > 0 && (
-            <section className="px-6 md:px-16 pb-32 max-w-[1440px] mx-auto">
-              <div className="flex items-center justify-between mb-12">
-                <div className="text-[10px] uppercase tracking-[0.2em] text-[#888888]">
-                  VISUAL SYSTEM // ARTIFACTS
+          {/* 03. EDITORIAL STORYTELLING — Challenge & Solution */}
+          <section className="px-6 md:px-16 py-24 md:py-32 bg-[#080808] border-y border-[#1A1A1A]">
+            <div className="max-w-[1440px] mx-auto">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 md:gap-40">
+                
+                {/* Challenge */}
+                <div className="lg:col-span-10 lg:col-start-2 flex flex-col gap-12">
+                  <div className="flex items-center gap-6">
+                    <span className="text-[10px] font-bold text-white/20 tracking-[0.4em]">01</span>
+                    <span className="text-[10px] font-bold text-[#C8FF00] tracking-[0.4em]">THE CHALLENGE</span>
+                  </div>
+                  <h3 className="text-3xl md:text-6xl font-serif italic text-white/90 leading-[1.1] max-w-5xl">
+                    "{study.challenge}"
+                  </h3>
                 </div>
-                <div className="text-[10px] text-[#333]">[{study.gallery.length} IMAGES]</div>
+
+                {/* Solution */}
+                <div className="lg:col-span-10 lg:col-start-2 flex flex-col gap-12">
+                  <div className="flex items-center gap-6">
+                    <span className="text-[10px] font-bold text-white/20 tracking-[0.4em]">02</span>
+                    <span className="text-[10px] font-bold text-[#C8FF00] tracking-[0.4em]">THE SOLUTION</span>
+                  </div>
+                  <div className="max-w-4xl">
+                    <p className="text-xl md:text-3xl text-white/70 leading-relaxed font-light">
+                      {study.solution}
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </section>
+
+          {/* 04. IMPACT METRICS — Premium Strip */}
+          <section className="px-6 md:px-16 py-32 md:py-48 max-w-[1440px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-20 items-center">
+              <div className="lg:col-span-6">
+                <div className="flex items-center gap-6 mb-12">
+                  <span className="text-[10px] font-bold text-white/20 tracking-[0.4em]">03</span>
+                  <span className="text-[10px] font-bold text-[#C8FF00] tracking-[0.4em]">THE RESULTS</span>
+                </div>
+                <p className="text-2xl md:text-4xl font-serif text-white/90 leading-tight mb-8">
+                  {study.results}
+                </p>
+              </div>
+
+              <div className="lg:col-span-5 lg:col-start-8">
+                <div className="grid grid-cols-1 gap-8">
+                  <div className="p-10 border border-white/5 bg-white/[0.02] rounded-sm relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C8FF00" strokeWidth="1">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                      </svg>
+                    </div>
+                    <div className="text-6xl md:text-8xl font-bold text-[#C8FF00] tracking-tighter mb-4">{study.impact_metric_1}</div>
+                    <div className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold">{study.impact_label_1}</div>
+                  </div>
+                  
+                  <div className="p-10 border border-white/5 bg-white/[0.02] rounded-sm relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="1">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                      </svg>
+                    </div>
+                    <div className="text-6xl md:text-8xl font-bold text-white/90 tracking-tighter mb-4">{study.impact_metric_2}</div>
+                    <div className="text-[10px] uppercase tracking-[0.3em] text-white/40 font-bold">{study.impact_label_2}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 05. GALLERY SECTION — Cinematic Grid */}
+          {study.gallery.length > 0 && (
+            <section className="px-6 md:px-16 pb-32 md:pb-48 max-w-[1440px] mx-auto">
+              <div className="flex items-center justify-between mb-16">
+                <div className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-bold">
+                  VISUAL ARTIFACTS // {study.gallery.length} IMAGES
+                </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="md:col-span-2 aspect-[16/9] overflow-hidden bg-[#111] border border-[#1A1A1A]">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+                <div className="md:col-span-12 aspect-[21/9] overflow-hidden bg-[#111] border border-white/5 group">
                   <img
                     src={study.gallery[0]}
                     alt={`${study.project_title} - Feature`}
-                    className="cs-gallery-img w-full h-full object-cover"
+                    className="cs-gallery-img w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
                   />
                 </div>
                 {study.gallery.slice(1).map((img, i) => (
                   <div 
                     key={i} 
-                    className={`aspect-[16/10] overflow-hidden bg-[#111] border border-[#1A1A1A] ${i === 2 && study.gallery.length > 3 ? 'md:col-span-2' : ''}`}
+                    className={`aspect-[16/10] overflow-hidden bg-[#111] border border-white/5 group ${
+                      i % 3 === 0 ? 'md:col-span-8' : 'md:col-span-4'
+                    }`}
                   >
                     <img
                       src={img}
                       alt={`${study.project_title} - Detail ${i + 1}`}
-                      className="cs-gallery-img w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
+                      className="cs-gallery-img w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
                     />
                   </div>
                 ))}
@@ -318,42 +362,36 @@ function CaseStudyComponent() {
             </section>
           )}
 
-          {/* Impact & Results */}
-          {study.the_impact && (
-            <section className="px-6 md:px-16 py-32 bg-[#0D0D0D] border-y border-[#1A1A1A]">
-              <div className="max-w-[1440px] mx-auto">
-                <div className="cs-impact-section">
-                  <div className="text-[10px] font-bold text-[#C8FF00] tracking-[0.3em] mb-12">
-                    04 // THE IMPACT
-                  </div>
-                  
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
-                    <p
-                      className="text-2xl md:text-3xl lg:text-4xl leading-snug text-[#F4F4F0] m-0"
-                      style={{ fontFamily: "Satoshi, sans-serif", letterSpacing: "-0.01em" }}
-                    >
-                      {study.the_impact}
-                    </p>
-                    
-                    <div className="grid grid-cols-2 gap-12 border-l border-[#1A1A1A] pl-12">
-                      <div>
-                        <div className="text-4xl md:text-5xl font-bold text-[#FFF8EE] mb-2">{study.impact_metric_1}</div>
-                        <div className="text-[10px] uppercase tracking-widest text-[#888888]">{study.impact_label_1}</div>
-                      </div>
-                      <div>
-                        <div className="text-4xl md:text-5xl font-bold text-[#FFF8EE] mb-2">{study.impact_metric_2}</div>
-                        <div className="text-[10px] uppercase tracking-widest text-[#888888]">{study.impact_label_2}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          {/* 06. LIVE WEBSITE CTA — Refined Section */}
+          {study.live_site_link && (
+            <section className="px-6 md:px-16 py-32 md:py-48 border-t border-white/5 bg-gradient-to-b from-transparent to-[#C8FF00]/5 text-center">
+               <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, ease: luxuryEase }}
+               >
+                 <span className="text-[10px] uppercase tracking-[0.4em] text-white/30 mb-8 block font-bold">EXPERIENCE THE PROJECT</span>
+                 <h2 className="text-4xl md:text-7xl font-serif text-white/90 mb-12">Ready to see it in action?</h2>
+                 <a
+                    href={study.live_site_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-6 px-12 py-6 border border-[#C8FF00]/30 text-[#C8FF00] hover:bg-[#C8FF00] hover:text-black transition-all duration-500 rounded-sm group"
+                    data-cursor="Open Site"
+                  >
+                    <span className="text-xs uppercase tracking-[0.3em] font-bold">Visit Live Website</span>
+                    <svg width="16" height="16" viewBox="0 0 14 14" fill="none" className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
+                      <path d="M1 13L13 1M13 1H4M13 1V10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </a>
+               </motion.div>
             </section>
           )}
 
           {/* Next Project Navigator */}
           {nextStudy && (
-            <section className="relative px-6 md:px-16 py-20 md:py-32 overflow-hidden border-b border-[#1A1A1A]">
+            <section className="relative px-6 md:px-16 py-32 md:py-48 overflow-hidden border-t border-white/5">
               <Link 
                 to="/case-study/$slug" 
                 params={{ slug: nextStudy.slug }}
@@ -361,11 +399,11 @@ function CaseStudyComponent() {
                 data-cursor="Next"
               >
                 <div className="flex flex-col items-center text-center">
-                  <span className="text-[10px] uppercase tracking-[0.4em] text-[#888888] mb-8 group-hover:text-[#C8FF00] transition-colors">
-                    Next Project
+                  <span className="text-[10px] uppercase tracking-[0.4em] text-white/30 mb-8 group-hover:text-[#C8FF00] transition-colors font-bold">
+                    NEXT PROJECT
                   </span>
                   <h2 
-                    className="text-5xl md:text-7xl lg:text-9xl m-0 text-transparent bg-clip-text bg-gradient-to-b from-[#FFF8EE] to-[#444] group-hover:to-[#C8FF00] transition-all duration-700"
+                    className="text-5xl md:text-8xl lg:text-[10rem] m-0 text-transparent bg-clip-text bg-gradient-to-b from-white/90 to-white/10 group-hover:from-[#C8FF00] group-hover:to-[#C8FF00]/50 transition-all duration-700"
                     style={{ fontFamily: "Boska, serif", lineHeight: "1", letterSpacing: "-0.04em" }}
                   >
                     {nextStudy.project_title.split('—')[0].trim()}
@@ -374,32 +412,32 @@ function CaseStudyComponent() {
               </Link>
               
               {/* Background preview of next study */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none">
-                <img src={nextStudy.cover_image} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-2000" alt="" />
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-1000 pointer-events-none">
+                <img src={nextStudy.cover_image} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-[3s]" alt="" />
               </div>
             </section>
           )}
 
           {/* Global Footer Navigation */}
-          <footer className="px-6 md:px-16 py-20 flex flex-col md:flex-row items-center justify-between gap-12 max-w-[1440px] mx-auto">
+          <footer className="px-6 md:px-16 py-20 flex flex-col md:flex-row items-center justify-between gap-12 max-w-[1440px] mx-auto border-t border-white/5">
             <Link
               to="/"
-              className="group flex items-center gap-4 text-[#888888] no-underline hover:text-white transition-colors"
+              className="group flex items-center gap-4 text-white/30 no-underline hover:text-white transition-colors"
               data-cursor=""
             >
               <span className="text-xl group-hover:-translate-x-2 transition-transform">←</span>
-              <span className="text-[10px] uppercase tracking-[0.2em]">Return to Index</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] font-bold">Index</span>
             </Link>
             
-            <div className="flex items-center gap-8">
-              <a href="mailto:hello@formaforge.com" className="text-[10px] uppercase tracking-[0.2em] text-[#888888] no-underline hover:text-[#C8FF00]">Email</a>
-              <a href="#" className="text-[10px] uppercase tracking-[0.2em] text-[#888888] no-underline hover:text-[#C8FF00]">LinkedIn</a>
-              <a href="#" className="text-[10px] uppercase tracking-[0.2em] text-[#888888] no-underline hover:text-[#C8FF00]">Twitter</a>
+            <div className="flex items-center gap-10">
+              <a href="mailto:hello@formaforge.com" className="text-[10px] uppercase tracking-[0.3em] text-white/30 no-underline hover:text-[#C8FF00] font-bold">Email</a>
+              <a href="#" className="text-[10px] uppercase tracking-[0.3em] text-white/30 no-underline hover:text-[#C8FF00] font-bold">LinkedIn</a>
+              <a href="#" className="text-[10px] uppercase tracking-[0.3em] text-white/30 no-underline hover:text-[#C8FF00] font-bold">Twitter</a>
             </div>
             
             <a
               href="/#contact"
-              className="text-[10px] uppercase tracking-[0.2em] px-10 py-5 border border-[#1A1A1A] text-[#C8FF00] no-underline hover:bg-[#C8FF00] hover:text-black transition-all"
+              className="text-[10px] uppercase tracking-[0.3em] px-10 py-5 border border-white/10 text-[#C8FF00] no-underline hover:bg-[#C8FF00] hover:text-black transition-all font-bold"
               data-cursor=""
             >
               Start Your Project
@@ -410,5 +448,6 @@ function CaseStudyComponent() {
     </div>
   );
 }
+
 
 export default CaseStudyComponent;

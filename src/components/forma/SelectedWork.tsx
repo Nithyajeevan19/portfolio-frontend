@@ -33,6 +33,8 @@ function MobileWorkCard({ cs }: { cs: CaseStudy }) {
         <img
           src={cs.cover_image}
           alt={cs.project_title}
+          loading="lazy"
+          decoding="async"
           style={{
             width: '100%', height: '100%',
             objectFit: 'cover',
@@ -209,7 +211,7 @@ function WorkCard({
           border: "1px solid rgba(4,50,34,0.08)",
           backgroundColor: "#FFF8EE",
           boxShadow: hov
-            ? "0 40px 80px -20px rgba(4,50,34,0.15)"
+            ? "0 40px 80px -20px rgba(4,50,34,0.15), inset 0 0 0 1px rgba(255,255,255,0.4)"
             : "0 4px 20px rgba(4,50,34,0.03)",
           transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
           textDecoration: "none",
@@ -400,8 +402,8 @@ export function SelectedWork() {
 
   return (
     <section id="work" style={{ 
-      paddingTop: '16vh', 
-      paddingBottom: '14vh', 
+      paddingTop: 'var(--section-gap)', 
+      paddingBottom: 'var(--section-gap)', 
       backgroundColor: '#F6E9D9',
       overflow: 'hidden',
     }}>
@@ -440,13 +442,16 @@ export function SelectedWork() {
               </span>
             </h2>
           </div>
-          <p style={{ 
-            fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', 
-            lineHeight: '1.80', color: '#4F5B57', maxWidth: '21rem' 
-          }}>
-            A focused selection. Every engagement is led by senior 
-            principals, from strategy through final delivery.
-          </p>
+            <p style={{ 
+              fontFamily: 'Satoshi, sans-serif', 
+              fontSize: 'clamp(1rem, 1.4vw, 1.25rem)', 
+              color: '#4F5B57', 
+              lineHeight: 1.6, 
+              margin: 0,
+              maxWidth: '35rem'
+            }}>
+              A curated selection. We partner with a limited number of brands to ensure senior-led excellence across every touchpoint, from strategy to final deployment.
+            </p>
         </motion.div>
       </div>
   
@@ -477,7 +482,7 @@ export function SelectedWork() {
                     <div style={{ 
                       display: 'grid', 
                       gridTemplateColumns: 'repeat(2, 1fr)', 
-                      gap: '0.85rem' 
+                      gap: 'var(--card-gap)' 
                     }}>
                       {second && <WorkCard project={second} index={1} size="normal" />}
                       {third  && <WorkCard project={third}  index={2} size="normal" />}

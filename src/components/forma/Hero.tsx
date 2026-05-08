@@ -105,9 +105,10 @@ export function Hero() {
           style={{
             position: "absolute",
             inset: 0,
-            opacity: 0.015,
+            opacity: 0.012,
+            pointerEvents: "none",
             backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
+              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",
           }}
         />
       </motion.div>
@@ -208,15 +209,17 @@ export function Hero() {
                 maxWidth: "100%",
               }}
             >
-              Design that <br />
-              works,{" "}
+              Design that
+works,{" "}
               <span style={{ fontStyle: "italic" }}>
                 <span style={{ color: "rgba(4,50,34,0.25)" }}>
-                  Systems <br />
-                  that scale,
+                  Systems
+that scale, <br />
+                
                 </span>{" "}
-                Value <br />
-                that lasts.
+                Value
+that lasts.<br />
+                
               </span>
             </motion.h1>
 
@@ -242,7 +245,7 @@ export function Hero() {
                 color: "#4F5B57",
               }}
             >
-              A modern creative studio for ambitious brands. We craft high-impact web experiences, build smart systems, and turn ideas into scalable products.
+              Forma is a senior-led design partner building high-performance brand systems and scalable digital products. We partner with founders who value craft as a competitive advantage.
             </motion.p>
 
             {/* CTAs */}
@@ -253,7 +256,7 @@ export function Hero() {
               <HeroBtn href="#work" primary>
                 VIEW OUR WORK →
               </HeroBtn>
-              <HeroBtn href="#contact">START A PROJECT</HeroBtn>
+              <HeroBtn href="#contact">START PROJECT →</HeroBtn>
             </motion.div>
           </motion.div>
 

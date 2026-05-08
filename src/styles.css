@@ -55,6 +55,11 @@
 :root {
   --radius: 0.25rem;
 
+  /* Spacing Scale */
+  --section-gap: clamp(100px, 16vh, 180px);
+  --container-padding: clamp(1.5rem, 6vw, 6rem);
+  --card-gap: 1.5rem;
+
   /* Forma palette */
   --cream: oklch(0.945 0.018 85); /* #F2EDE4 */
   --forest: oklch(0.245 0.045 155); /* #0D2B1A deep forest green */
@@ -91,19 +96,41 @@
     border-color: var(--color-border);
   }
 
+  /* Accessible Focus States */
+  :focus-visible {
+    outline: 2px solid var(--forest);
+    outline-offset: 4px;
+  }
+
+  .text-muted {
+    color: var(--muted-foreground) !important;
+  }
+
+  .micro-label {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--forest-muted);
+  }
+
   html {
     scroll-behavior: smooth;
     width: 100%;
     overflow-x: hidden;
+    background-color: var(--background);
+    color: var(--foreground);
   }
 
   body {
-    background-color: var(--color-cream);
-    color: var(--color-forest);
+    width: 100%;
+    overflow-x: hidden;
+    background-color: var(--background);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "ss01", "cv11";
-    width: 100%;
     overflow-x: hidden;
     position: relative;
   }

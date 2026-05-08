@@ -1,8 +1,8 @@
 import Marquee from 'react-fast-marquee';
 
 const ITEMS = [
-  'Digital Systems', 'Scalable SaaS',
-  'Web Experience', 'Growth Marketing','Creative Technology', 'Creative Direction',
+  'Digital Systems', '·', 'Scalable SaaS', '·', 'Creative Technology', '·', 
+  'Web Experience', '·', 'Brand Strategy', '·', 'Interactive Design', '·',
 ];
 
 export function MarqueeStrip() {
@@ -14,7 +14,7 @@ export function MarqueeStrip() {
       padding: '0.95rem 0',
       overflow: 'hidden',
     }}>
-      <Marquee speed={28} gradient={false} pauseOnHover>
+      <Marquee speed={28} gradient={false} pauseOnHover autoFill={true}>
         {ITEMS.map((item, i) => (
           <span key={i} style={{
             fontFamily: 'Inter,sans-serif',
