@@ -159,7 +159,7 @@ function LuxuryOrb({ size = 380 }: { size: number }) {
     };
     window.addEventListener("mousemove", onMouse, { passive: true });
 
-    const clock = new THREE.Clock();
+    let startTime = performance.now();
     let frameId: number;
     const animate = () => {
       frameId = requestAnimationFrame(animate);
@@ -168,7 +168,7 @@ function LuxuryOrb({ size = 380 }: { size: number }) {
         return;
       }
 
-      const t = clock.getElapsedTime();
+      const t = (performance.now() - startTime) / 1000;
       core.rotation.y = t * 0.08;
       
       for (let i = 0; i < ringGroups.length; i++) {

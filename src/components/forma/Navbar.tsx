@@ -2,17 +2,16 @@ import { useState, useEffect } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { luxuryEase } from "../../lib/motion";
-
-const NAV_LINKS = [
-  { label: "Work", href: "#work" },
-  { label: "Services", href: "#services" },
-  { label: "Studio", href: "#studio" },
-  { label: "Contact", href: "#contact" },
-];
-
 import { useMagnetic } from "@/hooks/useMagnetic";
 
-export function Navbar() {
+const NAV_LINKS = [
+  { label: "Work", href: "/#work" },
+  { label: "Services", href: "/#services" },
+  { label: "Crew", href: "/#studio" },
+  { label: "Contact", href: "/#contact" },
+];
+
+export function Navbar({ isDark = false }: { isDark?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const mag = useMagnetic(0.25);
@@ -22,6 +21,9 @@ export function Navbar() {
     window.addEventListener("scroll", fn, { passive: true });
     return () => window.removeEventListener("scroll", fn);
   }, []);
+
+  const themeColor = scrolled ? "#043222" : (isDark ? "#FFF8EE" : "#043222");
+  const subColor = scrolled ? "#4F5B57" : (isDark ? "rgba(255,248,238,0.7)" : "#4F5B57");
 
   return (
     <nav
@@ -39,10 +41,9 @@ export function Navbar() {
           data-cursor=""
           style={{ textDecoration: "none" }}
         >
-          <div />
           <span
             style={{
-              color: "#043222",
+              color: themeColor,
               fontSize: "0.9rem",
               letterSpacing: "0.22em",
               textTransform: "uppercase",
@@ -61,7 +62,7 @@ export function Navbar() {
               href={link.href}
               className="group relative transition-colors duration-300"
               style={{
-                color: "#4F5B57",
+                color: subColor,
                 fontSize: "0.68rem",
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
@@ -69,17 +70,17 @@ export function Navbar() {
                 textDecoration: "none",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.color = "#043222";
+                e.currentTarget.style.color = themeColor;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.color = "#4F5B57";
+                e.currentTarget.style.color = subColor;
               }}
               data-cursor=""
             >
               {link.label}
               <span
                 className="absolute -bottom-0.5 left-0 w-0 h-px group-hover:w-full transition-all duration-500"
-                style={{ backgroundColor: "#043222" }}
+                style={{ backgroundColor: themeColor }}
               />
             </a>
           ))}
@@ -90,12 +91,12 @@ export function Navbar() {
             onMouseLeave={mag.onMouseLeave}
           >
             <a
-              href="#contact"
+              href="/#contact"
               className="px-5 py-2.5 transition-all duration-400 rounded-sm"
               style={{
                 display: "inline-block",
-                backgroundColor: "#043222",
-                color: "#FFF8EE",
+                backgroundColor: themeColor,
+                color: scrolled ? "#FFF8EE" : (isDark ? "#0A0A0A" : "#FFF8EE"),
                 fontSize: "0.65rem",
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
@@ -105,10 +106,18 @@ export function Navbar() {
                 cursor: "none",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "#003631";
+                if (!scrolled && isDark) {
+                  e.currentTarget.style.opacity = "0.9";
+                } else {
+                  e.currentTarget.style.backgroundColor = scrolled ? "#003631" : (isDark ? "#FFF8EE" : "#003631");
+                }
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "#043222";
+                if (!scrolled && isDark) {
+                  e.currentTarget.style.opacity = "1";
+                } else {
+                  e.currentTarget.style.backgroundColor = themeColor;
+                }
               }}
               data-cursor=""
             >

@@ -11,80 +11,108 @@ import { revealVariants, viewportConfig, luxuryEase, transition } from "../lib/m
 gsap.registerPlugin(ScrollTrigger);
 
 export const Route = createFileRoute("/case-study/$slug")({
-  component: CaseStudy,
+  component: CaseStudyComponent,
 });
 
-export default function CaseStudy() {
+function CaseStudyComponent() {
   const { slug } = Route.useParams();
-  const study = CASE_STUDIES.find((s) => s.slug.trim() === slug.trim());
+  const studyIndex = CASE_STUDIES.findIndex((s) => s.slug.trim() === slug.trim());
+  const study = studyIndex !== -1 ? CASE_STUDIES[studyIndex] : null;
+  const nextStudy = studyIndex !== -1 ? CASE_STUDIES[(studyIndex + 1) % CASE_STUDIES.length] : null;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [slug]);
 
   useEffect(() => {
     if (!study) return;
 
-    // Pin meta bar briefly on scroll past hero
-    const metaBar = document.querySelector(".cs-meta-bar");
-    if (metaBar) {
-      gsap.from(metaBar, {
-        opacity: 0,
-        y: 20,
-        duration: 0.8,
-        scrollTrigger: { trigger: metaBar, start: "top 85%", toggleActions: "play none none none" },
-      });
-    }
+    const ctx = gsap.context(() => {
+      // Pin meta bar briefly on scroll past hero
+      const metaBar = document.querySelector(".cs-meta-bar");
+      if (metaBar) {
+        gsap.from(metaBar, {
+          opacity: 0,
+          y: 20,
+          duration: 0.8,
+          scrollTrigger: {
+            trigger: metaBar,
+            start: "top 90%",
+            toggleActions: "play none none none",
+          },
+        });
+      }
 
-    // Stagger gallery images in
-    const galleryImgs = document.querySelectorAll(".cs-gallery-img");
-    galleryImgs.forEach((img, i) => {
-      gsap.from(img, {
-        opacity: 0,
-        y: 40,
-        duration: 1.1,
-        ease: "power3.out",
-        delay: i * 0.1,
-        scrollTrigger: { trigger: img, start: "top 88%", toggleActions: "play none none none" },
+      // Stagger gallery images in
+      const galleryImgs = document.querySelectorAll(".cs-gallery-img");
+      galleryImgs.forEach((img, i) => {
+        gsap.from(img, {
+          opacity: 0,
+          y: 40,
+          duration: 1.1,
+          ease: "power3.out",
+          delay: i * 0.1,
+          scrollTrigger: {
+            trigger: img,
+            start: "top 92%",
+            toggleActions: "play none none none",
+          },
+        });
       });
+
+      // Description text character-by-word reveal
+      const desc = document.querySelectorAll(".cs-description");
+      desc.forEach((d) => {
+        gsap.from(d, {
+          opacity: 0,
+          y: 30,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: d,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        });
+      });
+
+      // Reveal impact section
+      const impactSec = document.querySelector(".cs-impact-section");
+      if (impactSec) {
+        gsap.from(impactSec, {
+          opacity: 0,
+          scale: 0.98,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: impactSec,
+            start: "top 85%",
+            toggleActions: "play none none none",
+          },
+        });
+      }
     });
 
-    // Description text character-by-word reveal
-    const desc = document.querySelectorAll(".cs-description");
-    desc.forEach((d) => {
-      gsap.from(d, {
-        opacity: 0,
-        y: 30,
-        duration: 1.2,
-        ease: "power3.out",
-        scrollTrigger: { trigger: d, start: "top 80%", toggleActions: "play none none none" },
-      });
-    });
+    // Refresh ScrollTrigger after a short delay to ensure layout is settled
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 500);
 
     return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
+      ctx.revert();
+      clearTimeout(timer);
     };
-  }, [study]);
+  }, [study, slug]);
 
   if (!study) {
     return (
       <div
-        style={{
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#0A0A0A",
-        }}
+        className="flex items-center justify-center min-h-screen bg-[#0A0A0A] text-white font-sans"
+        style={{ backgroundColor: "#0A0A0A" }}
       >
-        <div style={{ textAlign: "center" }}>
-          <p
-            style={{
-              fontFamily: "Inter,sans-serif",
-              fontSize: "0.8rem",
-              color: "white",
-              marginBottom: "1.5rem",
-            }}
-          >
-            STUDY NOT FOUND
-          </p>
-          <Link to="/" style={{ color: "#FFEDA8", fontSize: "0.7rem", textDecoration: "none" }}>
+        <div className="text-center">
+          <p className="text-xs tracking-widest text-gray-500 mb-6 uppercase">STUDY NOT FOUND</p>
+          <Link to="/" className="text-[0.7rem] text-[#C8FF00] no-underline hover:underline">
             Return Home
           </Link>
         </div>
@@ -96,12 +124,20 @@ export default function CaseStudy() {
     { label: "The Context", content: study.the_context },
     { label: "The Challenge", content: study.the_challenge },
     { label: "The Approach", content: study.the_approach },
-  ].filter((b) => b.content !== undefined);
+  ].filter((b) => b.content && b.content.length > 0);
 
   return (
-    <div style={{ backgroundColor: "#0A0A0A", minHeight: "100vh" }}>
+    <div
+      style={{
+        backgroundColor: "#0A0A0A",
+        minHeight: "100vh",
+        position: "relative",
+        color: "#FFF8EE",
+        overflowX: "hidden",
+      }}
+    >
       <CustomCursor />
-      <Navbar />
+      <Navbar isDark />
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -109,17 +145,20 @@ export default function CaseStudy() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
         >
-          {/* Hero */}
+          {/* Hero Section */}
           <section
-            className="relative w-full overflow-hidden"
-            style={{ height: "85vh", borderBottom: "1px solid #1A1A1A" }}
+            className="relative w-full overflow-hidden flex flex-col justify-end"
+            style={{ 
+              height: "clamp(500px, 85vh, 92vh)", 
+              borderBottom: "1px solid #1A1A1A" 
+            }}
           >
             <div className="absolute inset-0 z-0">
               <motion.div
-                initial={{ scale: 1.1, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.6 }}
+                initial={{ scale: 1.15, opacity: 0 }}
+                animate={{ scale: 1, opacity: 0.5 }}
                 style={{
                   width: "100%",
                   height: "100%",
@@ -127,144 +166,97 @@ export default function CaseStudy() {
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
-                transition={{ duration: 1.8, ease: luxuryEase }}
+                transition={{ duration: 2.2, ease: luxuryEase }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent opacity-80" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-transparent to-transparent opacity-90" />
             </div>
 
-            <div className="relative z-10 h-full flex flex-col justify-end px-8 md:px-12 pb-20">
+            <div className="relative z-10 px-6 md:px-16 pb-12 md:pb-20 max-w-[1440px] mx-auto w-full">
               <motion.div
-                initial="hidden"
-                animate="visible"
-                variants={{
-                  hidden: { opacity: 0, y: 30 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { staggerChildren: 0.12, delayChildren: 0.2, ...transition },
-                  },
-                }}
-                className="max-w-5xl"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4, duration: 1, ease: luxuryEase }}
               >
-                <motion.div
-                  variants={revealVariants}
-                  className="micro-label mb-6"
-                  style={{ color: "#888888", fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif" }}
+                <div
+                  className="micro-label mb-6 text-[#C8FF00] tracking-[0.2em]"
+                  style={{ fontFamily: "Satoshi, sans-serif" }}
                 >
-                  CASE STUDY // {study.year}
-                </motion.div>
-                <motion.h1
-                  variants={revealVariants}
+                  PROJECT // {study.year}
+                </div>
+                <h1
                   style={{
-                    fontFamily: "Boska, ui-serif, Georgia, serif",
-                    fontSize: "clamp(2.5rem, 8vw, 7.5rem)",
-                    lineHeight: "0.94",
-                    letterSpacing: "-0.04em",
+                    fontFamily: "Boska, serif",
+                    fontSize: "clamp(3rem, 10vw, 8.5rem)",
+                    lineHeight: "0.9",
+                    letterSpacing: "-0.05em",
                     color: "#FFF8EE",
-                    margin: 0,
+                    margin: "0 0 2rem 0",
                   }}
                 >
                   {study.project_title}
-                </motion.h1>
-                {study.live_site_link && (
-                  <motion.a
-                    variants={revealVariants}
-                    href={study.live_site_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="micro-label flex items-center gap-2 mt-8 transition-colors hover:text-white"
-                    style={{
-                      color: "#C8FF00",
-                      fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
-                      textDecoration: "none",
-                    }}
-                    data-cursor=""
-                  >
-                    View Live Site →
-                  </motion.a>
-                )}
+                </h1>
+
+                <div className="flex flex-wrap items-center gap-8 mt-12">
+                  {study.live_site_link && (
+                    <a
+                      href={study.live_site_link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-center gap-3 text-[#C8FF00] no-underline"
+                      data-cursor="View Site"
+                    >
+                      <span className="text-xs uppercase tracking-widest font-medium group-hover:mr-2 transition-all">
+                        View Live Project
+                      </span>
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="group-hover:rotate-45 transition-transform">
+                        <path d="M1 13L13 1M13 1H4M13 1V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </a>
+                  )}
+                </div>
               </motion.div>
             </div>
           </section>
 
-          {/* Meta + Content */}
-          <section className="px-8 md:px-12" style={{ paddingTop: "10vh", paddingBottom: "10vh" }}>
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-16">
-              {/* Sticky sidebar */}
-              <div className="md:col-span-3">
-                <div className="cs-meta-bar sticky top-28 flex flex-col gap-8">
+          {/* Details & Narrative Grid */}
+          <section className="px-6 md:px-16 py-24 md:py-32 max-w-[1440px] mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+              {/* Sidebar Info */}
+              <div className="lg:col-span-3">
+                <div className="cs-meta-bar sticky top-32 flex flex-col gap-12">
                   {[
                     { label: "Client", value: study.client_name },
                     { label: "Services", value: study.services },
-                    { label: "Year", value: String(study.year) },
+                    { label: "Role", value: "Senior Lead Design" },
+                    { label: "Timeline", value: `${study.year}` },
                   ].map(({ label, value }) => (
                     <div key={label}>
-                      <div
-                        className="micro-label mb-2"
-                        style={{ color: "#888888", fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif" }}
-                      >
+                      <div className="text-[10px] uppercase tracking-[0.2em] text-[#888888] mb-3">
                         {label}
                       </div>
-                      <p
-                        style={{
-                          color: "#F4F4F0",
-                          fontSize: "0.9rem",
-                          lineHeight: "1.6",
-                          fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
-                          margin: 0,
-                        }}
-                      >
+                      <p className="text-sm md:text-base text-[#F4F4F0] leading-relaxed m-0 font-medium">
                         {value}
                       </p>
-                      <div style={{ width: "100%", height: "1px", backgroundColor: "#1A1A1A", marginTop: "2rem" }} />
+                      <div className="w-full h-[1px] bg-[#1A1A1A] mt-6" />
                     </div>
                   ))}
-                  <div>
-                    <div
-                      className="micro-label mb-2"
-                      style={{ color: "#888888", fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif" }}
-                    >
-                      Industry
-                    </div>
-                    <p
-                      className="micro-label"
-                      style={{
-                        color: "#C8FF00",
-                        border: "1px solid rgba(200,255,0,0.2)",
-                        padding: "4px 8px",
-                        display: "inline-block",
-                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
-                        margin: 0,
-                      }}
-                    >
-                      {study.category}
-                    </p>
-                  </div>
                 </div>
               </div>
 
-              {/* Content blocks */}
-              <div className="md:col-span-9 flex flex-col gap-16">
+              {/* Main Narrative */}
+              <div className="lg:col-span-9 flex flex-col gap-24 md:gap-32">
                 {blocks.map((block, i) => (
-                  <motion.div
-                    key={block.label}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={viewportConfig}
-                    variants={revealVariants}
-                  >
-                    <div
-                      className="micro-label mb-5"
-                      style={{ color: "#C8FF00", fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif" }}
-                    >
-                      {String(i + 1).padStart(2, "0")} // {block.label.toUpperCase()}
+                  <div key={block.label} className="max-w-4xl">
+                    <div className="text-[10px] font-bold text-[#C8FF00] tracking-[0.3em] mb-6 flex items-center gap-4">
+                      <span className="text-[#333]">{String(i + 1).padStart(2, "0")}</span>
+                      {block.label.toUpperCase()}
                     </div>
                     <p
                       className="cs-description"
                       style={{
-                        fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
-                        fontSize: "clamp(1.3rem, 2.5vw, 2rem)",
-                        lineHeight: "1.4",
+                        fontFamily: "Satoshi, sans-serif",
+                        fontSize: "clamp(1.25rem, 3vw, 2.25rem)",
+                        lineHeight: "1.35",
                         letterSpacing: "-0.02em",
                         color: "#F4F4F0",
                         margin: 0,
@@ -272,156 +264,137 @@ export default function CaseStudy() {
                     >
                       {block.content}
                     </p>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
           </section>
 
-          {/* Gallery */}
+          {/* Visual Showcase (Gallery) */}
           {study.gallery.length > 0 && (
-            <section className="px-8 md:px-12" style={{ paddingBottom: "10vh" }}>
-              <div
-                className="micro-label mb-8"
-                style={{ color: "#888888", fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif" }}
-              >
-                VISUAL SYSTEM
+            <section className="px-6 md:px-16 pb-32 max-w-[1440px] mx-auto">
+              <div className="flex items-center justify-between mb-12">
+                <div className="text-[10px] uppercase tracking-[0.2em] text-[#888888]">
+                  VISUAL SYSTEM // ARTIFACTS
+                </div>
+                <div className="text-[10px] text-[#333]">[{study.gallery.length} IMAGES]</div>
               </div>
-              <div className="mb-4" style={{ height: "60vh", overflow: "hidden", border: "1px solid #1A1A1A" }}>
-                <motion.img
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={viewportConfig}
-                  transition={{ duration: 1.2, ease: luxuryEase }}
-                  src={study.gallery[0]}
-                  alt="Gallery 1"
-                  className="cs-gallery-img w-full h-full object-cover"
-                  style={{ filter: "brightness(0.85)" }}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                {study.gallery.slice(1, 3).map((img, i) => (
-                  <div key={i} style={{ aspectRatio: "16/10", overflow: "hidden", border: "1px solid #1A1A1A" }}>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="md:col-span-2 aspect-[16/9] overflow-hidden bg-[#111] border border-[#1A1A1A]">
+                  <img
+                    src={study.gallery[0]}
+                    alt={`${study.project_title} - Feature`}
+                    className="cs-gallery-img w-full h-full object-cover"
+                  />
+                </div>
+                {study.gallery.slice(1).map((img, i) => (
+                  <div 
+                    key={i} 
+                    className={`aspect-[16/10] overflow-hidden bg-[#111] border border-[#1A1A1A] ${i === 2 && study.gallery.length > 3 ? 'md:col-span-2' : ''}`}
+                  >
                     <img
                       src={img}
-                      alt={`Gallery ${i + 2}`}
-                      className="cs-gallery-img w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-                      style={{ filter: "brightness(0.85)" }}
+                      alt={`${study.project_title} - Detail ${i + 1}`}
+                      className="cs-gallery-img w-full h-full object-cover transition-transform duration-1000 hover:scale-105"
                     />
                   </div>
                 ))}
               </div>
-              {study.gallery[3] && (
-                <div className="mt-4" style={{ height: "40vh", overflow: "hidden", border: "1px solid #1A1A1A" }}>
-                  <img
-                    src={study.gallery[3]}
-                    alt="Gallery 4"
-                    className="cs-gallery-img w-full h-full object-cover"
-                    style={{ filter: "brightness(0.85)" }}
-                  />
-                </div>
-              )}
             </section>
           )}
 
-          {/* Impact */}
-          {(study.impact_metric_1 || study.the_impact) && (
-            <section
-              className="px-8 md:px-12 py-20 mx-8 md:mx-12 mb-20"
-              style={{ border: "1px solid #1A1A1A", backgroundColor: "#0D0D0D" }}
-            >
-              <div
-                className="micro-label mb-10"
-                style={{ color: "#C8FF00", fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif" }}
-              >
-                04 // THE IMPACT
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mb-12">
-                {[
-                  { metric: study.impact_metric_1, label: study.impact_label_1 },
-                  { metric: study.impact_metric_2, label: study.impact_label_2 },
-                ]
-                  .filter((m) => m.metric)
-                  .map((item, i) => (
-                    <motion.div
-                      key={i}
-                      initial="hidden"
-                      whileInView="visible"
-                      viewport={viewportConfig}
-                      variants={revealVariants}
+          {/* Impact & Results */}
+          {study.the_impact && (
+            <section className="px-6 md:px-16 py-32 bg-[#0D0D0D] border-y border-[#1A1A1A]">
+              <div className="max-w-[1440px] mx-auto">
+                <div className="cs-impact-section">
+                  <div className="text-[10px] font-bold text-[#C8FF00] tracking-[0.3em] mb-12">
+                    04 // THE IMPACT
+                  </div>
+                  
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+                    <p
+                      className="text-2xl md:text-3xl lg:text-4xl leading-snug text-[#F4F4F0] m-0"
+                      style={{ fontFamily: "Satoshi, sans-serif", letterSpacing: "-0.01em" }}
                     >
-                      <div
-                        style={{
-                          fontFamily: "Boska, ui-serif, Georgia, serif",
-                          fontSize: "clamp(3rem, 8vw, 8rem)",
-                          lineHeight: 1,
-                          letterSpacing: "-0.04em",
-                          color: "#FFF8EE",
-                        }}
-                      >
-                        {item.metric}
+                      {study.the_impact}
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-12 border-l border-[#1A1A1A] pl-12">
+                      <div>
+                        <div className="text-4xl md:text-5xl font-bold text-[#FFF8EE] mb-2">{study.impact_metric_1}</div>
+                        <div className="text-[10px] uppercase tracking-widest text-[#888888]">{study.impact_label_1}</div>
                       </div>
-                      <div
-                        className="micro-label mt-3"
-                        style={{ color: "#888888", fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif" }}
-                      >
-                        {item.label?.toUpperCase()}
+                      <div>
+                        <div className="text-4xl md:text-5xl font-bold text-[#FFF8EE] mb-2">{study.impact_metric_2}</div>
+                        <div className="text-[10px] uppercase tracking-widest text-[#888888]">{study.impact_label_2}</div>
                       </div>
-                    </motion.div>
-                  ))}
+                    </div>
+                  </div>
+                </div>
               </div>
-              {study.the_impact && (
-                <p
-                  style={{
-                    fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
-                    fontSize: "clamp(1.1rem, 2vw, 1.5rem)",
-                    lineHeight: "1.4",
-                    letterSpacing: "-0.02em",
-                    color: "#888888",
-                    maxWidth: "42rem",
-                    margin: 0,
-                  }}
-                >
-                  {study.the_impact}
-                </p>
-              )}
             </section>
           )}
 
-          {/* Footer nav */}
-          <div
-            className="px-8 md:px-12 pb-20 flex items-center justify-between"
-            style={{ borderTop: "1px solid #1A1A1A", paddingTop: "3rem" }}
-          >
+          {/* Next Project Navigator */}
+          {nextStudy && (
+            <section className="relative px-6 md:px-16 py-20 md:py-32 overflow-hidden border-b border-[#1A1A1A]">
+              <Link 
+                to="/case-study/$slug" 
+                params={{ slug: nextStudy.slug }}
+                className="group block relative z-10 no-underline"
+                data-cursor="Next"
+              >
+                <div className="flex flex-col items-center text-center">
+                  <span className="text-[10px] uppercase tracking-[0.4em] text-[#888888] mb-8 group-hover:text-[#C8FF00] transition-colors">
+                    Next Project
+                  </span>
+                  <h2 
+                    className="text-5xl md:text-7xl lg:text-9xl m-0 text-transparent bg-clip-text bg-gradient-to-b from-[#FFF8EE] to-[#444] group-hover:to-[#C8FF00] transition-all duration-700"
+                    style={{ fontFamily: "Boska, serif", lineHeight: "1", letterSpacing: "-0.04em" }}
+                  >
+                    {nextStudy.project_title.split('—')[0].trim()}
+                  </h2>
+                </div>
+              </Link>
+              
+              {/* Background preview of next study */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none">
+                <img src={nextStudy.cover_image} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-2000" alt="" />
+              </div>
+            </section>
+          )}
+
+          {/* Global Footer Navigation */}
+          <footer className="px-6 md:px-16 py-20 flex flex-col md:flex-row items-center justify-between gap-12 max-w-[1440px] mx-auto">
             <Link
               to="/"
-              className="micro-label flex items-center gap-3 transition-colors hover:text-white"
-              style={{
-                color: "#888888",
-                fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
-                textDecoration: "none",
-              }}
+              className="group flex items-center gap-4 text-[#888888] no-underline hover:text-white transition-colors"
               data-cursor=""
             >
-              ← All Work
+              <span className="text-xl group-hover:-translate-x-2 transition-transform">←</span>
+              <span className="text-[10px] uppercase tracking-[0.2em]">Return to Index</span>
             </Link>
+            
+            <div className="flex items-center gap-8">
+              <a href="mailto:hello@formaforge.com" className="text-[10px] uppercase tracking-[0.2em] text-[#888888] no-underline hover:text-[#C8FF00]">Email</a>
+              <a href="#" className="text-[10px] uppercase tracking-[0.2em] text-[#888888] no-underline hover:text-[#C8FF00]">LinkedIn</a>
+              <a href="#" className="text-[10px] uppercase tracking-[0.2em] text-[#888888] no-underline hover:text-[#C8FF00]">Twitter</a>
+            </div>
+            
             <a
               href="/#contact"
-              className="micro-label flex items-center gap-3 px-6 py-3 transition-all"
-              style={{
-                border: "1px solid #1A1A1A",
-                color: "#C8FF00",
-                fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
-                textDecoration: "none",
-              }}
+              className="text-[10px] uppercase tracking-[0.2em] px-10 py-5 border border-[#1A1A1A] text-[#C8FF00] no-underline hover:bg-[#C8FF00] hover:text-black transition-all"
               data-cursor=""
             >
-              Start Your Project →
+              Start Your Project
             </a>
-          </div>
+          </footer>
         </motion.div>
       </AnimatePresence>
     </div>
   );
 }
 
+export default CaseStudyComponent;

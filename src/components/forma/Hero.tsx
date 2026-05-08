@@ -198,14 +198,14 @@ export function Hero() {
               style={{
                 margin: 0,
                 fontFamily: "Boska, ui-serif, Georgia, serif",
-                fontSize: "clamp(3.5rem,7vw,7.8rem)",
-                lineHeight: 0.96,
+                fontSize: "clamp(2.75rem, 8vw, 7.8rem)",
+                lineHeight: 0.94,
                 letterSpacing: "-0.046em",
                 fontWeight: 400,
                 color: "#043222",
-                overflow: "visible",
+                overflow: "hidden",
                 paddingBottom: "0.2rem",
-                maxWidth: "15ch",
+                maxWidth: "100%",
               }}
             >
               Design that <br />
@@ -390,44 +390,54 @@ export function Hero() {
       <style>{`
         @media (max-width: 767px) { 
           .hero-section {
-            min-height: 85svh !important;
+            min-height: 90svh !important;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            overflow: hidden;
           }
           .hero-grid { 
             grid-template-columns: 1fr !important; 
-            gap: 2rem !important; 
+            gap: 1.5rem !important; 
             position: relative;
             z-index: 1;
-            margin-top: 4vh !important;
+            margin-top: 2vh !important;
           } 
           .hero-text-col {
             position: relative;
             z-index: 2;
-            margin-top: -2vh !important;
+            margin-top: 0 !important;
+            padding: 0 !important;
           }
           .hero-orb-col { 
             position: absolute !important;
-            top: 42% !important;
+            top: 45% !important;
             left: 50% !important;
             transform: translate(-50%, -50%) !important;
             z-index: 0 !important;
+            width: 100% !important;
             height: auto !important;
-            opacity: 0.85;
+            opacity: 0.7;
             pointer-events: none !important;
           }
           .orb-wrapper {
             position: relative;
-            width: 280px;
-            height: 280px;
+            width: 240px;
+            height: 240px;
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: visible;
           }
-          /* Reduce spacing after scroll indicator */
           .hero-bottom-bar {
-             padding-bottom: 1.5rem !important;
+             padding-bottom: 2rem !important;
+             gap: 1rem !important;
+          }
+        }
+        @media (max-width: 380px) {
+          .orb-wrapper {
+            width: 200px;
+            height: 200px;
           }
         }
       `}</style>

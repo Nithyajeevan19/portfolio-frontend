@@ -2,11 +2,157 @@ import { useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper/modules';
+import { Pagination, FreeMode } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import 'swiper/css/free-mode';
 import { CASE_STUDIES, type CaseStudy } from "../../data/caseStudies";
 import { revealVariants, viewportConfig, revealTransition, luxuryEase } from "../../lib/motion";
+import { useIsMobile } from '@/hooks/use-mobile';
+
+function MobileWorkCard({ cs }: { cs: CaseStudy }) {
+  return (
+    <Link
+      to="/case-study/$slug"
+      params={{ slug: cs.slug }}
+      style={{
+        display: 'block',
+        textDecoration: 'none',
+        borderRadius: '2px',
+        border: '1px solid rgba(4,50,34,0.09)',
+        overflow: 'hidden',
+        boxShadow: '0 4px 24px rgba(4,50,34,0.08)',
+        backgroundColor: '#FFF8EE',
+        marginLeft: 'min(1.5rem, 4vw)',
+        marginRight: 'min(1.5rem, 4vw)',
+        width: 'calc(100% - min(3rem, 8vw))',
+      }}
+    >
+      {/* TOP — Image */}
+      <div style={{ position: 'relative', height: '260px', overflow: 'hidden' }}>
+        <img
+          src={cs.cover_image}
+          alt={cs.project_title}
+          style={{
+            width: '100%', height: '100%',
+            objectFit: 'cover',
+            filter: 'brightness(0.45)',
+          }}
+        />
+
+        {/* Featured badge */}
+        {cs.featured && (
+          <div style={{
+            position: 'absolute', top: '1rem', left: '1rem',
+            backgroundColor: '#C5F135',
+            color: '#043222',
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '0.55rem', fontWeight: 700,
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            padding: '0.28rem 0.75rem',
+            borderRadius: '999px',
+          }}>
+            Featured
+          </div>
+        )}
+
+        {/* Bottom metadata overlay */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          padding: '1.25rem',
+          background: 'linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%)',
+        }}>
+          {/* Row 1 — category · services · year */}
+          <div style={{
+            display: 'flex', justifyContent: 'space-between',
+            alignItems: 'center', marginBottom: '0.5rem',
+          }}>
+            <span style={{
+              fontFamily: 'Inter, sans-serif', fontSize: '0.55rem',
+              fontWeight: 600, letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: 'rgba(255,255,255,0.65)',
+            }}>
+              {cs.category} · {cs.services.split(',')[0]}
+            </span>
+            <span style={{
+              fontFamily: 'Inter, sans-serif', fontSize: '0.55rem',
+              letterSpacing: '0.1em',
+              color: 'rgba(255,255,255,0.45)',
+            }}>
+              {cs.year}
+            </span>
+          </div>
+
+          {/* Row 2 — project title */}
+          <h3 style={{
+            margin: '0 0 0.3rem',
+            fontFamily: 'Cormorant Garamond, Georgia, serif',
+            fontSize: '1.55rem', fontWeight: 600,
+            lineHeight: 1.1, letterSpacing: '-0.025em',
+            color: '#FFFFFF',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            paddingBottom: '0.05em',
+          }}>
+            {cs.project_title}
+          </h3>
+
+          {/* Row 3 — client name */}
+          <p style={{
+            margin: 0,
+            fontFamily: 'Inter, sans-serif', fontSize: '0.72rem',
+            color: 'rgba(255,255,255,0.50)',
+          }}>
+            {cs.client_name}
+          </p>
+        </div>
+      </div>
+
+      {/* BOTTOM — Cream info strip */}
+      <div style={{
+        padding: '1.1rem 1.25rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: '1rem',
+        backgroundColor: '#FFF8EE',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', flex: 1, minWidth: 0 }}>
+          <div style={{
+            width: '4px', height: '4px', borderRadius: '50%',
+            backgroundColor: '#043222', flexShrink: 0, marginTop: '0.45rem',
+          }} />
+          <p style={{
+            margin: 0,
+            fontFamily: 'Inter, sans-serif', fontSize: '0.78rem',
+            color: '#4F5B57', lineHeight: 1.65,
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+          }}>
+            {cs.description}
+          </p>
+        </div>
+        <span
+          style={{
+            flexShrink: 0,
+            fontFamily: 'Inter, sans-serif', fontSize: '0.60rem',
+            fontWeight: 600, letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            color: '#043222', textDecoration: 'none',
+            whiteSpace: 'nowrap',
+          }}>
+          Case Study →
+        </span>
+      </div>
+    </Link>
+  );
+}
 
 function WorkCard({
   project,
@@ -41,72 +187,73 @@ function WorkCard({
       whileHover="hover"
       viewport={viewportConfig}
       variants={{
-        hidden: { opacity: 0, y: 20 },
+        hidden: { opacity: 0, y: 30 },
         visible: { 
           opacity: 1, 
           y: 0, 
-          transition: { ...revealTransition, delay: (index % 3) * 0.12 } 
+          transition: { ...revealTransition, delay: (index % 3) * 0.1 } 
         },
         hover: { 
-          y: -8,
-          transition: { duration: 0.6, ease: luxuryEase }
+          y: -12,
+          transition: { duration: 0.8, ease: luxuryEase }
         }
       }}
+      className="h-full"
     >
       <Link
         to="/case-study/$slug"
         params={{ slug: project.slug }}
-        className="block relative overflow-hidden"
+        className="block relative overflow-hidden group h-full"
         style={{
-          borderRadius: "2px",
-          border: "1px solid rgba(4,50,34,0.09)",
+          borderRadius: "4px",
+          border: "1px solid rgba(4,50,34,0.08)",
           backgroundColor: "#FFF8EE",
           boxShadow: hov
-            ? "0 32px 64px -16px rgba(4,50,34,0.12)"
-            : "0 2px 10px rgba(4,50,34,0.04)",
-          transition: "box-shadow 0.65s ease",
+            ? "0 40px 80px -20px rgba(4,50,34,0.15)"
+            : "0 4px 20px rgba(4,50,34,0.03)",
+          transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
           textDecoration: "none",
-          height: "100%",
           display: "flex",
           flexDirection: "column",
-          minHeight: "440px",
+          minHeight: "520px",
         }}
         onMouseEnter={() => setHov(true)}
         onMouseLeave={() => setHov(false)}
         onMouseMove={onMove}
-        data-cursor="View"
+        data-cursor="Discover"
       >
-        {/* Image container should take fixed space */}
+        {/* Image container */}
         <div
           style={{
             position: "relative",
             overflow: "hidden",
-            height: isLarge ? "clamp(300px,46vw,600px)" : "clamp(240px,28vw,380px)",
+            height: isLarge ? "clamp(340px, 50vw, 650px)" : "clamp(280px, 30vw, 420px)",
             flexShrink: 0,
+            backgroundColor: "#043222",
           }}
         >
           <motion.div
             style={{
               y: imageY,
               position: "absolute",
-              inset: "-10%",
+              inset: "-15%",
             }}
           >
             <motion.div
               variants={{
                 hover: { 
-                  scale: 1.08,
-                  filter: "brightness(0.72) saturate(0.95)",
+                  scale: 1.1,
+                  filter: "brightness(0.8) saturate(1.1)",
                 }
               }}
-              transition={{ duration: 1.2, ease: luxuryEase }}
+              transition={{ duration: 1.5, ease: luxuryEase }}
               style={{
                 position: "absolute",
                 inset: 0,
                 backgroundImage: `url(${project.cover_image})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                filter: "brightness(0.62) saturate(0.80)",
+                filter: "brightness(0.7) saturate(0.9)",
               }}
             />
           </motion.div>
@@ -117,206 +264,103 @@ function WorkCard({
               position: "absolute",
               inset: 0,
               pointerEvents: "none",
-              background: `radial-gradient(circle at ${xy.x}% ${xy.y}%, rgba(4,50,34,0.11) 0%, transparent 52%)`,
+              background: `radial-gradient(circle at ${xy.x}% ${xy.y}%, rgba(200,255,0,0.15) 0%, transparent 60%)`,
               opacity: hov ? 1 : 0,
-              transition: "opacity 0.45s",
-            }}
-          />
-
-          {/* Gradient vignette */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background:
-                "linear-gradient(to top, rgba(4,50,34,0.75) 0%, rgba(4,50,34,0.14) 42%, transparent 62%)",
+              transition: "opacity 0.6s ease",
             }}
           />
 
           {/* Featured tag */}
           {project.featured && (
-            <div style={{ position: "absolute", top: "1.25rem", left: "1.25rem" }}>
+            <div style={{ position: "absolute", top: "1.5rem", left: "1.5rem", zIndex: 10 }}>
               <span
                 style={{
-                  fontFamily: "Satoshi, Inter, sans-serif",
-                  fontSize: "0.58rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.18em",
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: "0.55rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.2em",
                   textTransform: "uppercase",
-                  padding: "0.32rem 0.7rem",
-                  borderRadius: "2px",
-                  backgroundColor: "#FFEDA8",
+                  padding: "0.5rem 1rem",
+                  borderRadius: "100px",
+                  backgroundColor: "#C8FF00",
                   color: "#043222",
+                  boxShadow: "0 4px 12px rgba(200,255,0,0.3)",
                 }}
               >
-                Featured
+                Featured Release
               </span>
             </div>
           )}
-
-          {/* Arrow CTA */}
-          <div
-            style={{
-              position: "absolute",
-              top: "1.25rem",
-              right: "1.25rem",
-              width: "34px",
-              height: "34px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: "2px",
-              border: "1px solid rgba(255,248,238,0.38)",
-              backgroundColor: hov ? "#FFF8EE" : "transparent",
-              opacity: hov ? 1 : 0,
-              transform: hov ? "translate(0,0)" : "translate(5px,-5px)",
-              transition: "all 0.5s ease",
-            }}
-          >
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" style={{ transform: "rotate(-45deg)" }}>
-              <path
-                d="M1 11L11 1M11 1H4M11 1V8"
-                stroke="#043222"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-          </div>
-
-          {/* Card bottom metadata */}
-          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "1.5rem" }}>
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                alignItems: "center",
-                gap: "0.6rem",
-                marginBottom: "0.55rem",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "Satoshi, Inter, sans-serif",
-                  fontSize: "0.58rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  color: "#FFEDA8",
-                }}
-              >
+ 
+          {/* Card bottom metadata overlay */}
+          <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "2rem", zIndex: 5 }}>
+            <div className="flex items-center gap-4 mb-4">
+              <span className="text-[10px] uppercase tracking-[0.2em] text-[#C8FF00] font-bold">
                 {project.category}
               </span>
-              <span
-                style={{
-                  fontFamily: "Satoshi, Inter, sans-serif",
-                  fontSize: "0.58rem",
-                  letterSpacing: "0.1em",
-                  color: "rgba(255,248,238,0.35)",
-                }}
-              >
-                ·
-              </span>
-              <span
-                style={{
-                  fontFamily: "Satoshi, Inter, sans-serif",
-                  fontSize: "0.58rem",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "rgba(255,248,238,0.50)",
-                }}
-              >
-                {project.services}
-              </span>
-              <span
-                style={{
-                  fontFamily: "Satoshi, Inter, sans-serif",
-                  fontSize: "0.58rem",
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "rgba(255,248,238,0.30)",
-                  marginLeft: "auto",
-                }}
-              >
-                {project.year}
+              <div className="w-8 h-[1px] bg-white/20" />
+              <span className="text-[10px] uppercase tracking-[0.2em] text-white/60">
+                {project.services.split(',')[0]}
               </span>
             </div>
             <h3
               style={{
                 margin: 0,
-                fontFamily: "Boska, Georgia, serif",
-                fontSize: "clamp(1.45rem,2.4vw,2.1rem)",
-                letterSpacing: "-0.035em",
+                fontFamily: "Cormorant Garamond, Georgia, serif",
+                fontSize: "clamp(1.8rem, 3vw, 2.8rem)",
+                letterSpacing: "-0.04em",
                 color: "#FFF8EE",
-                lineHeight: 1.06,
-                paddingBottom: "0.06em",
+                lineHeight: 1,
               }}
             >
-              {project.project_title}
+              {project.project_title.split('—')[0].trim()}
             </h3>
-            <p
-              style={{
-                margin: "0.25rem 0 0",
-                fontFamily: "Satoshi, Inter, sans-serif",
-                fontSize: "0.73rem",
-                color: "rgba(255,248,238,0.52)",
-              }}
-            >
-              {project.client_name}
-            </p>
           </div>
+          
+          <div className="absolute inset-0 bg-gradient-to-t from-[#043222]/90 via-[#043222]/20 to-transparent pointer-events-none" />
         </div>
-
-        {/* Result strip — set minHeight to equalize cards */}
+ 
+        {/* Content Strip */}
         <div
           style={{
-            padding: "1.2rem 1.5rem",
+            padding: "2rem",
             display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            backgroundColor: hov ? "rgba(4,50,34,0.03)" : "#FFF8EE",
-            transition: "background-color 0.4s",
-            borderTop: "1px solid rgba(4,50,34,0.06)",
+            flexDirection: "column",
+            justifyContent: "center",
+            backgroundColor: hov ? "rgba(4,50,34,0.02)" : "#FFF8EE",
+            transition: "all 0.5s ease",
             flex: 1,
-            minHeight: "80px",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "0.65rem" }}>
-            <div
-              style={{
-                width: "3px",
-                height: "3px",
-                borderRadius: "50%",
-                backgroundColor: "#043222",
-                flexShrink: 0,
-              }}
-            />
-            <span
-              style={{
-                fontFamily: "Satoshi, Inter, sans-serif",
-                fontSize: "0.72rem",
-                color: "#4F5B57",
-                lineHeight: "1.5",
-              }}
-            >
-              {project.description}
-            </span>
-          </div>
-          <span
+          <p
             style={{
-              fontFamily: "Satoshi, Inter, sans-serif",
-              fontSize: "0.62rem",
-              fontWeight: 600,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: hov ? "#043222" : "rgba(4,50,34,0.22)",
-              transition: "color 0.35s",
-              whiteSpace: "nowrap",
-              paddingLeft: "1rem",
+              fontFamily: "Inter, sans-serif",
+              fontSize: "0.9rem",
+              color: "#4F5B57",
+              lineHeight: "1.6",
+              margin: "0 0 1.5rem 0",
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
             }}
           >
-            Case Study →
-          </span>
+            {project.description}
+          </p>
+          
+          <div className="mt-auto flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-[#C8FF00]" />
+              <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#043222]">
+                Explore Case Study
+              </span>
+            </div>
+            <div className="w-10 h-10 rounded-full border border-black/5 flex items-center justify-center group-hover:bg-[#043222] group-hover:border-[#043222] transition-all duration-500">
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
+                <path d="M1 13L13 1M13 1H4M13 1V10" stroke={hov ? "#C8FF00" : "#043222"} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+          </div>
         </div>
       </Link>
     </motion.div>
@@ -327,6 +371,7 @@ function WorkCard({
 
 export function SelectedWork() {
   const items = CASE_STUDIES as CaseStudy[];
+  const isMobile = useIsMobile();
 
   // Alternating layout: large → [small + small] → large → repeat
   const rows: Array<
@@ -354,191 +399,138 @@ export function SelectedWork() {
   let cardIndex = 0;
 
   return (
-    <section
-      id="work"
-      style={{ paddingTop: "16vh", paddingBottom: "14vh", backgroundColor: "#F6E9D9" }}
-    >
-      {/* Header */}
-      <div
-        className="px-8 md:px-14 mb-14"
-        style={{ borderBottom: "1px solid rgba(4,50,34,0.09)", paddingBottom: "2.5rem" }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
+    <section id="work" style={{ 
+      paddingTop: '16vh', 
+      paddingBottom: '14vh', 
+      backgroundColor: '#F6E9D9',
+      overflow: 'hidden',
+    }}>
+  
+      {/* Section Header */}
+      <div className="px-8 md:px-14 mb-14"
+        style={{ borderBottom: '1px solid rgba(4,50,34,0.09)', paddingBottom: '2.5rem' }}>
+        <motion.div 
+          initial={{ opacity: 0, y: 14 }} 
+          whileInView={{ opacity: 1, y: 0 }} 
           viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6"
-        >
+          transition={{ duration: 1, ease: luxuryEase }}
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
-            <div
-              style={{
-                fontFamily: "Satoshi, Inter, sans-serif",
-                fontSize: "0.60rem",
-                fontWeight: 600,
-                letterSpacing: "0.22em",
-                textTransform: "uppercase",
-                color: "rgba(4,50,34,0.40)",
-                marginBottom: "0.75rem",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-              }}
-            >
-              <span style={{ color: "rgba(4,50,34,0.28)" }}>02</span>
-              <span
-                style={{
-                  width: "14px",
-                  height: "1px",
-                  backgroundColor: "rgba(4,50,34,0.22)",
-                  display: "inline-block",
-                }}
-              />
+            <div style={{ 
+              fontFamily: 'Inter, sans-serif', fontSize: '0.60rem', 
+              fontWeight: 600, letterSpacing: '0.22em', 
+              textTransform: 'uppercase', color: 'rgba(4,50,34,0.40)', 
+              marginBottom: '0.75rem', display: 'flex', 
+              alignItems: 'center', gap: '0.75rem' 
+            }}>
+              <span style={{ color: 'rgba(4,50,34,0.28)' }}>02</span>
+              <span style={{ width: '14px', height: '1px', backgroundColor: 'rgba(4,50,34,0.22)', display: 'inline-block' }} />
               Selected Work
             </div>
-            <h2
-              style={{
-                margin: 0,
-                fontFamily: "Boska, Georgia, serif",
-                fontSize: "clamp(2.2rem,5vw,5.5rem)",
-                lineHeight: "0.94",
-                letterSpacing: "-0.044em",
-                color: "#043222",
-                paddingBottom: "0.12em",
-              }}
-            >
-              Work that
-              <br />
-              <span style={{ fontStyle: "italic", color: "rgba(4,50,34,0.28)" }}>
+            <h2 style={{ 
+              margin: 0, 
+              fontFamily: 'Cormorant Garamond, Georgia, serif', 
+              fontSize: 'clamp(2.2rem,5vw,5.5rem)', 
+              lineHeight: '0.94', letterSpacing: '-0.044em', 
+              color: '#043222', paddingBottom: '0.12em' 
+            }}>
+              Work that<br />
+              <span style={{ fontStyle: 'italic', color: 'rgba(4,50,34,0.28)' }}>
                 earns its place.
               </span>
             </h2>
           </div>
-          <p
-            style={{
-              fontFamily: "Satoshi, Inter, sans-serif",
-              fontSize: "0.82rem",
-              lineHeight: "1.80",
-              color: "#4F5B57",
-              maxWidth: "21rem",
-            }}
-          >
-            A focused selection. Every engagement is led by senior principals, from strategy through
-            final delivery.
+          <p style={{ 
+            fontFamily: 'Inter, sans-serif', fontSize: '0.82rem', 
+            lineHeight: '1.80', color: '#4F5B57', maxWidth: '21rem' 
+          }}>
+            A focused selection. Every engagement is led by senior 
+            principals, from strategy through final delivery.
           </p>
         </motion.div>
       </div>
-
-      {/* Mobile swiper — hidden on md+ */}
-      <div className="md:hidden pb-2">
-        <Swiper
-          modules={[Pagination]}
-          spaceBetween={20}
-          slidesPerView={1.15}
-          centeredSlides={true}
-          pagination={{ clickable: true }}
-          style={{ paddingBottom: '3.5rem' }}>
-          {items.map((cs, i) => (
-            <SwiperSlide key={cs.id}>
-              <WorkCard project={cs} index={i} />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-
-      {/* Grid — hidden on mobile */}
-      <div
-        className="hidden md:flex px-8 md:px-14"
-        style={{ flexDirection: "column", gap: "0.85rem" }}
-      >
-        {rows.map((row, ri) => {
-          if (row.type === "single") {
-            const idx = cardIndex++;
-            return (
-              <WorkCard key={row.item.id} project={row.item} index={idx} size="large" />
-            );
-          } else {
-            const idxA = cardIndex++;
-            const idxB = cardIndex++;
-            return (
-              <div
-                key={`pair-${ri}`}
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-                  gap: "0.85rem",
-                }}
-              >
-                <WorkCard project={row.items[0]} index={idxA} size="normal" />
-                <WorkCard project={row.items[1]} index={idxB} size="normal" />
-              </div>
-            );
-          }
-        })}
-      </div>
-
+  
+      {isMobile ? (
+        <div style={{ paddingTop: '0.5rem', paddingBottom: '1rem', overflow: 'hidden' }}>
+          <Swiper
+            modules={[Pagination]}
+            slidesPerView={1}
+            spaceBetween={0}
+            pagination={{ clickable: true }}
+            style={{ paddingBottom: '2.8rem' }}>
+            {items.map((cs) => (
+              <SwiperSlide key={cs.id ?? cs.slug}>
+                <MobileWorkCard cs={cs} />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      ) : (
+        <div style={{ padding: '0 2rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            {(() => {
+              const [first, second, third, ...rest] = items;
+              return (
+                <>
+                  {first && <WorkCard project={first} index={0} size="large" />}
+                  {(second || third) && (
+                    <div style={{ 
+                      display: 'grid', 
+                      gridTemplateColumns: 'repeat(2, 1fr)', 
+                      gap: '0.85rem' 
+                    }}>
+                      {second && <WorkCard project={second} index={1} size="normal" />}
+                      {third  && <WorkCard project={third}  index={2} size="normal" />}
+                    </div>
+                  )}
+                  {rest.map((cs, i) => (
+                    <WorkCard key={cs.id} project={cs} index={i + 3} size="large" />
+                  ))}
+                </>
+              );
+            })()}
+          </div>
+        </div>
+      )}
+  
       {/* Footer bar */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        whileInView={{ opacity: 1, y: 0 }}
+      <motion.div 
+        initial={{ opacity: 0, y: 8 }} 
+        whileInView={{ opacity: 1, y: 0 }} 
         viewport={{ once: true }}
         transition={{ duration: 1, delay: 0.2 }}
         className="px-8 md:px-14 mt-14"
-        style={{
-          borderTop: "1px solid rgba(4,50,34,0.09)",
-          paddingTop: "2rem",
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "1rem",
-        }}
-      >
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "1.2rem" }}>
-          {["Fintech", "Food Tech", "SaaS", "Sports Tech", "Lifestyle"].map((c) => (
-            <span
-              key={c}
-              style={{
-                fontFamily: "Satoshi, Inter, sans-serif",
-                fontSize: "0.60rem",
-                fontWeight: 600,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: "rgba(4,50,34,0.20)",
-              }}
-            >
-              {c}
-            </span>
+        style={{ 
+          borderTop: '1px solid rgba(4,50,34,0.09)', 
+          paddingTop: '2rem', 
+          display: 'flex', flexWrap: 'wrap', 
+          alignItems: 'center', justifyContent: 'space-between', 
+          gap: '1rem' 
+        }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1.2rem' }}>
+          {['Fintech', 'Luxury', 'SaaS', 'Web3', 'Climate'].map(c => (
+            <span key={c} style={{ 
+              fontFamily: 'Inter, sans-serif', fontSize: '0.60rem', 
+              fontWeight: 600, letterSpacing: '0.18em', 
+              textTransform: 'uppercase', color: 'rgba(4,50,34,0.20)' 
+            }}>{c}</span>
           ))}
         </div>
-        <a
-          href="#contact"
-          style={{
-            fontFamily: "Satoshi, Inter, sans-serif",
-            fontWeight: 600,
-            fontSize: "0.68rem",
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            color: "#4F5B57",
-            textDecoration: "none",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.6rem",
-            transition: "color 0.3s",
+        <a href="#contact" data-cursor=""
+          style={{ 
+            fontFamily: 'Inter, sans-serif', fontWeight: 600, 
+            fontSize: '0.68rem', letterSpacing: '0.14em', 
+            textTransform: 'uppercase', color: '#4F5B57', 
+            textDecoration: 'none', display: 'flex', 
+            alignItems: 'center', gap: '0.6rem', transition: 'color 0.3s' 
           }}
-          onMouseEnter={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#043222")}
-          onMouseLeave={(e) => ((e.currentTarget as HTMLAnchorElement).style.color = "#4F5B57")}
-          data-cursor=""
-        >
+          onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = '#043222'}
+          onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = '#4F5B57'}>
           Discuss a project
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" style={{ transform: "rotate(-45deg)" }}>
-            <path
-              d="M1 11L11 1M11 1H4M11 1V8"
-              stroke="currentColor"
-              strokeWidth="1.3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" 
+            style={{ transform: 'rotate(-45deg)' }}>
+            <path d="M1 11L11 1M11 1H4M11 1V8" stroke="currentColor" 
+              strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </a>
       </motion.div>

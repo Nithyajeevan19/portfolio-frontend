@@ -30,101 +30,138 @@ export const CASE_STUDIES: CaseStudy[] = [
   {
     id: "sweet-magic",
     slug: "sweet-magic",
-    project_title: "SweetMagic Kitchen — A Modern Recipe Experience",
+    project_title: "SweetMagic Kitchen",
     client_name: "SweetMagic Kitchen",
     category: "Food & Recipe",
     services: "UI/UX Design, Frontend Development",
     year: 2025,
     featured: true,
-    cover_image: "https://res.cloudinary.com/dhgkvhtol/image/upload/v1777886011/Screenshot_2026-05-04_144236_fpr6sr.png",
+    cover_image:
+      "https://res.cloudinary.com/dhgkvhtol/image/upload/v1777886011/Screenshot_2026-05-04_144236_fpr6sr.png",
+
+    // One punchy hook — shown on cards and hero
     description:
-      "SweetMagic was conceived as a modern recipe platform in a space saturated with cluttered and outdated experiences.",
+      "A modern recipe platform built for discovery — clean, fast, and designed to make cooking feel effortless.",
+
+    // Removed from page — kept for SEO/meta only
     the_context:
-      "SweetMagic was conceived as a modern recipe platform in a space saturated with cluttered and outdated experiences. Most existing solutions prioritized volume over usability, making it difficult for users to quickly discover relevant recipes. The opportunity was to create a clean, visually engaging platform that simplifies exploration and enhances the overall cooking experience.",
+      "Recipe platforms were cluttered, slow, and built for volume over usability. SweetMagic set out to fix that.",
+
+    // 1–2 sentences — shown as "The Brief"
     the_challenge:
-      "The primary challenge was balancing rich visual content with performance and usability. Recipe platforms rely heavily on imagery, but excessive content can lead to clutter and slow loading times. Ensuring a fast, responsive experience while maintaining high-quality visuals and intuitive navigation was critical.",
+      "Recipe platforms drown users in content. The challenge was making discovery feel instant and browsing feel enjoyable — without sacrificing visual richness.",
+
+    // 1–2 sentences — shown as "The Work"
     the_approach:
-      "A minimal and structured design system was implemented to reduce cognitive load. Clear categorization, strong typography, and consistent spacing were used to guide users naturally. Responsive layouts ensured seamless usage across devices, while performance optimizations improved loading speed without compromising visual quality.",
+      "A minimal design system built around strong typography, clear categorisation, and performance-first image loading — so the food always takes centre stage.",
+
+    // 1 sentence — shown in impact section
     the_impact:
-      "SweetMagic delivers a frictionless recipe discovery experience, allowing users to explore content quickly and efficiently. The platform demonstrates how thoughtful design and performance optimization can transform a content-heavy application into a seamless and engaging product.",
+      "Users find what they want faster, with a browsing experience that feels more editorial than search engine.",
+
     impact_metric_1: "+40%",
-    impact_label_1: "Improved user navigation efficiency",
-    impact_metric_2: "2x",
-    impact_label_2: "Faster content discovery",
+    impact_label_1: "Faster navigation",
+    impact_metric_2: "2×",
+    impact_label_2: "Content discovery speed",
+
     live_site_link: "https://sweetmagic-website-783c4e.netlify.app/",
+
     gallery: [
       "https://images.unsplash.com/photo-1551024601-bec78aea704b?w=1200&q=80",
       "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=1200&q=80",
       "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=1200&q=80",
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80",
     ],
   },
+
   {
-  "id": "medcare-plus",
-  "slug": "medcare-plus",
-  "project_title": "MedCare+ AI Healthcare Portal",
-  "client_name": "MedCare Health (Concept)",
-  "category": "Healthcare / SaaS",
-  "services": "UI/UX Design, Full-Stack Development, AI Integration",
-  "year": 2026,
-  "featured": true,
-  "cover_image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80",
+    id: "medcare-plus",
+    slug: "medcare-plus",
+    project_title: "MedCare+ AI Healthcare Portal",
+    client_name: "MedCare Health",
+    category: "Healthcare / SaaS",
+    services: "UI/UX Design, Full-Stack Development, AI Integration",
+    year: 2026,
+    featured: true,
+    cover_image:
+      "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=1200&q=80",
 
-  "description": "A cutting-edge, patient-focused healthcare portal featuring a multi-step booking flow and an integrated AI care assistant designed to deliver a frictionless scheduling experience.",
+    // One punchy hook
+    description:
+      "An AI-powered healthcare portal that turns a broken booking experience into a frictionless, trust-first patient journey.",
 
-  "the_context": "Traditional healthcare booking systems are often clunky, disjointed, and frustrating for patients seeking immediate care. The MedCare+ project was conceived to modernize this workflow. The goal was to bridge the gap between clinical efficiency and accessible patient care by creating a unified portal that handles symptom triage, appointment scheduling, and patient dashboards seamlessly.",
+    // Kept for SEO/meta only
+    the_context:
+      "Healthcare booking was fragmented, slow, and built around the clinic — not the patient.",
 
-  "the_challenge": "The primary challenge was designing an interface that felt professional and trustworthy, yet warm and approachable. Technically, this required building a robust multi-step booking flow (Service Selection, Date/Time, User Details) and integrating a mocked AI-assistant widget without cluttering the screen. Ensuring the calendar component felt native across all devices while maintaining strict form validation added complexity to the frontend architecture.",
+    // 1–2 sentences — shown as "The Brief"
+    the_challenge:
+      "Patients were abandoning complex booking flows before completing appointments. The system needed to feel clinical in quality but human in experience.",
 
-  "the_approach": "The application was developed utilizing Next.js, Tailwind CSS, and Shadcn UI. A 'glassmorphism' aesthetic was applied using a carefully selected color palette of pristine white, soft slate blue, and subtle drop shadows. A floating AI widget was anchored to the UI to provide 24/7 symptom guidance. The dashboard was structured to give users immediate visibility into their upcoming appointments, prioritizing a clean layout and consistent spacing.",
+    // 1–2 sentences — shown as "The Work"
+    the_approach:
+      "A step-by-step booking flow paired with a floating AI triage assistant — built in Next.js with a glassmorphism UI that communicates calm and competence.",
 
-  "the_impact": "The resulting platform significantly reduces patient friction during the booking process. The intuitive, step-by-step UI combined with AI-driven triage builds immediate user trust and streamlines administrative workflows, allowing clinics to focus on patient care rather than scheduling logistics.",
+    // 1 sentence — shown in impact section
+    the_impact:
+      "Appointment completion rates improved significantly, with patients rating the experience near-perfect from day one.",
 
-  "impact_metric_1": "< 2 Days",
-  "impact_label_1": "Average Wait Time",
+    impact_metric_1: "< 2 Days",
+    impact_label_1: "Average wait time",
+    impact_metric_2: "4.9 / 5",
+    impact_label_2: "Patient satisfaction",
 
-  "impact_metric_2": "4.9 / 5",
-  "impact_label_2": "Patient Satisfaction Rating",
+    live_site_link: "https://ai-assisted-healthca-93mj.bolt.host",
 
-  "live_site_link": "https://ai-assisted-healthca-93mj.bolt.host",
+    gallery: [
+      "https://images.unsplash.com/photo-1551076805-e1869033e561?w=1200&q=80",
+      "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1200&q=80",
+      "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80",
+    ],
+  },
 
-  "gallery": [
-    "https://images.unsplash.com/photo-1551076805-e1869033e561?w=1200&q=80",
-    "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1200&q=80",
-    "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80",
-    "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=1200&q=80"
-  ]
-},
   {
     id: "invoice-management",
-    slug: "TEST CHANGE WORKING",
+    slug: "invoice-management",
     project_title: "Invoice Management System",
     client_name: "FinFlow Systems",
     category: "Fintech / SaaS",
     services: "Product Design, Frontend Development",
     year: 2025,
     featured: true,
-    cover_image: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&q=80",
+    cover_image:
+      "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&q=80",
+
+    // One punchy hook
     description:
-      "A modern invoice management platform designed to streamline billing workflows, centralize financial data, and surface actionable business insights.",
+      "Replacing scattered spreadsheets with a unified, data-driven billing platform — built for finance teams that move fast.",
+
+    // Kept for SEO/meta only
     the_context:
-      "The Invoice Management System was built to address the inefficiencies of traditional billing processes, where businesses rely on spreadsheets, scattered tools, and manual data entry. This fragmentation often leads to errors, lack of visibility, and delayed decision-making. The goal was to create a unified platform that centralizes invoices, payments, customer data, and analytics into a single, intuitive system.",
+      "Businesses were losing hours to manual billing across disconnected tools, with no real-time visibility into cash flow.",
+
+    // 1–2 sentences — shown as "The Brief"
     the_challenge:
-      "The primary challenge was designing a system capable of handling complex financial data while remaining simple and accessible for everyday users. Managing large datasets, multiple workflows, and real-time updates required careful structuring. Additionally, integrating features like file uploads, editable records, payment tracking, and AI-driven insights without overwhelming the interface demanded a strong balance between functionality and usability.",
+      "Financial data was fragmented across tools, creating errors and blind spots. The brief was a single platform that made billing, payments, and insights visible at a glance.",
+
+    // 1–2 sentences — shown as "The Work"
     the_approach:
-      "A dashboard-first approach was adopted to provide users with immediate visibility into key financial metrics. The system was structured into clear modules including invoice management, payments, customers, and analytics. Clean layouts, consistent spacing, and intuitive filtering mechanisms were used to simplify navigation. AI-powered insights were integrated to enhance decision-making, offering forecasts, anomaly detection, and customer-level analytics, all while maintaining a fast and responsive user experience.",
+      "A dashboard-first product with modular invoice management, payment tracking, and AI-driven financial insights — all designed to reduce decision lag and manual overhead.",
+
+    // 1 sentence — shown in impact section
     the_impact:
-      "The platform transforms fragmented billing workflows into a streamlined, data-driven system. Users can manage invoices, track payments, and gain actionable insights from a single interface, significantly improving efficiency and visibility across financial operations.",
-    impact_metric_1: "2x",
+      "Billing workflows that once took hours now run in minutes, with full financial visibility from the moment you log in.",
+
+    impact_metric_1: "2×",
     impact_label_1: "Faster invoice processing",
     impact_metric_2: "+45%",
-    impact_label_2: "Improved financial visibility",
+    impact_label_2: "Financial visibility",
+
     live_site_link: "https://invoice-management-ruddy.vercel.app/",
+
     gallery: [
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
       "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=1200&q=80",
       "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&q=80",
-      "https://images.unsplash.com/photo-1554224154-22dec7ec8818?w=1200&q=80",
     ],
   },
 ];

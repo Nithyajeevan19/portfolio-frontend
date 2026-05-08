@@ -248,7 +248,6 @@ function TeamCard({ member, index }: { member: (typeof TEAM)[0]; index: number }
 export function Studio() {
   return (
     <section
-      id="studio"
       style={{ paddingTop: "16vh", paddingBottom: "16vh", backgroundColor: "#FFF8EE" }}
     >
       {/* Full-bleed pullquote banner */}
@@ -328,6 +327,7 @@ export function Studio() {
 
       {/* Header */}
       <div
+        id="studio"
         className="px-8 md:px-14 mb-14"
         style={{ borderBottom: "1px solid rgba(4,50,34,0.09)", paddingBottom: "2.5rem" }}
       >
@@ -375,7 +375,7 @@ export function Studio() {
                 paddingBottom: "0.12em",
               }}
             >
-              Four principals.
+              Four principles.
               <br />
               <span style={{ fontStyle: "italic", color: "rgba(4,50,34,0.28)" }}>
                 One standard.
