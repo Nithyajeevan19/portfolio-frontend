@@ -31,7 +31,7 @@ export function PageLoader() {
             style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
             <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#043222' }} />
             <span style={{ fontFamily: 'Inter,sans-serif', fontWeight: 600, fontSize: '0.70rem', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#043222' }}>
-              Forma Studio
+              DEVNest
             </span>
           </motion.div>
 

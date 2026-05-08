@@ -24,9 +24,9 @@ function Index() {
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "ProfessionalService",
-          "name": "Forma Studio",
-          "image": "https://formastudio.co/og-image.jpg",
-          "url": "https://formastudio.co/",
+          "name": "DEVNest",
+          "image": "https://devnest.agency/og-image.jpg",
+          "url": "https://devnest.agency/",
           "telephone": "",
           "address": {
             "@type": "PostalAddress",

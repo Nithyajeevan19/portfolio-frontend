@@ -211,7 +211,7 @@ export function Contact() {
               Direct Email
             </div>
             <a
-              href="mailto:hello@formastudio.co"
+              href="mailto:hello@devnest.agency"
               className="transition-colors duration-300"
               style={{
                 fontFamily: "Satoshi, ui-sans-serif, system-ui, sans-serif",
@@ -227,7 +227,7 @@ export function Contact() {
               }}
               data-cursor=""
             >
-              hello@formastudio.co
+              hello@devnest.agency
             </a>
           </div>
 

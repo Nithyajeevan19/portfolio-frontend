@@ -9,7 +9,7 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Forma Studio design system.
+ * DEVNest design system.
  * Colors are warm cream + deep forest green. All headings use Boska.
  * Body / labels / nav use Inter (uppercase for labels).
  */
@@ -60,7 +60,7 @@
   --container-padding: clamp(1.5rem, 6vw, 6rem);
   --card-gap: 1.5rem;
 
-  /* Forma palette */
+  /* DEVNest palette */
   --cream: oklch(0.945 0.018 85); /* #F2EDE4 */
   --forest: oklch(0.245 0.045 155); /* #0D2B1A deep forest green */
   --forest-ghost: oklch(0.245 0.045 155 / 0.22);

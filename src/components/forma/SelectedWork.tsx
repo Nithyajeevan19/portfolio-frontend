@@ -450,7 +450,7 @@ export function SelectedWork() {
               margin: 0,
               maxWidth: '35rem'
             }}>
-              A curated selection. We partner with a limited number of brands to ensure senior-led excellence across every touchpoint, from strategy to final deployment.
+              A focused selection of digital experiences, systems, and products designed to solve real problems and create measurable impact.
             </p>
         </motion.div>
       </div>

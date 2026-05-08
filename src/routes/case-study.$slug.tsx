@@ -33,7 +33,7 @@ function CaseStudyComponent() {
 
     // Update SEO metadata
     if (study) {
-      document.title = `${study.project_title} | Forma Studio Case Study`;
+      document.title = `${study.project_title} | DEVNest Case Study`;
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
         metaDesc.setAttribute("content", study.description || "");
@@ -42,7 +42,7 @@ function CaseStudyComponent() {
 
     return () => {
       // Reset title when leaving
-      document.title = "Forma Studio — Senior-led brand & product design";
+      document.title = "DEVNest — Senior-led brand & product design";
     };
   }, [slug, study]);
 
@@ -176,20 +176,21 @@ function CaseStudyComponent() {
               borderBottom: "1px solid #1A1A1A",
             }}
           >
-            <div className="absolute inset-0 z-0">
-              <motion.div
+            <div className="absolute inset-0 z-0 overflow-hidden">
+              <motion.img
                 initial={{ scale: 1.1, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.6 }}
+                animate={{ scale: 1, opacity: 0.7 }}
+                src={study.inner_cover_image}
                 style={{
                   width: "100%",
                   height: "100%",
-                  backgroundImage: `url(${study.inner_cover_image})`,
-                  backgroundSize: "cover",
-                  backgroundPosition: "top center",
+                  objectFit: "cover",
+                  objectPosition: "top center",
                 }}
                 transition={{ duration: 2.5, ease: luxuryEase }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/40 to-transparent opacity-95" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-transparent" />
+              <div className="absolute inset-0 bg-[#0A0A0A]/20" />
             </div>
 
             <div className="relative z-10 px-6 md:px-16 pb-16 md:pb-24 max-w-[1440px] mx-auto w-full">
@@ -447,7 +448,7 @@ function CaseStudyComponent() {
             </Link>
             
             <div className="flex items-center gap-10">
-              <a href="mailto:hello@formaforge.com" className="text-[10px] uppercase tracking-[0.3em] text-white/30 no-underline hover:text-[#C8FF00] font-bold">Email</a>
+              <a href="mailto:hello@devnest.agency" className="text-[10px] uppercase tracking-[0.3em] text-white/30 no-underline hover:text-[#C8FF00] font-bold">Email</a>
               <a href="#" className="text-[10px] uppercase tracking-[0.3em] text-white/30 no-underline hover:text-[#C8FF00] font-bold">LinkedIn</a>
               <a href="#" className="text-[10px] uppercase tracking-[0.3em] text-white/30 no-underline hover:text-[#C8FF00] font-bold">Twitter</a>
             </div>

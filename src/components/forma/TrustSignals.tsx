@@ -18,11 +18,19 @@ export function TrustSignals() {
           <motion.div {...fadeUp}>
             <span className="micro-label mb-12 block">Client Praise</span>
             <blockquote className="text-2xl md:text-4xl font-serif italic text-[#043222] leading-tight mb-10">
-              "Forma Studio doesn't just deliver design; they deliver a strategic advantage. Their senior-led approach ensured our product launched with a level of polish we didn't think was possible in such a tight timeline."
+              "DEVNest doesn't just deliver design; they deliver a strategic advantage. Their senior-led approach ensured our product launched with a level of polish we didn't think was possible in such a tight timeline."
             </blockquote>
-            <cite className="not-italic">
-              <span className="block text-sm font-bold uppercase tracking-widest text-[#043222]">Founder & CEO</span>
-              <span className="block text-xs uppercase tracking-widest text-[#043222]/50 mt-1">Leading Fintech Platform</span>
+            <cite className="not-italic flex flex-col items-center">
+              <span className="block text-sm font-bold uppercase tracking-[0.25em] text-[#043222] mb-1">Business Owner</span>
+              <span className="block text-xs uppercase tracking-[0.15em] text-[#043222]/40">Sweet Magic Restaurant</span>
+              
+              <div className="mt-6 flex items-center gap-3">
+                <div className="w-8 h-px bg-[#043222]/10" />
+                <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-[#043222]/30">
+                  An Indian Authentic Food Brand
+                </span>
+                <div className="w-8 h-px bg-[#043222]/10" />
+              </div>
             </cite>
           </motion.div>
         </div>

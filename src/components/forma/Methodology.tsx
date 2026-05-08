@@ -107,8 +107,7 @@ export function Methodology() {
               margin: 0,
             }}
           >
-            Built over eight years of high-stakes engagements — flexible enough to adapt, structured
-            enough to deliver.
+            From discovery to deployment, every phase is designed to reduce friction and build with purpose.
           </p>
         </motion.div>
       </div>

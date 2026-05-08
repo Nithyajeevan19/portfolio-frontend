@@ -245,7 +245,7 @@ that lasts.<br />
                 color: "#4F5B57",
               }}
             >
-              Forma is a senior-led design partner building high-performance brand systems and scalable digital products. We partner with founders who value craft as a competitive advantage.
+              A modern creative studio for ambitious brands. We craft high-impact web experiences, build smart systems, and turn ideas into scalable products.
             </motion.p>
 
             {/* CTAs */}
