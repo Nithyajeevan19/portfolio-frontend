@@ -507,15 +507,6 @@ export function SelectedWork() {
           alignItems: 'center', justifyContent: 'space-between', 
           gap: '1rem' 
         }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '1.2rem' }}>
-          {['Fintech', 'Luxury', 'SaaS', 'Web3', 'Climate'].map(c => (
-            <span key={c} style={{ 
-              fontFamily: 'Inter, sans-serif', fontSize: '0.60rem', 
-              fontWeight: 600, letterSpacing: '0.18em', 
-              textTransform: 'uppercase', color: 'rgba(4,50,34,0.20)' 
-            }}>{c}</span>
-          ))}
-        </div>
         <a href="#contact" data-cursor=""
           style={{ 
             fontFamily: 'Inter, sans-serif', fontWeight: 600, 
@@ -527,10 +518,9 @@ export function SelectedWork() {
           onMouseEnter={e => (e.currentTarget as HTMLAnchorElement).style.color = '#043222'}
           onMouseLeave={e => (e.currentTarget as HTMLAnchorElement).style.color = '#4F5B57'}>
           Discuss a project
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none" 
-            style={{ transform: 'rotate(-45deg)' }}>
-            <path d="M1 11L11 1M11 1H4M11 1V8" stroke="currentColor" 
-              strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M1 3.5L5 7.5L9 3.5" stroke="currentColor" 
+              strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </a>
       </motion.div>

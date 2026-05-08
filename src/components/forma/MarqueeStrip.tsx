@@ -1,10 +1,8 @@
 import Marquee from 'react-fast-marquee';
 
 const ITEMS = [
-  'Brand Identity', '·', 'Digital Product', '·',
-  'Web Experience', '·', 'Creative Direction', '·',
-  'Motion Design', '·', 'Art Direction', '·',
-  'Strategy', '·', 'Packaging', '·',
+  'Digital Systems', 'Scalable SaaS',
+  'Web Experience', 'Growth Marketing','Creative Technology', 'Creative Direction',
 ];
 
 export function MarqueeStrip() {

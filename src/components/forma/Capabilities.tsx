@@ -92,7 +92,7 @@ export function Capabilities() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
+    const check = () => setIsMobile(window.innerWidth < 1024);
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
@@ -151,8 +151,10 @@ export function Capabilities() {
 
       <div className="md:px-14">
         <div
-          className="grid grid-cols-1 md:grid-cols-2 rounded-sm overflow-hidden"
-          style={{ border: "1px solid rgba(4,50,34,0.09)" }}
+          className="grid grid-cols-1 lg:grid-cols-2 rounded-sm overflow-hidden"
+          style={{ 
+            border: isMobile ? "none" : "1px solid rgba(4,50,34,0.09)"
+          }}
         >
           <div style={{ borderRight: isMobile ? "none" : "1px solid rgba(4,50,34,0.09)", backgroundColor: "#FFF8EE" }}>
             {/* Services List (Accordion Style for both Mobile & Desktop) */}
@@ -163,13 +165,15 @@ export function Capabilities() {
                   className="w-full text-left"
                   style={{
                     padding: "1.65rem 2.25rem",
-                    borderBottom: i < SERVICES.length - 1 ? "1px solid rgba(4,50,34,0.09)" : "none",
-                    backgroundColor: active === i ? "rgba(4,50,34,0.035)" : "#FFF8EE",
+                    borderBottom: isMobile ? "none" : (i < SERVICES.length - 1 ? "1px solid rgba(4,50,34,0.09)" : "none"),
+                    backgroundColor: active === i ? (isMobile ? "#FFF8EE" : "rgba(4,50,34,0.035)") : "#FFF8EE",
                     transition: "background-color 0.35s ease",
                     cursor: "pointer",
                     borderTop: "none",
                     borderLeft: "none",
                     borderRight: "none",
+                    outline: "none",
+                    WebkitTapHighlightColor: "transparent",
                   }}
                   onClick={() => setActive(i)}
                   onMouseEnter={() => !isMobile && setActive(i)}
@@ -313,7 +317,11 @@ export function Capabilities() {
                 key={`mobile-content-${active}`}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                style={{ padding: "2.2rem 1.75rem", backgroundColor: "#FFF8EE" }}
+                style={{ 
+                  padding: "0.5rem 2.25rem 2.25rem", 
+                  backgroundColor: "#FFF8EE",
+                  marginTop: "-1rem" 
+                }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "0.8rem", marginBottom: "1.2rem" }}>
                   <div style={{ width: "4px", height: "4px", borderRadius: "50%", backgroundColor: "#043222" }} />
@@ -430,12 +438,10 @@ export function Capabilities() {
 
       <style>{`
         @media(min-width:1024px){
-          .svc-inner{ grid-template-columns:7fr 5fr!important; }
           .svc-img-panel{ display:block!important; }
         }
         @media(max-width:1023px){
           .svc-img-panel{ display:none!important; }
-          .svc-accordion{ border-right:none!important; }
         }
       `}</style>
     </section>

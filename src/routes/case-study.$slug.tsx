@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CASE_STUDIES, type CaseStudy } from "../data/caseStudies";
 import CustomCursor from "../components/forma/CustomCursor";
 import { Navbar } from "../components/forma/Navbar";
+import { getLenis } from "../lib/lenis";
 import { revealVariants, viewportConfig, luxuryEase, transition } from "../lib/motion";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -20,8 +21,15 @@ function CaseStudyComponent() {
   const study = studyIndex !== -1 ? CASE_STUDIES[studyIndex] : null;
   const nextStudy = studyIndex !== -1 ? CASE_STUDIES[(studyIndex + 1) % CASE_STUDIES.length] : null;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    // Reset scroll immediately before paint
+    const lenis = getLenis();
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    }
     window.scrollTo(0, 0);
+    document.documentElement.scrollTo(0, 0);
+    document.body.scrollTo(0, 0);
   }, [slug]);
 
   useEffect(() => {
@@ -35,9 +43,11 @@ function CaseStudyComponent() {
           opacity: 0,
           y: 20,
           duration: 0.8,
+          immediateRender: false,
           scrollTrigger: {
             trigger: metaBar,
-            start: "top 90%",
+            start: "top 95%",
+            once: true,
             toggleActions: "play none none none",
           },
         });
@@ -52,9 +62,11 @@ function CaseStudyComponent() {
           duration: 1.1,
           ease: "power3.out",
           delay: i * 0.1,
+          immediateRender: false,
           scrollTrigger: {
             trigger: img,
-            start: "top 92%",
+            start: "top 98%",
+            once: true,
             toggleActions: "play none none none",
           },
         });
@@ -68,9 +80,11 @@ function CaseStudyComponent() {
           y: 30,
           duration: 1.2,
           ease: "power3.out",
+          immediateRender: false,
           scrollTrigger: {
             trigger: d,
-            start: "top 85%",
+            start: "top 95%",
+            once: true,
             toggleActions: "play none none none",
           },
         });
@@ -139,7 +153,7 @@ function CaseStudyComponent() {
       <CustomCursor />
       <Navbar isDark />
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         <motion.div
           key={slug}
           initial={{ opacity: 0 }}
@@ -147,12 +161,12 @@ function CaseStudyComponent() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.6 }}
         >
-          {/* Hero Section */}
           <section
             className="relative w-full overflow-hidden flex flex-col justify-end"
             style={{ 
-              height: "clamp(500px, 85vh, 92vh)", 
-              borderBottom: "1px solid #1A1A1A" 
+              height: "clamp(480px, 90vh, 92vh)", 
+              borderBottom: "1px solid #1A1A1A",
+              paddingTop: "80px", // Safety for navbar
             }}
           >
             <div className="absolute inset-0 z-0">

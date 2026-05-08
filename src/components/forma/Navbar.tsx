@@ -136,18 +136,21 @@ export function Navbar({ isDark = false }: { isDark?: boolean }) {
           <span
             className="block w-6 h-px transition-all duration-400"
             style={{
-              backgroundColor: "#043222",
+              backgroundColor: scrolled ? "#043222" : (isDark ? "#FFF8EE" : "#043222"),
               transform: menuOpen ? "rotate(45deg) translate(3px,3px)" : "",
             }}
           />
           <span
             className="block w-4 h-px transition-opacity duration-300"
-            style={{ backgroundColor: "#043222", opacity: menuOpen ? 0 : 1 }}
+            style={{ 
+              backgroundColor: scrolled ? "#043222" : (isDark ? "#FFF8EE" : "#043222"),
+              opacity: menuOpen ? 0 : 1 
+            }}
           />
           <span
             className="block w-6 h-px transition-all duration-400"
             style={{
-              backgroundColor: "#043222",
+              backgroundColor: scrolled ? "#043222" : (isDark ? "#FFF8EE" : "#043222"),
               transform: menuOpen ? "rotate(-45deg) translate(3px,-3px)" : "",
             }}
           />
