@@ -466,9 +466,9 @@ export function Contact() {
                   name="message"
                   value={form.message}
                   onChange={handleChange}
-                  rows={3}
+                  rows={2}
                   placeholder="Tell us what you're building, what's at stake, and when you need it..."
-                  style={{ ...inputBase, resize: "none", lineHeight: "1.65", paddingTop: "0.5rem" }}
+                  style={{ ...inputBase, resize: "none", lineHeight: "1.65", paddingTop: "0.5rem", paddingBottom: "0.2rem" }}
                   onFocus={(e) => {
                     e.target.style.borderBottomColor = "#043222";
                   }}
