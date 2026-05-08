@@ -336,26 +336,41 @@ function CaseStudyComponent() {
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
-                <div className="md:col-span-12 aspect-[21/9] overflow-hidden bg-[#111] border border-white/5 group">
-                  <img
-                    src={study.gallery[0]}
-                    alt={`${study.project_title} - Feature`}
-                    className="cs-gallery-img w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
-                  />
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-20">
+                {/* Primary Feature Image */}
+                <div className="md:col-span-12 group">
+                  <div className="flex items-center gap-4 mb-6">
+                    <span className="text-[10px] uppercase tracking-[0.4em] text-[#C8FF00] font-bold">01</span>
+                    <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-bold">{study.gallery[0].title}</h4>
+                  </div>
+                  <div className="aspect-[21/9] overflow-hidden bg-[#111] border border-white/5 relative">
+                    <img
+                      src={study.gallery[0].url}
+                      alt={study.gallery[0].title}
+                      className="cs-gallery-img w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
+                    />
+                  </div>
                 </div>
-                {study.gallery.slice(1).map((img, i) => (
+
+                {/* Sub-features Grid */}
+                {study.gallery.slice(1).map((item, i) => (
                   <div 
                     key={i} 
-                    className={`aspect-[16/10] overflow-hidden bg-[#111] border border-white/5 group ${
+                    className={`group ${
                       i % 3 === 0 ? 'md:col-span-8' : 'md:col-span-4'
                     }`}
                   >
-                    <img
-                      src={img}
-                      alt={`${study.project_title} - Detail ${i + 1}`}
-                      className="cs-gallery-img w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
-                    />
+                    <div className="flex items-center gap-4 mb-6">
+                      <span className="text-[10px] uppercase tracking-[0.4em] text-[#C8FF00] font-bold">0{i + 2}</span>
+                      <h4 className="text-[10px] uppercase tracking-[0.3em] text-white/50 font-bold">{item.title}</h4>
+                    </div>
+                    <div className="aspect-[16/10] overflow-hidden bg-[#111] border border-white/5 relative">
+                      <img
+                        src={item.url}
+                        alt={item.title}
+                        className="cs-gallery-img w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-110"
+                      />
+                    </div>
                   </div>
                 ))}
               </div>

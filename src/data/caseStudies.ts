@@ -23,7 +23,7 @@ export interface CaseStudy {
   impact_metric_2: string;
   impact_label_2: string;
   live_site_link: string;
-  gallery: string[];
+  gallery: { url: string; title: string }[];
   tech_stack: string[];
   timeline: string;
   role: string;
@@ -58,8 +58,14 @@ export const CASE_STUDIES: CaseStudy[] = [
     impact_label_2: "Content discovery speed",
     live_site_link: "https://sweetmagic-website-783c4e.netlify.app/",
     gallery: [
-      "https://res.cloudinary.com/dqkbvljmo/image/upload/v1778237425/Screenshot_2026-05-08_162005_d889qk.png",
-      "https://res.cloudinary.com/dqkbvljmo/image/upload/v1778236990/Screenshot_2026-05-08_161256_sez1xt.png",
+      {
+        url: "https://res.cloudinary.com/dqkbvljmo/image/upload/v1778237425/Screenshot_2026-05-08_162005_d889qk.png",
+        title: "Recipe Discovery & Grid Layout"
+      },
+      {
+        url: "https://res.cloudinary.com/dqkbvljmo/image/upload/v1778236990/Screenshot_2026-05-08_161256_sez1xt.png",
+        title: "Administrative Control Center"
+      }
     ],
     tech_stack: ["React", "Vite", "Framer Motion", "Cloudinary"],
     timeline: "8 Weeks",
@@ -93,9 +99,18 @@ export const CASE_STUDIES: CaseStudy[] = [
     impact_label_2: "Patient satisfaction",
     live_site_link: "https://ai-assisted-healthca-93mj.bolt.host",
     gallery: [
-      "https://images.unsplash.com/photo-1551076805-e1869033e561?w=1200&q=80",
-      "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1200&q=80",
-      "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80",
+      {
+        url: "https://images.unsplash.com/photo-1551076805-e1869033e561?w=1200&q=80",
+        title: "AI Patient Triage Interface"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1200&q=80",
+        title: "Doctor Scheduling Dashboard"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?w=1200&q=80",
+        title: "Medical Records Overview"
+      }
     ],
     tech_stack: ["Next.js", "OpenAI", "Tailwind CSS", "Supabase"],
     timeline: "14 Weeks",
@@ -129,9 +144,18 @@ export const CASE_STUDIES: CaseStudy[] = [
     impact_label_2: "Financial visibility",
     live_site_link: "https://invoice-management-ruddy.vercel.app/",
     gallery: [
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
-      "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=1200&q=80",
-      "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&q=80",
+      {
+        url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
+        title: "Financial Analytics Dashboard"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=1200&q=80",
+        title: "Modular Invoice Builder"
+      },
+      {
+        url: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=1200&q=80",
+        title: "Global Transaction History"
+      }
     ],
     tech_stack: ["React", "TanStack Table", "Radix UI", "Node.js"],
     timeline: "10 Weeks",
@@ -139,5 +163,3 @@ export const CASE_STUDIES: CaseStudy[] = [
     objective: "Consolidate fragmented financial workflows into a high-performance SaaS dashboard.",
   },
 ];
-
-
