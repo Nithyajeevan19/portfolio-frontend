@@ -424,8 +424,7 @@ export function Studio() {
               maxWidth: "21rem",
             }}
           >
-            No layers. No junior execution on client work. The principals you meet at pitch are the
-            ones who build your project.
+            Built intentionally — where strategy, design, and execution move as one system.
           </p>
         </motion.div>
       </div>
