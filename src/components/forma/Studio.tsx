@@ -7,7 +7,7 @@ const TEAM = [
     name: "Ajith M",
     role: "Strategy & Brand",
     bio: "Formerly IDEO and Wolff Olins. Builds brand systems that hold under pressure — for founders, market shifts, and long-term growth.",
-    image: "/images/ajith.png",
+    image: "https://res.cloudinary.com/dhgkvhtol/image/upload/v1778557763/Ajith_k28a6t.png",
     initials: "MV",
     showConnect: false,
     linkedin: "https://www.linkedin.com/in/ajith-marella-92ba39317/",
@@ -32,12 +32,21 @@ const TEAM = [
   },
   {
     name: "Ajay V",
-    role: "Art Direction",
+    role: "OutReach & Marketing",
     bio: "Creative lead with an Awwwards SoTY nomination. Champions restraint, craft, and work that looks inevitable in hindsight.",
     image: "/images/ajay.jpg",
     initials: "TM",
     showConnect: false,
   },
+  {
+    name: "Keerthan J",
+    role: "Designer",
+    bio: "Chief Morale Officer. Contributes nothing but enforces strict break policies. Keeps the team grounded.",
+    image: "/images/keerthan.jpg",
+    initials: "KJ",
+    showConnect: false,
+    linkedin: "https://www.linkedin.com/in/keerthan-jakkaraju-887845381/",
+  }
 ];
 
 const ease = [0.16, 1, 0.3, 1] as const;
